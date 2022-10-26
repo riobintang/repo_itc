@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const { User } = require("../../models/User");
-const { Division } = require("../../models/Division");
+const { User, Division } = require("../../models");
 const { validateRegisterUserChema } = require("../../validator/user");
 
 module.exports = {
