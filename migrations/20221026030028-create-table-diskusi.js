@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('discussion', { 
+    await queryInterface.createTable('discussions', { 
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'user',
+          model: 'users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -43,7 +43,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'course',
+          model: 'courses',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -53,6 +53,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('discussion');
+    await queryInterface.dropTable('discussions');
   }
 };
