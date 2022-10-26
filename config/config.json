@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "",
-    "database": "pembelajaran_tc",
+    "database": "pembelajaran_itc",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

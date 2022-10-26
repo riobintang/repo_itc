@@ -2,14 +2,14 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('divisi', { 
+    await queryInterface.createTable('division', { 
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       }, 
-      nama_divisi: {
+      divisionName: {
         type: Sequelize.STRING,
         allowNull: false,
       }, 
@@ -25,7 +25,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('divisi');
+    await queryInterface.dropTable('division');
     
   }
 };

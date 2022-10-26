@@ -9,7 +9,7 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       }, 
-      nama_role: {
+      roleName: {
         type: Sequelize.STRING,
         allowNull: false,
       }, 

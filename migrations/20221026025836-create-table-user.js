@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      nama_lengkap: {
+      fullName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -27,13 +27,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      angkatan: {
+      generation: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
-      noHP: {
+      phoneNumber: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -47,7 +47,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'divisi',
+          model: 'division',
           key: 'id',
         },
         onUpdate: 'CASCADE',

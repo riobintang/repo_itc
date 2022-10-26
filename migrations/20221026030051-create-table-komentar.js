@@ -2,14 +2,14 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('komentar', { 
+    await queryInterface.createTable('comment', { 
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       }, 
-      isi_komentar: {
+      body: {
         type: Sequelize.STRING,
         allowNull: false,
       },  
@@ -35,11 +35,11 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       }, 
-      id_diskusi: {
+      id_discussion: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'diskusi',
+          model: 'discussion',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -49,7 +49,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('komentar');
+    await queryInterface.dropTable('comment');
     
   }
 };

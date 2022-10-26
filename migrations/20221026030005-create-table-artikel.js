@@ -2,18 +2,18 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('artikel', { 
+    await queryInterface.createTable('article', { 
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       }, 
-      judul_artikel: {
+      title: {
         type: Sequelize.STRING,
         allowNull: false,
       }, 
-      isi: {
+      body: {
         type: Sequelize.STRING,
         allowNull: false,
       }, 
@@ -25,11 +25,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       }, 
-      id_bab: {
+      id_chapter: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'bab',
+          model: 'chapter',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -39,7 +39,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('artikel');
+    await queryInterface.dropTable('article');
     
   }
 };
