@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('users', { 
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("users", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -47,27 +47,26 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'division',
-          key: 'id',
+          model: "division",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
       id_role: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'roles',
-          key: 'id',
+          model: "roles",
+          key: "id",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       },
     });
   },
 
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
-    
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("users");
+  },
 };
