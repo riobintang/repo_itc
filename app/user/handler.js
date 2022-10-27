@@ -2,7 +2,11 @@ const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 
 const { User } = require("../../models");
-const { validateRegisterUserSchema } = require("../../validator/user");
+const generateAccessToken = require("../../utils/tokenManager");
+const {
+  validateRegisterUserSchema,
+  validateLoginUserSchema,
+} = require("../../validator/user");
 
 const Op = Sequelize.Op;
 
@@ -29,6 +33,40 @@ module.exports = {
           attributes: { exclude: ["password", "createdAt", "updatedAt"] },
           order: [["createdAt", "DESC"]], //to send last data inserted to database
         }),
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerUserLogin: async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      validateLoginUserSchema(req.body);
+      const user = await User.findOne({
+        where: {
+          email: email,
+        },
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const passwordValidate = bcrypt.compareSync(password, user.password);
+      if (!passwordValidate) {
+        throw new Error("Invalid password");
+      }
+
+      const accessToken = generateAccessToken({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.id_role,
+      });
+
+      res.status(200).json({
+        status: "success",
+        data: { user, accessToken },
       });
     } catch (error) {
       next(error);

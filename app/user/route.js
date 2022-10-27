@@ -1,5 +1,5 @@
 const express = require("express");
-const { handlerRegisterUser } = require("./handler");
+const { handlerRegisterUser, handlerUserLogin } = require("./handler");
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -7,5 +7,5 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/register", handlerRegisterUser);
-
+router.post("/login", handlerUserLogin);
 module.exports = router;

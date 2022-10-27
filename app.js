@@ -5,6 +5,7 @@ const logger = require("morgan");
 const userRouter = require("./app/user/route");
 const divisionRouter = require("./app/division/route");
 const customErrorHandler = require("./middleware/customErrorHandler");
+const handler404NotFound = require("./middleware/handler404NotFound");
 const app = express();
 
 app.use(logger("dev"));
@@ -17,5 +18,6 @@ app.use("/user", userRouter);
 app.use("/division", divisionRouter);
 
 app.use(customErrorHandler);
+app.use(handler404NotFound);
 
 module.exports = app;

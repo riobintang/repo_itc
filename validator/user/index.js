@@ -2,6 +2,7 @@ const {
   userUpdateSchema,
   userRegisterSchema,
   userCreateSchema,
+  userLoginSchema,
 } = require("./schema");
 
 function validateRegisterUserSchema(payload) {
@@ -24,4 +25,17 @@ function validateCreateUserSchema(payload) {
     throw new Error(validateResult.error.message);
   }
 }
-module.exports = { validateRegisterUserSchema, validateUpdateUserSchema, validateCreateUserSchema };
+
+function validateLoginUserSchema(payload) {
+  const validateResult = userLoginSchema(payload);
+  if (!validateResult) {
+    throw new Error(validateResult.error.message);
+  }
+}
+
+module.exports = {
+  validateRegisterUserSchema,
+  validateUpdateUserSchema,
+  validateCreateUserSchema,
+  validateLoginUserSchema,
+};
