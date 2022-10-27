@@ -29,7 +29,7 @@ const userCreateSchema = Joi.object({
 const userLoginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
-});
+}).unknown();
 
 module.exports = {
   userRegisterSchema,
