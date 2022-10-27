@@ -2,6 +2,6 @@ const express = require("express");
 const { handlerGetDivision } = require("./handler");
 const router = express.Router();
 
-router.get("/division", handlerGetDivision);
+router.get("/", handlerGetDivision);
 
 module.exports = router;
