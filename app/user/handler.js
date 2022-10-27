@@ -9,29 +9,19 @@ const Op = Sequelize.Op;
 module.exports = {
   handlerRegisterUser: async (req, res, next) => {
     try {
-      
-      const { username, fullName, email, password, division } = req.body;
+      const { username, fullName, email, password, id_division } = req.body;
       validateRegisterUserSchema(req.body);
-      const id_division = await Division.findOne({
-       attributes: ["id"],
-       where: {
-         divisionName: {
-            [Op.like]: `%${division}%`,
-         },
-       },
-      });
       const hashPassword = await bcrypt.hash(password, 10);
       const role = 1;
-    
-
       await User.create({
         username: username,
         fullName: fullName,
         email: email,
         password: hashPassword,
-        id_division: id_division,
+        id_division: id_division.id,
         id_role: role,
       });
+
       res.status(200).json({
         status: "success",
         message: "Successfully register user",
@@ -40,10 +30,23 @@ module.exports = {
           order: [["createdAt", "DESC"]], //to send last data inserted to database
         }),
       });
-      
     } catch (error) {
-      // throw new Error(error);
-      console.log(error.message);
+      next(error);
+    }
+  },
+
+  handlerGetDivision: async(req, res, next) => {
+    try {
+      const division = await Division.findAll();
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get division",
+        data: {
+          id: division.id,
+          divisionName: division.divisionName,
+        },
+      })
+    } catch (error) {
       next(error);
     }
   },
