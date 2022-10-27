@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 
-const { User, Division } = require("../../models");
+const { User } = require("../../models");
 const { validateRegisterUserSchema } = require("../../validator/user");
 
 const Op = Sequelize.Op;
@@ -30,22 +30,6 @@ module.exports = {
           order: [["createdAt", "DESC"]], //to send last data inserted to database
         }),
       });
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  handlerGetDivision: async(req, res, next) => {
-    try {
-      const division = await Division.findAll();
-      res.status(200).json({
-        status: "success",
-        message: "Successfully get division",
-        data: {
-          id: division.id,
-          divisionName: division.divisionName,
-        },
-      })
     } catch (error) {
       next(error);
     }
