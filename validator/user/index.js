@@ -4,7 +4,7 @@ const {
   userCreateSchema,
 } = require("./schema");
 
-function validateRegisterUserChema(payload) {
+function validateRegisterUserSchema(payload) {
   const validateResult = userRegisterSchema.validate(payload);
   if (!validateResult) {
     throw new Error(validateResult.error.message);
@@ -24,4 +24,4 @@ function validateCreateUserSchema(payload) {
     throw new Error(validateResult.error.message);
   }
 }
-module.exports = { validateRegisterUserChema, validateUpdateUserSchema, validateCreateUserSchema };
+module.exports = { validateRegisterUserSchema, validateUpdateUserSchema, validateCreateUserSchema };

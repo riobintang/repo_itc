@@ -40,7 +40,7 @@ function createModelUser(Sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    id_divisi: {
+    id_division: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

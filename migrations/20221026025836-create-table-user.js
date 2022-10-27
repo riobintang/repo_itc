@@ -43,7 +43,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      id_divisi: {
+      id_division: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
