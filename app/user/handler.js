@@ -22,7 +22,7 @@ module.exports = {
         fullName: fullName,
         email: email,
         password: hashPassword,
-        id_division: id_division.id,
+        id_division: id_division,
         id_role: role,
       });
 
