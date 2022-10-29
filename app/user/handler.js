@@ -40,11 +40,18 @@ module.exports = {
   },
   handlerUserLogin: async (req, res, next) => {
     try {
-      const { email, password } = req.body;
+      const { emailUsername, password } = req.body;
       validateLoginUserSchema(req.body);
       const user = await User.findOne({
         where: {
-          email: email,
+          [Op.or]: [
+            {
+              email: emailUsername,
+            },
+            {
+              userName: emailUsername,
+            },
+          ],
         },
       });
 
