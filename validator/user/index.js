@@ -7,21 +7,21 @@ const {
 
 function validateRegisterUserSchema(payload) {
   const validateResult = userRegisterSchema.validate(payload);
-  if (!validateResult) {
+  if (validateResult.error) {
     throw new Error(validateResult.error.message);
   }
 }
 
 function validateUpdateUserSchema(payload) {
   const validateResult = userUpdateSchema.validate(payload);
-  if (!validateResult) {
+  if (validateResult.error) {
     throw new Error(validateResult.error.message);
   }
 }
 
 function validateCreateUserSchema(payload) {
   const validateResult = userCreateSchema.validate(payload);
-  if (!validateResult) {
+  if (validateResult.error) {
     throw new Error(validateResult.error.message);
   }
 }

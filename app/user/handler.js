@@ -15,6 +15,7 @@ module.exports = {
     try {
       const { username, fullName, email, password, id_division } = req.body;
       validateRegisterUserSchema(req.body);
+      
       const hashPassword = await bcrypt.hash(password, 10);
       const role = 1;
       await User.create({
