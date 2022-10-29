@@ -15,7 +15,22 @@ module.exports = {
     try {
       const { username, fullName, email, password, id_division } = req.body;
       validateRegisterUserSchema(req.body);
-      
+      const checkEmail = await User.findOne({
+        where: {
+          email: email,
+        },
+      });
+      const checkUsername = await User.findOne({
+        where: {
+          username: username,
+        },
+      });
+      if (checkEmail) {
+        throw new Error("Email address already in use");
+      }
+      if (checkUsername) {
+        throw new Error("Username already in use");
+      }
       const hashPassword = await bcrypt.hash(password, 10);
       const role = 1;
       await User.create({
