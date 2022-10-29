@@ -28,7 +28,7 @@ function validateCreateUserSchema(payload) {
 
 function validateLoginUserSchema(payload) {
   const validateResult = userLoginSchema.validate(payload);
-  if (!validateResult) {
+  if (validateResult.error) {
     throw new Error(validateResult.error.message);
   }
 }
