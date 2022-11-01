@@ -69,6 +69,7 @@ module.exports = {
             },
           ],
         },
+        attributes: {exclude: ["password", "createdAt", "updatedAt"]},
       });
 
       if (!user) {

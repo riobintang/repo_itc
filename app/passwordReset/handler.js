@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-
+const bcrypt = require("bcrypt");
 const { User, Token } = require("../../models");
 const sendEmail = require("../../utils/sendEmail");
 const subtractHours = require("../../utils/subtractHours");
@@ -24,8 +24,13 @@ module.exports = {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
 
-      const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
-      await sendEmail(user.email, "Password reset", link);
+      const link = `${process.env.BASE_URL}/password-reset/${userReset.id}/${token.token}`;
+      await sendEmail(userReset.email, "Password reset", link);
+      res.status(201).json({
+        status: "success",
+        message: "email sent successfully",
+        data: link,
+      });
     } catch (error) {
       next(error);
     }
@@ -41,24 +46,27 @@ module.exports = {
         },
       });
 
-      const reqToken = await Token.findone({
+      const reqToken = await Token.findOne({
         where: {
           id_user: id_user,
-          id: token,
+          token: token,
         },
-        order: [["createdAt", "DESC"]],
       });
-
+      console.log(reqUser);
+      console.log(reqToken);
       if (!reqUser || !reqToken) {
         throw new Error("Invalid link or expired");
       }
       const diffTime = subtractHours(1, new Date());
-      if (diffTime >= reqToken.createdAt) {
+      console.log(new Date());
+      
+      if (reqToken.createdAt >= diffTime) {
         const hashPassword = await bcrypt.hash(password, 10);
         reqUser.set({
             password: hashPassword,
         });
         await reqUser.save();
+        await reqToken.destroy();
         res.status(201).json({
             status: "success",
             message: "Password reset successfully",

@@ -14,7 +14,7 @@ function createModelComment(Sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    cretaedAt: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
     },

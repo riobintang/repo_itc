@@ -1,13 +1,13 @@
-function createmodelToken(Sequelize, DataTypes) {
+function createModelToken(Sequelize, DataTypes) {
   const Token = Sequelize.define("Token", {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
     id_user: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: "users",
@@ -17,15 +17,15 @@ function createmodelToken(Sequelize, DataTypes) {
       onDelete: "CASCADE",
     },
     token: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     createdAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
     updatedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false,
     },
   });
@@ -35,4 +35,8 @@ function createmodelToken(Sequelize, DataTypes) {
       as: "user",
     });
   };
+
+  return Token;
 }
+
+module.exports = createModelToken;
