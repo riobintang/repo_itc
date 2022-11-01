@@ -1,6 +1,6 @@
 # pembelajaran_itc
 
-1. Install node v16.14.2
+1. Install node v16.14.2 https://nodejs.org/en/blog/release/v16.14.2/
 2. npm install
 3. npx sequelize db:migrate
 4. Isi database roles dengan value roleName = Pengguna atau User
