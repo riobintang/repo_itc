@@ -71,6 +71,10 @@ function createModelUser(Sequelize, DataTypes) {
       foreignKey: "id_role",
       as: "role",
     });
+    User.hasMany(models.Token, {
+      foreignKey: "id_user",
+      as: "token",
+    });
   };
 
   return User;
