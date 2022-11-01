@@ -52,13 +52,11 @@ module.exports = {
           token: token,
         },
       });
-      console.log(reqUser);
-      console.log(reqToken);
+
       if (!reqUser || !reqToken) {
         throw new Error("Invalid link or expired");
       }
       const diffTime = subtractHours(1, new Date());
-      console.log(new Date());
       
       if (reqToken.createdAt >= diffTime) {
         const hashPassword = await bcrypt.hash(password, 10);
