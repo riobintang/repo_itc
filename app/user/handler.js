@@ -69,7 +69,7 @@ module.exports = {
             },
           ],
         },
-        attributes: {exclude: ["password", "createdAt", "updatedAt"]},
+        attributes: {exclude: ["createdAt", "updatedAt"]},
       });
 
       if (!user) {
@@ -90,7 +90,14 @@ module.exports = {
 
       res.status(200).json({
         status: "success",
-        data: { user, accessToken },
+        data: { 
+          user: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            fullName: user.fullName, 
+            role: user.id_role,
+        }, accessToken },
       });
     } catch (error) {
       next(error);
