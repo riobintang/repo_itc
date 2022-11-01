@@ -5,4 +5,5 @@
 3. npx sequelize db:migrate
 4. Isi database roles dengan value roleName = Pengguna atau User
 5. Isi database divisions dengan dengan value divisionName = Back End atau Front End atau Mobile
-6. npm run start
+6. Membuat file .env berdasarkan .env.example
+7. npm run start
