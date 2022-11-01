@@ -6,13 +6,10 @@ module.exports = {
       const division = await Division.findAll({
         attributes: {exclude: ["createdAt", "updatedAt"]}
       });
-      console.log(division);
       res.status(200).json({
         status: "success",
         message: "Successfully get division",
-        data: {
-          division,
-        },
+        data: division,
       });
     } catch (error) {
       next(error);
