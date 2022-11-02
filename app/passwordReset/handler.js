@@ -39,7 +39,7 @@ module.exports = {
     try {
       const { id_user, token } = req.params;
       const { password } = req.body;
-      
+
       const reqUser = await User.findOne({
         where: {
           id: id_user,
@@ -57,17 +57,17 @@ module.exports = {
         throw new Error("Invalid link or expired");
       }
       const diffTime = subtractHours(1, new Date());
-      
+
       if (reqToken.createdAt >= diffTime) {
         const hashPassword = await bcrypt.hash(password, 10);
         reqUser.set({
-            password: hashPassword,
+          password: hashPassword,
         });
         await reqUser.save();
         await reqToken.destroy();
         res.status(201).json({
-            status: "success",
-            message: "Password reset successfully",
+          status: "success",
+          message: "Password reset successfully",
         });
       } else {
         throw new Error("Invalid link or expired");
