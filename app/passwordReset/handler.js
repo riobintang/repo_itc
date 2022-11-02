@@ -29,7 +29,7 @@ module.exports = {
       res.status(201).json({
         status: "success",
         message: "email sent successfully",
-        data: link,
+        data: link, //hapus link
       });
     } catch (error) {
       next(error);
