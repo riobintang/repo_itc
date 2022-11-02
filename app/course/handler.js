@@ -1,6 +1,7 @@
 const { Course } = require("../../models");
 
 module.exports = {
+    //handler get course
     handlerGetCourse: async (req, res, next) => {
         try {
             const courses = await Course.findAll();
@@ -13,6 +14,7 @@ module.exports = {
             next(error);
         }
     },
+    //handler to post course
     handlerPostCourse: async (req, res, next) => {
         try {
             const {title, description, image_thumbnail, id_division, id_user} = req.body;
@@ -33,6 +35,7 @@ module.exports = {
             next(error);
         }
     },
+    //handler to update course
     handlerPutCourse: async (req, res, next) => {
         try {
             const { id } = req.params;
@@ -56,6 +59,7 @@ module.exports = {
             next(error);
         }
     },
+    //handler for delete course
     handlerDeleteCourse: async (req, res, next) => {
         try {
             const {id} = req.params;

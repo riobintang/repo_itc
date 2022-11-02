@@ -11,6 +11,7 @@ const {
 const Op = Sequelize.Op;
 
 module.exports = {
+  //handler for register user
   handlerRegisterUser: async (req, res, next) => {
     try {
       const { username, fullName, email, password, id_division } = req.body;
@@ -54,10 +55,12 @@ module.exports = {
       next(error);
     }
   },
+  //handler for login user
   handlerUserLogin: async (req, res, next) => {
     try {
       const { emailUsername, password } = req.body;
       validateLoginUserSchema(req.body);
+      //get User from db
       const user = await User.findOne({
         where: {
           [Op.or]: [
@@ -77,10 +80,10 @@ module.exports = {
       }
 
       const passwordValidate = bcrypt.compareSync(password, user.password);
-      if (!passwordValidate) {
+      if (!passwordValidate) { //validate password
         throw new Error("Invalid password");
       }
-
+      //generate access token
       const accessToken = generateAccessToken({
         id: user.id,
         email: user.email,
@@ -103,6 +106,7 @@ module.exports = {
       next(error);
     }
   },
+  //handler for get user by id
   handlerGetUserById: async (req, res, next) => {
     try {
       const { id } = req.params;

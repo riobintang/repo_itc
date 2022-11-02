@@ -1,6 +1,7 @@
 const { Division } = require("../../models");
 
 module.exports = {
+  //handler get division
   handlerGetDivision: async (req, res, next) => {
     try {
       const division = await Division.findAll({
