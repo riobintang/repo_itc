@@ -42,7 +42,7 @@ module.exports = {
         id_role: role,
       });
 
-      res.status(200).json({
+      res.status(201).json({
         status: "success",
         message: "Successfully register user",
         data: await User.findOne({
@@ -88,7 +88,7 @@ module.exports = {
         role: user.id_role,
       });
 
-      res.status(200).json({
+      res.status(201).json({
         status: "success",
         data: { 
           user: {
