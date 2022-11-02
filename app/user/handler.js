@@ -103,4 +103,23 @@ module.exports = {
       next(error);
     }
   },
+  handlerGetUserById: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = await User.findByPk(id,
+        {attributes: {exclude:["createdAt", "updatedAt"]}
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get user by id",
+        data: user,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
