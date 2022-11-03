@@ -1,5 +1,5 @@
 function createModelToken(Sequelize, DataTypes) {
-  const Token = Sequelize.define("Token", {
+  const Token = Sequelize.define("token", {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,

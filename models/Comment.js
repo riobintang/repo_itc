@@ -1,5 +1,5 @@
 function createModelComment(Sequelize, DataTypes) {
-  const Comment = Sequelize.define("Comment", {
+  const Comment = Sequelize.define("comment", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

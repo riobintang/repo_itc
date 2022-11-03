@@ -1,5 +1,5 @@
 function createModelDiscussion(Sequelize, DataTypes) {
-  const Discussion = Sequelize.define("Discussion", {
+  const Discussion = Sequelize.define("discussion", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

@@ -1,5 +1,5 @@
 function createModelUser(Sequelize, DataTypes) {
-  const User = Sequelize.define("User", {
+  const User = Sequelize.define("user", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

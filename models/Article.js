@@ -1,5 +1,5 @@
 function createModelArticle(Sequelize, DataTypes) {
-  const Article = Sequelize.define("Article", {
+  const Article = Sequelize.define("article", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
