@@ -42,6 +42,8 @@ function createModelComment(Sequelize, DataTypes) {
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+  },{
+    tableName: "comments",
   });
 
   Comment.associate = (models) => {

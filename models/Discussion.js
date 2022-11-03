@@ -1,52 +1,58 @@
 function createModelDiscussion(Sequelize, DataTypes) {
-  const Discussion = Sequelize.define("Discussion", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    body: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    isEdited: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    id_user: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "user",
-        key: "id",
+  const Discussion = Sequelize.define(
+    "Discussion",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
       },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
-    },
-    id_subject: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "subject",
-        key: "id",
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
+      body: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      isEdited: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      id_user: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "user",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+      id_subject: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "subject",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
     },
-  });
+    {
+      tableName: "discussions",
+    }
+  );
 
   Discussion.associate = (models) => {
     Discussion.belongsTo(models.User, {
