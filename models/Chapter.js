@@ -1,5 +1,5 @@
 function createModelChapter(Sequelize, DataTypes) {
-  const Chapter = Sequelize.define("chapter", {
+  const Chapter = Sequelize.define("Chapter", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

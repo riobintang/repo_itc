@@ -1,5 +1,5 @@
 function createModelCourse(Sequelize, DataTypes) {
-  const Course = Sequelize.define("course", {
+  const Course = Sequelize.define("Course", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

@@ -1,5 +1,5 @@
 function createModelRole(Sequelize, DataTypes) {
-  const Role = Sequelize.define("role", {
+  const Role = Sequelize.define("Role", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,

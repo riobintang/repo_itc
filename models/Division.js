@@ -1,5 +1,5 @@
 function createModelDivision(Sequelize, DataTypes) {
-  const Division = Sequelize.define("division", {
+  const Division = Sequelize.define("Division", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
