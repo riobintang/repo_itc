@@ -18,9 +18,6 @@ const sendEmail = async (email, subject, text, userReset) => {
       to: email,
       subject: subject,
       text: newText,
-      headers: {
-        'x-my-key': 'Reset Password',
-      }
     });
     console.log("email sent successfully");
   } catch (error) {
