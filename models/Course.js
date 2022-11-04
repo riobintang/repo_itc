@@ -20,6 +20,10 @@ function createModelCourse(Sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      cloudinary_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

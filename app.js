@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const userRouter = require("./app/user/route");
 const divisionRouter = require("./app/division/route");
+const roleRouter = require("./app/role/route");
 const courseRouter = require("./app/course/route");
 const tokenRouter = require("./app/authentication/route");
 const passwordResetRouter = require("./app/passwordReset/route");
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/token", tokenRouter);
 app.use("/user", userRouter);
 app.use("/division", divisionRouter);
+app.use("/role", roleRouter);
 app.use("/course", courseRouter);
 app.use("/password-reset", passwordResetRouter);
 
