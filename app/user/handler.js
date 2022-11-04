@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 const { User, Role, Division } = require("../../models");
+const { checkUniqueRegister } = require("./functionDBUser");
 
 const generateAccessToken = require("../../utils/tokenManager");
 const {
@@ -16,22 +17,7 @@ module.exports = {
     try {
       const { username, fullName, email, password, id_division } = req.body;
       validateRegisterUserSchema(req.body);
-      const checkEmail = await User.findOne({
-        where: {
-          email: email,
-        },
-      });
-      const checkUsername = await User.findOne({
-        where: {
-          username: username,
-        },
-      });
-      if (checkEmail) {
-        throw new Error("Email address already in use");
-      }
-      if (checkUsername) {
-        throw new Error("Username already in use");
-      }
+      checkUniqueRegister(email, username, next); //check unique username and email
       const hashPassword = await bcrypt.hash(password, 10);
       const role = await Role.findOne({
         where: {
@@ -47,7 +33,7 @@ module.exports = {
         id_role: role.id,
       });
 
-      res.status(201).json({
+      res.status(200).json({
         status: "success",
         message: "Successfully register user",
         data: await User.findOne({
@@ -98,7 +84,7 @@ module.exports = {
         division: user.Division.divisionName,
       });
 
-      res.status(201).json({
+      res.status(200).json({
         status: "success",
         data: {
           user: {
@@ -106,10 +92,10 @@ module.exports = {
             email: user.email,
             username: user.username,
             fullName: user.fullName,
-            role: user.Role.roleName,
-            division: user.Division.divisionName,
+            id_role: user.id_role,
+            id_division: user.id_division,
+            accessToken,
           },
-          accessToken,
         },
       });
     } catch (error) {
