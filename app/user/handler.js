@@ -1,15 +1,19 @@
 const bcrypt = require("bcrypt");
-const Sequelize = require("sequelize");
-const { User, Role, Division } = require("../../models");
-const { checkUniqueRegister } = require("./functionDBUser");
+
+const { User } = require("../../models");
+const {
+  findDetailUser,
+  userFindByPK,
+  userFindLastInsert,
+  checkEmailAndUsername,
+} = require("../../data-access/functionUserDB");
 
 const generateAccessToken = require("../../utils/tokenManager");
 const {
   validateRegisterUserSchema,
   validateLoginUserSchema,
 } = require("../../validator/user");
-
-const Op = Sequelize.Op;
+const { findOneRoleByName } = require("../../data-access/functionRoleDB");
 
 module.exports = {
   //handler for register user
@@ -17,13 +21,18 @@ module.exports = {
     try {
       const { username, fullName, email, password, id_division } = req.body;
       validateRegisterUserSchema(req.body);
-      checkUniqueRegister(email, username, next); //check unique username and email
+      //check unique username and email
+      const checkUnique = await checkEmailAndUsername(email, username);
+      if (checkUnique.checkEmail) {
+        throw new Error("Email address already in use");
+      }
+      if (checkUnique.checkUsername) {
+        throw new Error("Username already in use");
+      }
+
       const hashPassword = await bcrypt.hash(password, 10);
-      const role = await Role.findOne({
-        where: {
-          roleName: "User",
-        }
-      });
+      const role = await findOneRoleByName("User");
+      console.log(role);
       await User.create({
         username: username,
         fullName: fullName,
@@ -33,13 +42,12 @@ module.exports = {
         id_role: role.id,
       });
 
+      const user = userFindLastInsert;
+
       res.status(200).json({
         status: "success",
         message: "Successfully register user",
-        data: await User.findOne({
-          attributes: { exclude: ["password", "createdAt", "updatedAt"] },
-          order: [["createdAt", "DESC"]], //to send last data inserted to database
-        }),
+        data: user,
       });
     } catch (error) {
       next(error);
@@ -50,21 +58,8 @@ module.exports = {
     try {
       const { emailUsername, password } = req.body;
       validateLoginUserSchema(req.body);
-      //get User from db
-      const user = await User.findOne({
-        where: {
-          [Op.or]: [
-            {
-              email: emailUsername,
-            },
-            {
-              userName: emailUsername,
-            },
-          ],
-        },
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-        include: [{model: Role }, {model: Division}],
-      });
+
+      const user = await findDetailUser(emailUsername); //get User from db
 
       if (!user) {
         throw new Error("User not found");
@@ -72,9 +67,9 @@ module.exports = {
 
       const passwordValidate = bcrypt.compareSync(password, user.password);
       if (!passwordValidate) {
-        //validate password
         throw new Error("Invalid password");
       }
+
       //generate access token
       const accessToken = generateAccessToken({
         id: user.id,
@@ -106,9 +101,7 @@ module.exports = {
   handlerGetUserById: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const user = await User.findByPk(id, {
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-      });
+      const user = await userFindByPK(id);
 
       if (!user) {
         throw new Error("User not found");
