@@ -99,7 +99,9 @@ module.exports = {
         email: user.email,
         username: user.username,
         role: user.Role.roleName,
+        id_role: user.id_role,
         division: user.Division.divisionName,
+        id_division: user.id_division,
       });
 
       res.status(200).json({

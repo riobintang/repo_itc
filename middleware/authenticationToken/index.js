@@ -18,7 +18,9 @@ function authenticationToken(req, res, next) {
         email: decoded.email,
         username: decoded.username,
         role: decoded.role,
+        id_role: decoded.id_role,
         division: decoded.division,
+        id_division: decoded.id_division,
     };
     req.user = user;
 
