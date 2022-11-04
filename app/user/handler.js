@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 const { User, Role, Division } = require("../../models");
-const { checkUniqueRegister } = require("./functionDBUser");
 
 const generateAccessToken = require("../../utils/tokenManager");
 const {
@@ -17,13 +16,32 @@ module.exports = {
     try {
       const { username, fullName, email, password, id_division } = req.body;
       validateRegisterUserSchema(req.body);
-      checkUniqueRegister(email, username, next); //check unique username and email
+      //check unique username and email
+      const checkEmail = await User.findOne({
+        where: {
+          email: email,
+        },
+      });
+      const checkUsername = await User.findOne({
+        where: {
+          username: username,
+        },
+      });
+
+      if (checkEmail) {
+        throw new Error(`Email address already in use`);
+      }
+      if (checkUsername) {
+        throw new Error(`Username already in use`);
+      }
+
       const hashPassword = await bcrypt.hash(password, 10);
       const role = await Role.findOne({
         where: {
           roleName: "User",
-        }
+        },
       });
+
       await User.create({
         username: username,
         fullName: fullName,
@@ -63,7 +81,7 @@ module.exports = {
           ],
         },
         attributes: { exclude: ["createdAt", "updatedAt"] },
-        include: [{model: Role }, {model: Division}],
+        include: [{ model: Role }, { model: Division }],
       });
 
       if (!user) {
@@ -107,7 +125,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id, {
-        attributes: { exclude: ["createdAt", "updatedAt"] },
+        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
       });
 
       if (!user) {
