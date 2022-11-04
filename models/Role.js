@@ -28,13 +28,6 @@ function createModelRole(Sequelize, DataTypes) {
     }
   );
 
-  Role.associate = (models) => {
-    Role.hasMany(models.User, {
-      foreignKey: "id_role",
-      as: "user",
-    });
-  };
-
   return Role;
 }
 

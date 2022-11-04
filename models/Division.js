@@ -28,17 +28,6 @@ function createModelDivision(Sequelize, DataTypes) {
     }
   );
 
-  Division.associate = (models) => {
-    Division.hasMany(models.User, {
-      foreignKey: "id_division",
-      as: "user",
-    });
-    Division.hasMany(models.Course, {
-      foreignKey: "id_division",
-      as: "course",
-    });
-  };
-
   return Division;
 }
 

@@ -70,21 +70,6 @@ function createModelUser(Sequelize, DataTypes) {
     }
   );
 
-  User.assoicate = (models) => {
-    User.belongsTo(models.Division, {
-      foreignKey: "id_division",
-      as: "division",
-    });
-    User.belongsTo(models.Role, {
-      foreignKey: "id_role",
-      as: "role",
-    });
-    User.hasMany(models.Token, {
-      foreignKey: "id_user",
-      as: "token",
-    });
-  };
-
   return User;
 }
 
