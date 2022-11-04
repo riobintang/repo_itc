@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
+const { User, Role, Division } = require("../../models");
 
-const { User } = require("../../models");
 const generateAccessToken = require("../../utils/tokenManager");
 const {
   validateRegisterUserSchema,
@@ -33,14 +33,18 @@ module.exports = {
         throw new Error("Username already in use");
       }
       const hashPassword = await bcrypt.hash(password, 10);
-      const role = 1;
+      const role = await Role.findOne({
+        where: {
+          roleName: "User",
+        }
+      });
       await User.create({
         username: username,
         fullName: fullName,
         email: email,
         password: hashPassword,
         id_division: id_division,
-        id_role: role,
+        id_role: role.id,
       });
 
       res.status(201).json({
@@ -72,7 +76,8 @@ module.exports = {
             },
           ],
         },
-        attributes: {exclude: ["createdAt", "updatedAt"]},
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [{model: Role }, {model: Division}],
       });
 
       if (!user) {
@@ -80,7 +85,8 @@ module.exports = {
       }
 
       const passwordValidate = bcrypt.compareSync(password, user.password);
-      if (!passwordValidate) { //validate password
+      if (!passwordValidate) {
+        //validate password
         throw new Error("Invalid password");
       }
       //generate access token
@@ -88,19 +94,23 @@ module.exports = {
         id: user.id,
         email: user.email,
         username: user.username,
-        role: user.id_role,
+        role: user.Role.roleName,
+        division: user.Division.divisionName,
       });
 
       res.status(201).json({
         status: "success",
-        data: { 
+        data: {
           user: {
             id: user.id,
             email: user.email,
             username: user.username,
-            fullName: user.fullName, 
-            role: user.id_role,
-        }, accessToken },
+            fullName: user.fullName,
+            role: user.Role.roleName,
+            division: user.Division.divisionName,
+          },
+          accessToken,
+        },
       });
     } catch (error) {
       next(error);
@@ -110,8 +120,8 @@ module.exports = {
   handlerGetUserById: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const user = await User.findByPk(id,
-        {attributes: {exclude:["createdAt", "updatedAt"]}
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ["createdAt", "updatedAt"] },
       });
 
       if (!user) {

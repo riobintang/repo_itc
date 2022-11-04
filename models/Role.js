@@ -7,10 +7,12 @@ function createModelRole(Sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
+        field: 'id',
       },
       roleName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'roleName',
       },
       createdAt: {
         type: DataTypes.DATE,

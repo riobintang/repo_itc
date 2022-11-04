@@ -7,10 +7,12 @@ function createModelDivision(Sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
+        field: 'id',
       },
       divisionName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'divisionName',
       },
       createdAt: {
         type: DataTypes.DATE,

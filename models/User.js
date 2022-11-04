@@ -51,6 +51,7 @@ function createModelUser(Sequelize, DataTypes) {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
+        field: 'id_division',
       },
       id_role: {
         type: DataTypes.INTEGER,
@@ -61,6 +62,7 @@ function createModelUser(Sequelize, DataTypes) {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
+        field: 'id_role',
       },
     },
     {
