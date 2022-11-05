@@ -6,9 +6,9 @@ const filePhotoSchema = Joi.object({
     filename: Joi.string().required(),
 }).unknown();
 
-const createCourseSchmea = Joi.object({
+const createCourseSchema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
 }).unknown();
 
-module.exports = { filePhotoSchema, createCourseSchmea };
+module.exports = { filePhotoSchema, createCourseSchema };

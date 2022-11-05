@@ -1,6 +1,5 @@
 const { Course } = require("../../models");
-const { validateCoursePhotoSchema } = require("../../validator/course");
-const upload = require("../../utils/multer");
+const { validateCoursePhotoSchema, validateCourseCreateUpdateSchema } = require("../../validator/course");
 const cloudinary = require("../../utils/cloudinary").v2;
 
 module.exports = {
@@ -21,8 +20,10 @@ module.exports = {
   handlerPostCourse: async (req, res, next) => {
     try {
       const { title, description } = req.body;
-      validateCoursePhotoSchema(req.file);
-      const checkImageSize = await upload(req.file.path);
+
+      validateCoursePhotoSchema(req.file); // validate photo extension
+      validateCourseCreateUpdateSchema({title, description}); // validate title and description
+
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "itc-repo/course/",
       });
@@ -50,14 +51,16 @@ module.exports = {
       const { id } = req.params;
       const { title, description } = req.body;
 
-      const course = await Course.findByPk(id);
+      const course = await Course.findByPk(id); // search course by id
       if (!course) {
         throw new Error("Course not found");
       }
 
-      if (req.file !== null) { //update image
-        validateCoursePhotoSchema(req.file);
-        const result = await cloudinary.uploader.upload(req.file.path, {
+      validateCourseCreateUpdateSchema({title, description}); // validate title and description
+
+      if (req.file != null) { //update image
+        validateCoursePhotoSchema(req.file); //validate image
+        const result = await cloudinary.uploader.upload(req.file.path, { // upload image to cloudinary
           folder:"itc-repo/course/", public_id: course.cloudinary_id,
         });
         await course.update({
@@ -65,11 +68,13 @@ module.exports = {
           cloudinary_id: course.cloudinary_id,
         });
       }
+      
       await course.update({
         title: title,
         description: description,
         id_user: req.user.id,
       });
+
       await course.save();
 
       res.status(200).json({
@@ -89,8 +94,8 @@ module.exports = {
       if (!course) {
         throw new Error("Course not found");
       }
-      const deleteImagePublic_id =  `itc-repo/course/${course.cloudinary_id}`;
-      const result = await cloudinary.uploader.destroy(deleteImagePublic_id);
+      const deleteImagePublic_id =  `itc-repo/course/${course.cloudinary_id}`; // to save public_id for parameter destroy
+      const result = await cloudinary.uploader.destroy(deleteImagePublic_id); // delete image in cloudinary
       console.log(result);
       if (result.result !== "ok") {
         throw new Error("Failed to delete image");
