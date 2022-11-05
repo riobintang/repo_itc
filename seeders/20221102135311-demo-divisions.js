@@ -1,24 +1,36 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert("divisions", [
+    return queryInterface.bulkInsert('divisions', [
       {
         id: 1,
-        divisionName: "Back End",
+        divisionName: 'Back-end Developer',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
-        divisionName: "Front End",
+        divisionName: 'Front-end Developer',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 3,
-        divisionName: "Mobile",
+        divisionName: 'Mobile Developer',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 4,
+        divisionName: 'Public Relations',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 5,
+        divisionName: 'Project Manager',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -26,6 +38,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("divisions", null, {});
+    return queryInterface.bulkDelete('divisions', null, {});
   },
 };
