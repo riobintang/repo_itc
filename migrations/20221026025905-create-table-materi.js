@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       cloudinary_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {

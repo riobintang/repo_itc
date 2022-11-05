@@ -10,7 +10,7 @@ router.get('/', authenticationToken, handlerGetCourse);
 //API post course: POST /course/
 router.post('/', authenticationToken, loginAdmin, upload.single("image"), handlerPostCourse);
 //API update course: PUT /course/:id
-router.put('/:id', authenticationToken, loginAdmin, handlerPutCourse);
+router.put('/:id', authenticationToken, loginAdmin, upload.single("image"), handlerPutCourse);
 //API delete course: DELETE /course/:id
 router.delete('/:id', authenticationToken, loginAdmin, handlerDeleteCourse);
 
