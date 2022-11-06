@@ -2,11 +2,11 @@
 ---
 ## Installation
 You need to install node v16.14.2 https://nodejs.org/en/blog/release/v16.14.2/ or latest https://nodejs.org/en/download/ \
-You need to install all package with command
+You need to install all package with command:
 ```text
 npm install
 ```
-Create database MySQL with the name "pembelajaran_itc"
+Create database MySQL manually with name "pembelajaran_itc".\
 Create a table automatically with command:
 ```text
 npx sequelize db:migrate
