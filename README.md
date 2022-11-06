@@ -1,13 +1,35 @@
 # pembelajaran_itc
 ---
-
-1. Install node v16.14.2 https://nodejs.org/en/blog/release/v16.14.2/
-2. Jalankan perintah npm install
-3. Buat database dengan nama "pembelajaran_itc"
-4. Jalankan npx sequelize db:migrate
-5. Jalankan npx sequelize-cli db:seed:all
-6. Jalankan perintah npm run start
-
+## Installation
+You need to install node v16.14.2 https://nodejs.org/en/blog/release/v16.14.2/ or latest https://nodejs.org/en/download/ \
+You need to install all package with command
+```text
+npm install
+```
+Create database MySQL with the name "pembelajaran_itc"
+Create a table automatically with command:
+```text
+npx sequelize db:migrate
+```
+Insert data into tables from all seeders with command:
+```text
+npx sequelize-cli db:seed:all
+```
+You can run specific seeder with following command:
+```text
+ npx sequelize-cli db:seed --seed <name file.js>
+```
+Before start, create a .env file with contents like .env.example \
+Start API with command:
+```text
+npm run start
+```
+or 
+```text
+npm run start-dev
+```
+\
+For more information about sequelize check the [documentation](https://sequelize.org/docs/v6/).
 
 ## Table of Contents
 
