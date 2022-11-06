@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,6 +12,8 @@ module.exports = {
         image_thumbnail:
           "https://res.cloudinary.com/dd6stok7k/image/upload/v1667643077/itc-repo/course/qvb6qhhlvyo1x69fox16.jpg",
         cloudinary_id: "qvb6qhhlvyo1x69fox16",
+        id_division: 2, 
+        id_user: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -23,13 +25,15 @@ module.exports = {
         image_thumbnail:
           "https://res.cloudinary.com/dd6stok7k/image/upload/v1667634116/itc-repo/course/b2zkflzfmac6bjiq9aqd.jpg",
         cloudinary_id: "b2zkflzfmac6bjiq9aqd",
+        id_division: 2, 
+        id_user: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     return queryInterface.bulkDelete("courses", null, [{}]);
-  },
+  }
 };
