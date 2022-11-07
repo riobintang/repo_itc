@@ -109,7 +109,7 @@ module.exports = {
       });
 
       const refreshToken = randtoken.uid(256);
-      refreshTokens[refreshToken] = emailUsername;
+      refreshTokens[refreshToken] = user.username;
 
       res.status(200).json({
         status: "success",
