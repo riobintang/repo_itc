@@ -6,7 +6,6 @@ const userRouter = require("./app/user/route");
 const divisionRouter = require("./app/division/route");
 const roleRouter = require("./app/role/route");
 const courseRouter = require("./app/course/route");
-const tokenRouter = require("./app/authentication/route");
 const passwordResetRouter = require("./app/passwordReset/route");
 const customErrorHandler = require("./middleware/customErrorHandler");
 const handler404NotFound = require("./middleware/handler404NotFound");
@@ -26,7 +25,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/token", tokenRouter);
 app.use("/user", userRouter);
 app.use("/division", divisionRouter);
 app.use("/role", roleRouter);

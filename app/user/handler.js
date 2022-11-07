@@ -1,6 +1,10 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 const { User, Role, Division } = require("../../models");
+const jwt = require("jsonwebtoken");
+const accessTokenSecretKey = "testing-secret-repo-itc";
+const randtoken = require("rand-token");
+const refreshTokens = {};
 
 const generateAccessToken = require("../../utils/tokenManager");
 const {
@@ -104,6 +108,9 @@ module.exports = {
         id_division: user.id_division,
       });
 
+      const refreshToken = randtoken.uid(256);
+      refreshTokens[refreshToken] = emailUsername;
+
       res.status(200).json({
         status: "success",
         data: {
@@ -115,6 +122,7 @@ module.exports = {
             id_role: user.id_role,
             id_division: user.id_division,
             accessToken,
+            refreshToken,
           },
         },
       });
@@ -142,4 +150,45 @@ module.exports = {
       next(error);
     }
   },
+  // handler for refresh token
+  refreshJWTHandler: async (req, res, next) => {
+    const username = req.body.username;
+    const refreshToken = req.body.refreshToken;
+
+    if ((refreshToken in refreshTokens) && (refreshTokens[refreshToken] == username)) {
+      const authHeader = req.headers["authorization"];
+      if (!authHeader) {
+          next(new Error("Token not found"));
+      }
+      
+      const token = authHeader.split(" ")[1];
+      if (!token) {
+          next(new Error("Token is required"));
+      }
+      
+      const decoded = jwt.verify(token, accessTokenSecretKey);
+      const user = {
+          id: decoded.id,
+          email: decoded.email,
+          username: decoded.username,
+          role: decoded.role,
+          id_role: decoded.id_role,
+          division: decoded.division,
+          id_division: decoded.id_division,
+      };
+      const accessToken = generateAccessToken(user);
+      res.status(200).json({
+        status: "success",
+        message: "Successfully refresh access token",
+        data: {
+          accessToken,
+        },
+      });
+    } else {
+      res.status(403).json({
+        status: "error",
+        message: "Invalid refresh token",
+      });
+    }
+  }
 };
