@@ -156,27 +156,23 @@ module.exports = {
     const refreshToken = req.body.refreshToken;
 
     if ((refreshToken in refreshTokens) && (refreshTokens[refreshToken] == username)) {
-      const authHeader = req.headers["authorization"];
-      if (!authHeader) {
-          next(new Error("Token not found"));
-      }
-      
-      const token = authHeader.split(" ")[1];
-      if (!token) {
-          next(new Error("Token is required"));
-      }
-      
-      const decoded = jwt.verify(token, accessTokenSecretKey);
-      const user = {
-          id: decoded.id,
-          email: decoded.email,
-          username: decoded.username,
-          role: decoded.role,
-          id_role: decoded.id_role,
-          division: decoded.division,
-          id_division: decoded.id_division,
-      };
-      const accessToken = generateAccessToken(user);
+      const user = await User.findOne({
+        where: {
+          username: username, 
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [{ model: Role }, { model: Division }],
+      });
+      const accessToken = generateAccessToken({
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.Role.roleName,
+        id_role: user.id_role,
+        division: user.Division.divisionName,
+        id_division: user.id_division,
+      });
+      //const accessToken = generateAccessToken(user);
       res.status(200).json({
         status: "success",
         message: "Successfully refresh access token",
