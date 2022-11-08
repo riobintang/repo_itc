@@ -39,6 +39,7 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Register User](#register-user)
     - [Login User](#login-user)
     - [Fetch User](#fetch-user)
+    - [Refresh Token](#refresh-token)
   - [Course](#course)
     - [Fetch All Courses](#fetch-all-courses)
     - [Store Course](#store-course)
@@ -154,8 +155,31 @@ Response
 }
 ```
 
+### Refresh Token
 
+```text
+POST /user/refresh-token
+```
 
+Body
+
+```json
+{
+    "username":"John",
+    "refreshToken": "8TgRNSUhAza7zaa3bMVmPYOa1l8RKy6YXjd0FDgCdeAStHvhwWbJqayvxWVlstBMfBn0jokn4KOA7XvQs73tqi3NHnvPqV2rMkZhVPz1Va87wfI500SAbh5Ie8i42oxh4MGBFkESIXwPilew6HVsLe0y4uoR6Vbn1jqvHLi2oZEeZyHxkWcUn1H2c7YKAjklnQPSyNTh1GcA0NsNh9O0KqNfGNEFHg6JaZcCyiDN3feRns9oizDz7TSopcQr3frp"
+}
+```
+
+Response
+```json
+{
+    "status": "success",
+    "message": "Successfully refresh access token",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJyaW8xMjM0NTY3ODkxMjNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJiaW50YW5nMDEiLCJyb2xlIjoidXNlciIsImlkX3JvbGUiOjEsImRpdmlzaW9uIjoiQmFjay1lbmQgRGV2ZWxvcGVyIiwiaWRfZGl2aXNpb24iOjEsImlhdCI6MTY2Nzg4NTk5MiwiZXhwIjoxNjY3ODg3MTkyLCJzdWIiOiJiaW50YW5nMDEifQ.SLhjrW1t3DAth06BK_4E-FMyLgzaoyYy2tJzq87HpEw"
+    }
+}
+```
 ---
 
 ## Course
