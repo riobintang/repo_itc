@@ -40,6 +40,8 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Login User](#login-user)
     - [Fetch User](#fetch-user)
     - [Refresh Token](#refresh-token)
+    - [Link Reset Password](#link-reset-password)
+    - [Reset Password](#reset-password)
   - [Course](#course)
     - [Fetch All Courses](#fetch-all-courses)
     - [Store Course](#store-course)
@@ -49,6 +51,7 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Fetch All Divisions](#fetch-all-divisions)
   - [Role](#role)
     - [Fetch All Roles](#fetch-all-roles)
+
 ---
 
 ## User
@@ -178,6 +181,55 @@ Response
     "data": {
         "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJyaW8xMjM0NTY3ODkxMjNAZ21haWwuY29tIiwidXNlcm5hbWUiOiJiaW50YW5nMDEiLCJyb2xlIjoidXNlciIsImlkX3JvbGUiOjEsImRpdmlzaW9uIjoiQmFjay1lbmQgRGV2ZWxvcGVyIiwiaWRfZGl2aXNpb24iOjEsImlhdCI6MTY2Nzg4NTk5MiwiZXhwIjoxNjY3ODg3MTkyLCJzdWIiOiJiaW50YW5nMDEifQ.SLhjrW1t3DAth06BK_4E-FMyLgzaoyYy2tJzq87HpEw"
     }
+}
+```
+### Link Reset Password
+
+Endpoint
+
+```text
+POST /reset-password/
+```
+
+Request
+
+```json
+{
+    "email": "johndoe@gmail.com"
+}
+```
+
+Response
+
+```json
+{
+    "status": "success",
+    "message": "email sent successfully"
+}
+```
+
+### Reset Password
+
+Endpoint
+
+```text
+POST /:id_user/:token
+```
+
+Request
+
+```json
+{
+    "password": "passwordsecret"
+}
+```
+
+Response
+
+```json
+{
+    "status": "success",
+    "message": "Password reset successfully"
 }
 ```
 ---
@@ -460,3 +512,4 @@ Response
     ]
 }
 ```
+
