@@ -27,7 +27,7 @@ module.exports = {
       const courses = await Course.findAll({
         where: {
           title: {
-            [Op.ilike]: `%${title}`,
+            [Op.like] : `%${title}%`,
           },
         },
       });
