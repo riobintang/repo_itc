@@ -384,11 +384,6 @@ Request
                 "value": "2",
                 "type": "text"
             },
-            {
-                "key": "id_user",
-                "value": "2",
-                "type": "text"
-            },
         ]
     },
 }
