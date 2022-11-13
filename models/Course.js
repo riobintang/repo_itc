@@ -58,21 +58,6 @@ function createModelCourse(Sequelize, DataTypes) {
     }
   );
 
-  Course.associate = (models) => {
-    Course.belongsTo(models.Division, {
-      foreignKey: "id_division",
-      as: "divisi",
-    });
-    Course.belongsTo(models.User, {
-      foreignKey: "id_user",
-      as: "user",
-    });
-    Course.hasMany(models.Chapter, {
-      foreignKey: "id_course",
-      as: "chapter",
-    });
-  };
-
   return Course;
 }
 

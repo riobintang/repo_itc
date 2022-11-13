@@ -46,17 +46,6 @@ function createModelComment(Sequelize, DataTypes) {
     tableName: "comments",
   });
 
-  Comment.associate = (models) => {
-    Comment.belongsTo(models.User, {
-      foreignKey: "id_user",
-      as: "user",
-    });
-    Comment.belongsTo(models.Discussion, {
-      foreignKey: "id_discussion",
-      as: "discussion",
-    });
-  };
-
   return Comment;
 }
 

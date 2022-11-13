@@ -40,13 +40,6 @@ function createModelArticle(Sequelize, DataTypes) {
     }
   );
 
-  Article.associate = (models) => {
-    Article.belongsTo(models.Chapter, {
-      foreignKey: "id_chapter",
-      as: "chapter",
-    });
-  };
-
   return Article;
 }
 

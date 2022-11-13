@@ -54,21 +54,6 @@ function createModelDiscussion(Sequelize, DataTypes) {
     }
   );
 
-  Discussion.associate = (models) => {
-    Discussion.belongsTo(models.User, {
-      foreignKey: "id_user",
-      as: "user",
-    });
-    Discussion.belongsTo(models.Course, {
-      foreignKey: "id_course",
-      as: "course",
-    });
-    Discussion.hasMany(models.Comment, {
-      foreignKey: "id_discussion",
-      as: "comment",
-    });
-  };
-
   return Discussion;
 }
 

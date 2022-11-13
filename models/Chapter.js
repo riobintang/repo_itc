@@ -36,17 +36,6 @@ function createModelChapter(Sequelize, DataTypes) {
     }
   );
 
-  Chapter.associate = (models) => {
-    Chapter.belongsTo(models.Course, {
-      foreignKey: "id_course",
-      as: "materi",
-    });
-    Chapter.hasMany(models.Article, {
-      foreignKey: "id_chapter",
-      as: "article",
-    });
-  };
-
   return Chapter;
 }
 
