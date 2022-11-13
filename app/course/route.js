@@ -8,7 +8,7 @@ const router = express.Router();
 //API get course: GET /course/
 router.get('/', authenticationToken, handlerGetAllCourse);
 //API get search course: GET /course/:title
-router.get('/:title', authenticationToken, handlerGetCourseByTitle);
+router.get('/search/:title', authenticationToken, handlerGetCourseByTitle);
 //API post course: POST /course/
 router.post('/', authenticationToken, loginAdmin, upload.single("image"), handlerPostCourse);
 //API update course: PUT /course/:id

@@ -46,7 +46,7 @@ module.exports = {
       const { title, description, id_division } = req.body;
 
       validateCoursePhotoSchema(req.file); // validate photo extension
-      validateCourseCreateUpdateSchema({ title, description }); // validate title and description
+      validateCourseCreateUpdateSchema({ title, description, id_division}); // validate title and description
 
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "itc-repo/course/",
@@ -80,7 +80,7 @@ module.exports = {
         throw new Error("Course not found");
       }
 
-      validateCourseCreateUpdateSchema({ title, description }); // validate title and description
+      validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
 
       if (req.file != null) {
         //update image
@@ -123,7 +123,6 @@ module.exports = {
       }
       const deleteImagePublic_id = `itc-repo/course/${course.cloudinary_id}`; // to save public_id for parameter destroy
       const result = await cloudinary.uploader.destroy(deleteImagePublic_id); // delete image in cloudinary
-      console.log(result);
       if (result.result !== "ok") {
         throw new Error("Failed to delete image");
       }

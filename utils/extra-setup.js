@@ -1,5 +1,5 @@
 function applyExtraSetup(sequelize) {
-    const { User, Role, Division, Course, Chapter, Article, Discussion } = sequelize.models;
+    const { User, Role, Division, Course, Chapter, Article, Discussion, Comment, Token } = sequelize.models;
 
     Role.hasMany(User, {
         foreignKey: 'id_role',

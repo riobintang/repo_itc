@@ -1,10 +1,10 @@
 const { createChapterSchema } = require("./schema");
 
-function validateCreateChapterSchema(payload) {
+function validateCreateUpdateChapterSchema(payload) {
     const validateResult = createChapterSchema.validate(payload);
     if (validateResult.error) {
         throw new Error(validateResult.error.message);
     }
 }
 
-module.exports = { validateCreateChapterSchema };
+module.exports = { validateCreateUpdateChapterSchema };
