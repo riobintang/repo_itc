@@ -20,7 +20,7 @@ function createModelChapter(Sequelize, DataTypes) {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      id_subject: {
+      id_course: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      id_subject: {
+      id_course: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
