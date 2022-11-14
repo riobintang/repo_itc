@@ -1,24 +1,30 @@
 const { Chapter } = require("../../models");
-const updateDateCourse = require("../../utils/updateDateCourse");
+const {updateDateCourse} = require("../../utils/courseDateUpdate");
 const { validateCreateUpdateChapterSchema } = require("../../validator/chapter");
 
 module.exports = {
-  handlerGetAllChapters: async (req, res, next) => {
+  handlerGetAllChaptersByCourseID: async (req, res, next) => {
     try {
-      const chapters = await Chapter.findAll();
+      const { id_course } = req.params;
+      const chapters = await Chapter.findAll({
+        where: {
+          id_course: id_course,
+        },
+      });
       res.status(200).json({
         status: "success",
         message: "Successfully get All Chapters",
         data: chapters,
-      });
+      }); 
     } catch (error) {
       next(error);
     }
   },
+  //Belum dipakai
   handlerGetChapterById: async (req, res,next) => {
     try {
-      const { id } = req.params;
-      const chapter = await Chapter.findByPK(id);
+      const { id_course, id_chapter } = req.params;
+      const chapter = await Chapter.findByPK(id_chapter);
 
       if (!chapter) {
         throw new Error("Chapter not found");
@@ -55,11 +61,13 @@ module.exports = {
   },
   handlerPutChapter: async (req, res, next) => {
     try {
-      const { id_course, id } = req.params;
+      const { id_course, id_chapter } = req.params;
       const { title } = req.body;
       
-      const chapter = await Chapter.findByPK(id);
-
+      const chapter = await Chapter.findByPK(id_chapter);
+      if (chapter.id_course != id_course) {
+        throw new Error("Course not found");
+      }
       if (!chapter) {
         throw new Error("Chapter not found");
       }
