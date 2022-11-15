@@ -13,7 +13,7 @@ module.exports = {
       });
       res.status(200).json({
         status: "success",
-        message: "Successfully get All Chapters",
+        message: "Successfully get all chapters by specific course",
         data: chapters,
       }); 
     } catch (error) {
@@ -76,7 +76,7 @@ module.exports = {
       await chapter.update({
         title: title,
       });
-      
+
       await updateDateCourse(id_course);
       
       res.status(200).json({
