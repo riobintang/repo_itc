@@ -517,7 +517,7 @@ Response
 Endpoint
 
 ```text
-PUT /course/:id_course/chapter/update/:id_chapter
+PUT /course/:id_course/chapter/:id_chapter
 ```
 
 Request
@@ -548,7 +548,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id_course/chapter/delete/:id_chapter
+DELETE /course/:id_course/chapter/:id_chapter
 ```
 
 Response
