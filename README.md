@@ -47,6 +47,11 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Store Course](#store-course)
     - [Modify Course](#modify-course)
     - [Delete Course](#delete-course)
+  - [Chapter](#chapter)
+    - [Fetch All Chapters by Course id](#fetch-all-chapters-by-course-id)
+    - [Store Chapter](#store-chapter)
+    - [Modify Chapter](#modify-chapter)
+    - [Delete Chapter](#delete-chapter)
   - [Division](#division)
     - [Fetch All Divisions](#fetch-all-divisions)
   - [Role](#role)
@@ -439,6 +444,119 @@ Response
 {
     "status": "success",
     "message": "Successfully delete course"
+}
+```
+---
+## Chapter
+
+### Fetch All Chapters by Course id
+
+Endpoint
+
+```text
+GET /course/:id_course/chapter
+```
+
+Response
+
+```json
+{
+    "status": "success",
+    "message": "Successfully get all chapters by specific course",
+    "data": [
+        {
+            "id": 1,
+            "title": "tipe data",
+            "createdAt": "2022-11-14T14:07:13.000Z",
+            "updatedAt": "2022-11-14T14:07:13.000Z",
+            "id_course": 1
+        },
+        {
+            "id": 2,
+            "title": "looping",
+            "createdAt": "2022-11-14T14:07:45.000Z",
+            "updatedAt": "2022-11-14T14:07:45.000Z",
+            "id_course": 1
+        }
+    ]
+}
+```
+
+### Store Chapter
+
+Endpoint
+
+```text
+POST /course/:id_course/chapter
+```
+
+Request
+```json
+{
+    "title": "looping while"
+}
+```
+
+Response
+```json
+{
+    "status": "success",
+    "message": "Successfully add chapter",
+    "data": {
+        "id": 16,
+        "title": "looping while",
+        "id_course": "2",
+        "updatedAt": "2022-11-15T10:15:39.194Z",
+        "createdAt": "2022-11-15T10:15:39.194Z"
+    }
+}
+```
+
+### Modify Chapter
+
+Endpoint
+
+```text
+PUT /course/:id_course/chapter/update/:id_chapter
+```
+
+Request
+
+```json
+{
+    "title": "looping while and for"
+}
+```
+Response
+
+```json
+{
+    "status": "success",
+    "message": "Successfully update Chapter",
+    "data": {
+        "id": 16,
+        "title": "looping while and for",
+        "createdAt": "2022-11-15T10:15:39.000Z",
+        "updatedAt": "2022-11-15T10:19:22.446Z",
+        "id_course": 2
+    }
+}
+```
+
+### Delete Chapter
+
+Endpoint
+
+```text
+DELETE /course/:id_course/chapter/delete/:id_chapter
+```
+
+Response
+
+```json
+{
+    "status": "success",
+    "message": "Successfully delete chapter"
 }
 ```
 
