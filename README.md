@@ -6,7 +6,10 @@ You need to install all package with command:
 ```text
 npm install
 ```
-Create database MySQL manually with name "pembelajaran_itc".\
+Create database MySQL with command:
+```text
+npx sequelize db:create
+```
 Create a table automatically with command:
 ```text
 npx sequelize db:migrate
