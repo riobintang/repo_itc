@@ -1,6 +1,8 @@
-const { Chapter } = require("../../models");
-const {updateDateCourse} = require("../../utils/courseDateUpdate");
-const { validateCreateUpdateChapterSchema } = require("../../validator/chapter");
+const { Chapter, Article } = require("../../models");
+const { updateDateCourse } = require("../../utils/courseDateUpdate");
+const {
+  validateCreateUpdateChapterSchema,
+} = require("../../validator/chapter");
 
 module.exports = {
   handlerGetAllChaptersByCourseID: async (req, res, next) => {
@@ -15,13 +17,32 @@ module.exports = {
         status: "success",
         message: "Successfully get all chapters by specific course",
         data: chapters,
-      }); 
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  //Get Title Chapter and Title Article
+  handlerGetChapterAndArticle: async (req, res, next) => {
+    try {
+      const { id_course } = req.params;
+      const chapters = await Chapter.findAll({
+        where: {
+          id_course: id_course,
+        },
+        include: [{ model: Article, attributes: ["id", "title", "id_chapter"],}],
+      });
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get all chapters by specific course",
+        data: chapters,
+      });
     } catch (error) {
       next(error);
     }
   },
   //Belum dipakai
-  handlerGetChapterById: async (req, res,next) => {
+  handlerGetChapterById: async (req, res, next) => {
     try {
       const { id_course, id_chapter } = req.params;
       const chapter = await Chapter.findByPK(id_chapter);
@@ -35,8 +56,7 @@ module.exports = {
         message: "Successfully get Chapter",
         data: chapter,
       });
-
-    } catch(error){ 
+    } catch (error) {
       next(error);
     }
   },
@@ -50,7 +70,7 @@ module.exports = {
         title: title,
         id_course: id_course,
       });
-      
+
       res.status(200).json({
         status: "success",
         message: "Successfully add chapter",
@@ -64,11 +84,11 @@ module.exports = {
     try {
       const { id_course, id_chapter } = req.params;
       const { title } = req.body;
-      
+
       const chapter = await Chapter.findByPk(id_chapter);
       if (!chapter) {
         throw new Error("Chapter not found");
-      }  
+      }
       if (chapter.id_course != id_course) {
         throw new Error("Chapter from Course not found");
       }
@@ -78,13 +98,13 @@ module.exports = {
       });
 
       await updateDateCourse(id_course);
-      
+
       res.status(200).json({
         status: "success",
         message: "Successfully update Chapter",
         data: chapter,
-      })
-    } catch(error) {
+      });
+    } catch (error) {
       next(error);
     }
   },
@@ -104,8 +124,8 @@ module.exports = {
         status: "success",
         message: "Successfully delete chapter",
       });
-    } catch(error) {
+    } catch (error) {
       next(error);
     }
-  }
+  },
 };

@@ -7,6 +7,7 @@ const divisionRouter = require("./app/division/route");
 const roleRouter = require("./app/role/route");
 const courseRouter = require("./app/course/route");
 const chapterRouter = require("./app/chapter/router");
+const articleRouter = require("./app/article/route");
 const passwordResetRouter = require("./app/passwordReset/route");
 const customErrorHandler = require("./middleware/customErrorHandler");
 const handler404NotFound = require("./middleware/handler404NotFound");
@@ -31,6 +32,7 @@ app.use("/division", divisionRouter);
 app.use("/role", roleRouter);
 app.use("/course", courseRouter);
 app.use("/course", chapterRouter);
+app.use("/course", articleRouter);
 app.use("/password-reset", passwordResetRouter);
 
 
