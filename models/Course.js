@@ -13,7 +13,7 @@ function createModelCourse(Sequelize, DataTypes) {
         allowNull: false,
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,
       },
       image_thumbnail: {
