@@ -45,7 +45,7 @@ module.exports = {
   handlerGetChapterById: async (req, res, next) => {
     try {
       const { id_course, id_chapter } = req.params;
-      const chapter = await Chapter.findByPK(id_chapter);
+      const chapter = await Chapter.findByPk(id_chapter);
 
       if (!chapter) {
         throw new Error("Chapter not found");
