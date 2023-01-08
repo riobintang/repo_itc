@@ -63,5 +63,8 @@ module.exports = {
         } catch (error) {
             next(error);
         }
+    },
+    handlerPostImage: async (req, res, next) => {
+        
     }
 }
