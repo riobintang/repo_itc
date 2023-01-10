@@ -1,5 +1,6 @@
 const { Article, Chapter, Course } = require("../../models");
 const { updateDateCourse } = require("../../utils/courseDateUpdate");
+const { validateArticleImageSchema, validateArticleValueSchema } = require("../../validator/article");
 
 module.exports = {
     handlerGetAllArticleTitleByChapterCourseID: async (req, res, next) => {
@@ -40,6 +41,7 @@ module.exports = {
         try {
             const { title, content } = req.body;
             const { id_course, id_chapter } = req.params;
+            validateArticleValueSchema({title, content});
             const chapter = await Chapter.findOne({
                 where: {
                     id: id_chapter,
@@ -65,6 +67,16 @@ module.exports = {
         }
     },
     handlerPostImage: async (req, res, next) => {
-        
+        try {
+            validateArticleImageSchema(req.file);
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: "itc-repo/article/",
+            });
+            res.status(200).json({
+                location: result.secure_url,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 }
