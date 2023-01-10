@@ -31,6 +31,9 @@ module.exports = {
           id: id_article,
         },
       });
+      if (!article) {
+        throw new Error("Article not found");
+      }
       res.status(200).json({
         status: "Success",
         message: "Successfully get article by id",
@@ -78,6 +81,29 @@ module.exports = {
       res.status(200).json({
         location: result.secure_url,
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerPutArticle: async (req, res, next) => {
+    try {
+      const { id_article } = req.params;
+      const { title, content } = req.body;
+      validateArticleValueSchema({ title, content });
+      const article = await Article.update(
+        {
+          title,
+          content,
+        },
+        {
+          where: {
+            id: id_article,
+          },
+        }
+      );
+      if (!article) {
+        throw new Error("Article failed to update: article not found");
+      }
     } catch (error) {
       next(error);
     }
