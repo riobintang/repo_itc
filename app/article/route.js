@@ -9,6 +9,7 @@ router.get("/:id_course/chapter/:id_chapter/article/:id_article", handlerGetArti
 
 router.post("/:id_course/chapter/:id_chapter/article", loginAdmin, handlerPostArticle);
 
-router.post("/:id_course/chapter/:id_chapter/article", loginAdmin, upload.single("image"), handlerPostArticle);
+router.post("/:id_course/chapter/:id_chapter/article/image", loginAdmin, upload.single("image"), handlerPostImage);
+
 
 module.exports = router;
