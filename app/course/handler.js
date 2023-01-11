@@ -50,6 +50,8 @@ module.exports = {
 
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "itc-repo/course/",
+        use_filename: true,
+        unique_filename: true,
       });
       const course = await Course.create({
         title: title,

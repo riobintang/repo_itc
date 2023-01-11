@@ -4,6 +4,8 @@ const {
   validateArticleImageSchema,
   validateArticleValueSchema,
 } = require("../../validator/article");
+const cloudinary = require("../../utils/cloudinary").v2;
+
 
 module.exports = {
   handlerGetAllArticleTitleByChapterCourseID: async (req, res, next) => {
@@ -77,6 +79,8 @@ module.exports = {
       validateArticleImageSchema(req.file);
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "itc-repo/article/",
+        use_filename: true,
+        unique_filename: true,
       });
       res.status(200).json({
         location: result.secure_url,
@@ -108,4 +112,17 @@ module.exports = {
       next(error);
     }
   },
+  handlerDeleteArticle: async (req, res, next) => {
+    const { id_article } = req.params;
+    const article = await Article.findByPk(id_article);
+    if (!article) {
+      throw new Error("Article not found");
+    }
+
+    await article.destroy();
+    res.status(200).json({
+      status: "Success",
+      message: "Successfully delete Article",
+    });
+  }
 };
