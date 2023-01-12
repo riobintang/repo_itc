@@ -8,6 +8,8 @@ const roleRouter = require("./app/role/route");
 const courseRouter = require("./app/course/route");
 const chapterRouter = require("./app/chapter/router");
 const articleRouter = require("./app/article/route");
+const discussionRouter = require("./app/discussion/route");
+const commentRouter = require("./app/comment/route");
 const passwordResetRouter = require("./app/passwordReset/route");
 const customErrorHandler = require("./middleware/customErrorHandler");
 const handler404NotFound = require("./middleware/handler404NotFound");
@@ -33,6 +35,8 @@ app.use("/role", roleRouter);
 app.use("/course", courseRouter);
 app.use("/course", chapterRouter);
 app.use("/course", articleRouter);
+app.use("/course", discussionRouter);
+app.use("/course", commentRouter);
 app.use("/password-reset", passwordResetRouter);
 
 
