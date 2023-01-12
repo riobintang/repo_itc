@@ -38,11 +38,11 @@ function createModelDiscussion(Sequelize, DataTypes) {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      id_subject: {
+      id_course: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "subject",
+          model: "course",
           key: "id",
         },
         onUpdate: "CASCADE",
