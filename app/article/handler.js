@@ -37,7 +37,7 @@ module.exports = {
         throw new Error("Article not found");
       }
       res.status(200).json({
-        status: "Success",
+        status: "success",
         message: "Successfully get article by id",
         data: article,
       });
@@ -121,7 +121,7 @@ module.exports = {
 
     await article.destroy();
     res.status(200).json({
-      status: "Success",
+      status: "success",
       message: "Successfully delete Article",
     });
   }
