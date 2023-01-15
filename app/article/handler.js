@@ -6,7 +6,6 @@ const {
 } = require("../../validator/article");
 const cloudinary = require("../../utils/cloudinary").v2;
 
-
 module.exports = {
   handlerGetAllArticleTitleByChapterCourseID: async (req, res, next) => {
     try {
@@ -74,7 +73,7 @@ module.exports = {
       next(error);
     }
   },
-  handlerPostImage: async (req, res, next) => {
+  handlerPostImageArticle: async (req, res, next) => {
     try {
       validateArticleImageSchema(req.file);
       const result = await cloudinary.uploader.upload(req.file.path, {
@@ -113,16 +112,39 @@ module.exports = {
     }
   },
   handlerDeleteArticle: async (req, res, next) => {
-    const { id_article } = req.params;
-    const article = await Article.findByPk(id_article);
-    if (!article) {
-      throw new Error("Article not found");
-    }
+    try {
+      const { id_article } = req.params;
+      const article = await Article.findByPk(id_article);
+      if (!article) {
+        throw new Error("Article not found");
+      }
 
-    await article.destroy();
-    res.status(200).json({
-      status: "success",
-      message: "Successfully delete Article",
-    });
-  }
+      await article.destroy();
+      res.status(200).json({
+        status: "success",
+        message: "Successfully delete Article",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerDeleteImageArticle: async (req, res, next) => {
+    try {
+      const { location } = req.body;
+      const deleteImageLocation = location.split("/").pop().split(".")[0];
+      const deleteImage = `itc-repo/article/${deleteImageLocation}`;
+      
+      const result = await cloudinary.uploader.destroy(deleteImage); // delete image in cloudinary
+
+      if (result.result !== "ok") {
+        throw new Error("Failed to delete image");
+      }
+      res.status(201).json({
+        status: "success",
+        message: "Successfully delete Image Article",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
