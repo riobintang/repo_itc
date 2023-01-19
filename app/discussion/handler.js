@@ -44,6 +44,10 @@ module.exports = {
         where: {
           id_course,
         },
+        include: {
+          model: User,
+          attributes: ["fullName", "id_division", "username"] ,
+        },
       });
       res.status(200).json({
         status: "success",
@@ -58,7 +62,12 @@ module.exports = {
   handlerGetDiscussionById: async (req, res, next) => {
     try {
       const { id_discussion } = req.params;
-      const discussion = await Discussion.findByPk(id_discussion);
+      const discussion = await Discussion.findByPk(id_discussion, {
+        include: {
+          model: User,
+          attributes: ["fullName", "id_division", "username"] ,
+        }
+      });
       if (!discussion) {
         throw new Error("Discussion not found");
       }
