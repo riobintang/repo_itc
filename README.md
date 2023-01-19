@@ -52,6 +52,7 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Delete Course](#delete-course)
   - [Chapter](#chapter)
     - [Fetch All Chapters by Course id](#fetch-all-chapters-by-course-id)
+    - [Fetch All Chapters and Title Articles by Course id](#fetch-all-chapters-and-title-articles-by-course-id)
     - [Store Chapter](#store-chapter)
     - [Modify Chapter](#modify-chapter)
     - [Delete Chapter](#delete-chapter)
@@ -482,6 +483,73 @@ Response
             "id_course": 1
         }
     ]
+}
+```
+
+### Fetch All Chapters and Title Articles by Course id
+Endpoint
+
+```text
+GET course/:id_course/chapter/article
+```
+
+Response
+
+```json
+{
+    {
+    "status": "success",
+    "message": "Successfully get all chapters by specific course",
+    "data": [
+        {
+            "id": 1,
+            "title": "looping while",
+            "createdAt": "2023-01-19T12:55:02.000Z",
+            "updatedAt": "2023-01-19T12:55:02.000Z",
+            "id_course": 1,
+            "Articles": [
+                {
+                    "id": 1,
+                    "title": "Percabangan",
+                    "id_chapter": 1
+                },
+                {
+                    "id": 2,
+                    "title": "Percabangan",
+                    "id_chapter": 1
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "looping while",
+            "createdAt": "2023-01-19T12:55:04.000Z",
+            "updatedAt": "2023-01-19T12:55:04.000Z",
+            "id_course": 1,
+            "Articles": [
+                {
+                    "id": 3,
+                    "title": "Percabangan",
+                    "id_chapter": 2
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "title": "looping while",
+            "createdAt": "2023-01-19T13:05:12.000Z",
+            "updatedAt": "2023-01-19T13:05:12.000Z",
+            "id_course": 1,
+            "Articles": [
+                {
+                    "id": 4,
+                    "title": "Percabangan",
+                    "id_chapter": 3
+                }
+            ]
+        }
+    ]
+}
 }
 ```
 
