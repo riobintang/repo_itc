@@ -4,7 +4,7 @@ const uploadImage = require("../utils/cloudinary/uploadImage");
 async function generateImage() {
   const data = [];
   for (let i = 0; i < 8; i++) {
-    let upload = await uploadImage("discussion");
+    let upload = await uploadImage("course");
     let image = {
       image_thumbnail: upload.secure_url,
       cloudinary_id: upload.public_id.split("/")[2],
