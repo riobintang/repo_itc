@@ -40,6 +40,23 @@ module.exports = {
       next(error);
     }
   },
+  //handler Get Course with Pagination 
+  handlerGetCourseByPage: async (req, res, next) => {
+    try {
+      const { page } = req.params;
+      const limit = 25;
+      const offset = (page-1) * 25;
+      console.log(offset);
+      const courses = await Course.findAll({limit, offset});
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get all courses",
+        data: courses,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   //handler to post course
   handlerPostCourse: async (req, res, next) => {
     try {

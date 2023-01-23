@@ -108,7 +108,6 @@ module.exports = {
       res.status(201).json({
         status: "success",
         message: "Successfully update Discussion",
-        data: discussion,
       });
     } catch (error) {
       next(error);
