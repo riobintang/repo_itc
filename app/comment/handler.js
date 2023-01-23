@@ -52,6 +52,7 @@ module.exports = {
         where: {
           id_discussion,
         },
+        include: [{ model: User, attributes: ["id", "fullName"] }],
       });
       res.status(200).json({
         status: "success",
@@ -110,6 +111,7 @@ module.exports = {
       if (!discussion) {
         throw new Error("Discussion not found");
       }
+
       const comment = await Comment.destroy({
         where: {
           id_comment,
@@ -118,6 +120,11 @@ module.exports = {
       if (!comment) {
         throw new Error("Comment not found");
       }
+      // Check authority
+      if (!req.user.id !== comment.id_user && !req.user.role !== "admin") {
+        throw new Error("You are not allowed");
+      }
+
       res.status(200).json({
         status: "success",
         message: "Successfully delete comment",
