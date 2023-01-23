@@ -27,7 +27,7 @@ module.exports = {
       const courses = await Course.findAll({
         where: {
           title: {
-            [Op.like] : `%${title}%`,
+            [Op.like]: `%${title}%`,
           },
         },
       });
@@ -40,14 +40,14 @@ module.exports = {
       next(error);
     }
   },
-  //handler Get Course with Pagination 
+  //handler Get Course with Pagination
   handlerGetCourseByPage: async (req, res, next) => {
     try {
       const { page } = req.params;
-      const limit = 25;
-      const offset = (page-1) * 25;
-      console.log(offset);
-      const courses = await Course.findAll({limit, offset});
+      const courses = await Course.findAll({
+        limit: 25,
+        offset: (page - 1) * 25,
+      });
       res.status(200).json({
         status: "success",
         message: "Successfully get all courses",
@@ -63,7 +63,7 @@ module.exports = {
       const { title, description, id_division } = req.body;
 
       validateCoursePhotoSchema(req.file); // validate photo extension
-      validateCourseCreateUpdateSchema({ title, description, id_division}); // validate title and description
+      validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
 
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "itc-repo/course/",

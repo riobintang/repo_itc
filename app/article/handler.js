@@ -105,7 +105,7 @@ module.exports = {
         }
       );
       if (!article) {
-        throw new Error("Article failed to update: article not found");
+        throw new Error("Article not found");
       }
       res.status(201).json({
         status: "success",
