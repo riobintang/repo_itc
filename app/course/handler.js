@@ -45,8 +45,8 @@ module.exports = {
     try {
       const { page } = req.params;
       const courses = await Course.findAll({
-        limit: 25,
-        offset: (page - 1) * 25,
+        limit: 10,
+        offset: (page - 1) * 10,
       });
       res.status(200).json({
         status: "success",
