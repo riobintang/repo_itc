@@ -871,10 +871,8 @@ Request
     ]
   },
   "body": {
-    {
-      "title":"Article 5",
-      "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor tortor mauris, et dictum lorem blandit quis. Aenean semper sed.</p>"
-    }
+    "title": "Article 5",
+    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor tortor mauris, et dictum lorem blandit quis. Aenean semper sed.</p>"
   }
 }
 ```
@@ -962,10 +960,8 @@ Request
     ]
   },
   "body": {
-    {
-      "title":"Article 1 edited",
-      "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor tortor mauris, et dictum lorem blandit quis. Aenean semper sed.</p>"
-    }
+    "title": "Article 1 edited",
+    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor tortor mauris, et dictum lorem blandit quis. Aenean semper sed.</p>"
   }
 }
 ```
@@ -1036,9 +1032,7 @@ Request
     ]
   },
   "body": {
-    {
-      "location": "https://res.cloudinary.com/dd6stok7k/image/upload/v1675340399/itc-repo/article/79674ec4f2ef72a86c673bc346b2f5dc_f8eem6.png"
-    }
+    "location": "https://res.cloudinary.com/dd6stok7k/image/upload/v1675340399/itc-repo/article/79674ec4f2ef72a86c673bc346b2f5dc_f8eem6.png"
   }
 }
 ```
@@ -1061,19 +1055,80 @@ Response
 Endpoint
 
 ```text
-
+GET /course/:id_course/discussion => /course/1/discussion
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDQ4NjIsImV4cCI6MTY3NTM0NjA2Miwic3ViIjoiSmFuZSJ9.ztiOPND9jYY-tPWq-4vvTTEFyPZ-SZvry20ruNASE10",
+        "type": "string"
+      }
+    ]
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully get Discussion by Course",
+  "data": [
+    {
+      "id": 1,
+      "title": "Discussion 1",
+      "body": "Lorem ipsum dolor sit amet",
+      "isEdited": false,
+      "createdAt": "2023-02-02T09:37:28.000Z",
+      "updatedAt": "2023-02-02T09:37:28.000Z",
+      "id_user": 1,
+      "id_course": 1,
+      "User": {
+        "fullName": "Faisal",
+        "id_division": 3,
+        "username": "adminitc"
+      }
+    },
+    {
+      "id": 2,
+      "title": "Discussion 2",
+      "body": "Lorem ipsum dolor sit amet",
+      "isEdited": false,
+      "createdAt": "2023-02-02T09:37:28.000Z",
+      "updatedAt": "2023-02-02T09:37:28.000Z",
+      "id_user": 1,
+      "id_course": 1,
+      "User": {
+        "fullName": "Faisal",
+        "id_division": 3,
+        "username": "adminitc"
+      }
+    },
+    {
+      "id": 3,
+      "title": "Discussion 3",
+      "body": "Lorem ipsum dolor sit amet",
+      "isEdited": false,
+      "createdAt": "2023-02-02T09:37:28.000Z",
+      "updatedAt": "2023-02-02T09:37:28.000Z",
+      "id_user": 1,
+      "id_course": 1,
+      "User": {
+        "fullName": "Faisal",
+        "id_division": 3,
+        "username": "adminitc"
+      }
+    }
+  ]
+}
 ```
 
 ### Fetch Discussion by Discussion Id
@@ -1081,19 +1136,48 @@ Response
 Endpoint
 
 ```text
-
+GET /course/:id_course/discussion/:id_discussion => /course/1/discussion/1
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDQ4NjIsImV4cCI6MTY3NTM0NjA2Miwic3ViIjoiSmFuZSJ9.ztiOPND9jYY-tPWq-4vvTTEFyPZ-SZvry20ruNASE10",
+        "type": "string"
+      }
+    ]
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully get Discussion by id",
+  "data": {
+    "id": 1,
+    "title": "Discussion 1",
+    "body": "Lorem ipsum dolor sit amet",
+    "isEdited": false,
+    "createdAt": "2023-02-02T09:37:28.000Z",
+    "updatedAt": "2023-02-02T09:37:28.000Z",
+    "id_user": 1,
+    "id_course": 1,
+    "User": {
+      "fullName": "Faisal",
+      "id_division": 3,
+      "username": "adminitc"
+    }
+  }
+}
 ```
 
 ### Store Discussion
@@ -1101,19 +1185,47 @@ Response
 Endpoint
 
 ```text
-
+POST /course/:id_course/discussion => /course/1/discussion
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDQ4NjIsImV4cCI6MTY3NTM0NjA2Miwic3ViIjoiSmFuZSJ9.ztiOPND9jYY-tPWq-4vvTTEFyPZ-SZvry20ruNASE10",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "title": "Discussion 4",
+    "body": "Lorem ipsum dolor sit amet"
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully post Discussion",
+  "data": {
+    "id": 6,
+    "title": "Discussion 4",
+    "body": "Lorem ipsum dolor sit amet",
+    "isEdited": false,
+    "id_course": "1",
+    "id_user": 2,
+    "updatedAt": "2023-02-02T13:38:13.537Z",
+    "createdAt": "2023-02-02T13:38:13.537Z"
+  }
+}
 ```
 
 ### Modify Discussion
@@ -1121,19 +1233,37 @@ Response
 Endpoint
 
 ```text
-
+PUT /course/:id_course/discussion/:id_discussion => /course/1/discussion/6
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDQ4NjIsImV4cCI6MTY3NTM0NjA2Miwic3ViIjoiSmFuZSJ9.ztiOPND9jYY-tPWq-4vvTTEFyPZ-SZvry20ruNASE10",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "title": "Discussion 1 edited",
+    "body": "Lorem ipsum dolor sit amet"
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully update Discussion"
+}
 ```
 
 ### Delete Discussion
@@ -1141,19 +1271,33 @@ Response
 Endpoint
 
 ```text
-
+DELETE /course/:id_course/discussion/:id_discussion => /course/1/discussion/1
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDQ4NjIsImV4cCI6MTY3NTM0NjA2Miwic3ViIjoiSmFuZSJ9.ztiOPND9jYY-tPWq-4vvTTEFyPZ-SZvry20ruNASE10",
+        "type": "string"
+      }
+    ]
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully delete Discussion"
+}
 ```
 
 ---
@@ -1165,19 +1309,61 @@ Response
 Endpoint
 
 ```text
-
+GET /course/:id_course/discussion/:id_discussion/comment => /course/1/discussion/2/comment
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDQ4NjIsImV4cCI6MTY3NTM0NjA2Miwic3ViIjoiSmFuZSJ9.ztiOPND9jYY-tPWq-4vvTTEFyPZ-SZvry20ruNASE10",
+        "type": "string"
+      }
+    ]
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully get All Comment by Discussion",
+  "data": [
+    {
+      "id": 1,
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "isEdited": false,
+      "createdAt": "2023-02-02T15:13:30.000Z",
+      "updatedAt": "2023-02-02T15:13:30.000Z",
+      "id_user": 2,
+      "id_discussion": 2,
+      "User": {
+        "id": 2,
+        "fullName": "Jane Doe"
+      }
+    },
+    {
+      "id": 2,
+      "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "isEdited": false,
+      "createdAt": "2023-02-02T15:14:00.000Z",
+      "updatedAt": "2023-02-02T15:14:00.000Z",
+      "id_user": 2,
+      "id_discussion": 2,
+      "User": {
+        "id": 2,
+        "fullName": "Jane Doe"
+      }
+    }
+  ]
+}
 ```
 
 ### Store Comment
@@ -1185,19 +1371,45 @@ Response
 Endpoint
 
 ```text
-
+POST /course/:id_course/discussion/:id_discussion/comment => /course/1/discussion/2/comment
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDYyNzIsImV4cCI6MTY3NTM0NzQ3Miwic3ViIjoiSmFuZSJ9.lPYkOMepMkD-99DCzw3inMKWHFCHxxQ_Z2ZtDQzy3sY",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully post Comment",
+  "data": {
+    "id": 3,
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "isEdited": false,
+    "id_discussion": "2",
+    "id_user": 2,
+    "updatedAt": "2023-02-02T15:14:00.280Z",
+    "createdAt": "2023-02-02T15:14:00.280Z"
+  }
+}
 ```
 
 ### Modify Comment
@@ -1205,19 +1417,36 @@ Response
 Endpoint
 
 ```text
-
+PUT /course/:id_course/discussion/:id_discussion/comment/:id_comment => /course/1/discussion/2/comment/3
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDYyNzIsImV4cCI6MTY3NTM0NzQ3Miwic3ViIjoiSmFuZSJ9.lPYkOMepMkD-99DCzw3inMKWHFCHxxQ_Z2ZtDQzy3sY",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "body": "edited Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully update Comment"
+}
 ```
 
 ### Delete Comment
@@ -1225,19 +1454,33 @@ Response
 Endpoint
 
 ```text
-
+DELETE /course/:id_course/discussion/:id_discussion/comment/:id_comment => course/1/discussion/2/comment/3
 ```
 
 Request
 
 ```json
-
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJqYW5lZG9lQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiSmFuZSIsInJvbGUiOiJhZG1pbiIsImlkX3JvbGUiOjIsImRpdmlzaW9uIjoiRnJvbnQtZW5kIERldmVsb3BlciIsImlkX2RpdmlzaW9uIjoyLCJpYXQiOjE2NzUzNDYyNzIsImV4cCI6MTY3NTM0NzQ3Miwic3ViIjoiSmFuZSJ9.lPYkOMepMkD-99DCzw3inMKWHFCHxxQ_Z2ZtDQzy3sY",
+        "type": "string"
+      }
+    ]
+  }
+}
 ```
 
 Response
 
 ```json
-
+{
+  "status": "success",
+  "message": "Successfully delete comment"
+}
 ```
 
 ---
