@@ -34,6 +34,10 @@ function createModelUser(Sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      photoProfile: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -63,6 +67,11 @@ function createModelUser(Sequelize, DataTypes) {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
         field: 'id_role',
+      },
+      verify: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        default: false,
       },
     },
     {

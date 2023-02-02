@@ -9,12 +9,11 @@ const userRegisterSchema = Joi.object({
 }).unknown();
 
 const userUpdateSchema = Joi.object({
-  username: Joi.string().min(4).required(),
-  email: Joi.string().email().required(),
   fullName: Joi.string().min(6).required(),
   password: Joi.string().min(8).required(),
   phoneNumber: Joi.string().min(9).required(),
-  angkatan: Joi.string().min(4).required(),
+  generation: Joi.string().min(4).required(),
+  id_division: Joi.number().min(1).required(),
 }).unknown();
 
 const userCreateSchema = Joi.object({
@@ -31,9 +30,16 @@ const userLoginSchema = Joi.object({
   password: Joi.string().min(8).required(),
 }).unknown();
 
+const userFilePhotoProfileSchema = Joi.object({
+  fieldname: Joi.string().required(),
+  mimetype: Joi.string().valid("image/jpeg", "image/png", "image/jpg"),
+  filename: Joi.string().required(),
+}).unknown();
+
 module.exports = {
   userRegisterSchema,
   userUpdateSchema,
   userCreateSchema,
   userLoginSchema,
+  userFilePhotoProfileSchema,
 };

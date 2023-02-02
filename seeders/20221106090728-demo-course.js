@@ -1,10 +1,10 @@
 "use strict";
 
-const uploadImage = require("../utils/cloudinary/uploadImage");
+const uploadImageTesting = require("../utils/cloudinary/uploadImageTesting");
 async function generateImage() {
   const data = [];
   for (let i = 0; i < 8; i++) {
-    let upload = await uploadImage("course");
+    let upload = await uploadImageTesting("course");
     let image = {
       image_thumbnail: upload.secure_url,
       cloudinary_id: upload.public_id.split("/")[2],

@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
-const { User, Role, Division } = require("../../models");
+const { User, Role, Division, sequelize } = require("../../models");
 const jwt = require("jsonwebtoken");
 const accessTokenSecretKey = "testing-secret-repo-itc";
 const randtoken = require("rand-token");
@@ -10,7 +10,10 @@ const generateAccessToken = require("../../utils/tokenManager");
 const {
   validateRegisterUserSchema,
   validateLoginUserSchema,
+  validateUserFilePhotoProfileSchema,
+  validateUpdateUserSchema,
 } = require("../../validator/user");
+const uploadImage = require("../../utils/cloudinary/uploadImage");
 
 const Op = Sequelize.Op;
 
@@ -155,10 +158,13 @@ module.exports = {
     const username = req.body.username;
     const refreshToken = req.body.refreshToken;
 
-    if ((refreshToken in refreshTokens) && (refreshTokens[refreshToken] == username)) {
+    if (
+      refreshToken in refreshTokens &&
+      refreshTokens[refreshToken] == username
+    ) {
       const user = await User.findOne({
         where: {
-          username: username, 
+          username: username,
         },
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [{ model: Role }, { model: Division }],
@@ -186,5 +192,52 @@ module.exports = {
         message: "Invalid refresh token",
       });
     }
-  }
+  },
+  handlerPutUserProfile: async (req, res, next) => {
+    try {
+      const t = await sequelize.transaction();
+      const { fullName, password, generation, phoneNumber, id_division } =
+        req.body;
+      const user = req.user;
+      const { id } = req.params;
+
+      if (user.id !== id) {
+        throw new Error("You are not allowed to edit");
+      }
+      const updateUser = await User.findByPk(id);
+      if (!updateUser) {
+        throw new Error("User not found");
+      }
+      if (req.file){
+        validateUserFilePhotoProfileSchema(req.file);
+        const photoProfile = await uploadImage(req.file, "user");
+        await updateUser.update({photoProfile: photoProfile.secure_url}, { transaction: t})
+
+      }
+      
+      validateUpdateUserSchema({
+        fullName,
+        password,
+        generation,
+        phoneNumber,
+        id_division,
+      });
+      
+      await updateUser.update({
+        fullName,
+        password,
+        generation,
+        phoneNumber,
+        id_division,
+      }, { transaction: t});
+      await t.commit();
+      res.status(201).json({
+        status: "success",
+        message: "Successfully update User",
+      });
+    } catch (error) {
+      await t.rollback();
+      next(error);
+    }
+  },
 };

@@ -1,4 +1,4 @@
-const { Comment, Discussion } = require("../../models");
+const { Comment, Discussion, User } = require("../../models");
 const { validateCreateCommentSchema } = require("../../validator/comment");
 
 module.exports = {
@@ -37,7 +37,7 @@ module.exports = {
   handlerGetCommentByDiscussion: async (req, res, next) => {
     try {
       const { id_course, id_discussion } = req.params;
-
+      
       const discussion = await Discussion.findOne({
         where: {
           id: id_discussion,
@@ -112,19 +112,16 @@ module.exports = {
         throw new Error("Discussion not found");
       }
 
-      const comment = await Comment.destroy({
-        where: {
-          id_comment,
-        },
-      });
+      const comment = await Comment.findByPk(id_comment);
       if (!comment) {
         throw new Error("Comment not found");
       }
       // Check authority
-      if (!req.user.id !== comment.id_user && !req.user.role !== "admin") {
+      console.log(req.user.role);
+      if (req.user.id !== comment.id_user && req.user.role !== "admin") {
         throw new Error("You are not allowed");
       }
-
+      await comment.destroy();
       res.status(200).json({
         status: "success",
         message: "Successfully delete comment",

@@ -35,6 +35,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      photoProfile: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -62,6 +66,11 @@ module.exports = {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
+      },
+      verify: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        default: false,
       },
     });
   },
