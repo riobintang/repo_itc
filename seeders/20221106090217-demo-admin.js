@@ -12,6 +12,7 @@ module.exports = {
         password: await bcrypt.hash("randomsecret", 10),
         createdAt: new Date(),
         updatedAt: new Date(),
+        verify: true,
         id_division: 3,
         id_role: 2,
       },

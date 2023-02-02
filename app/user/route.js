@@ -13,6 +13,6 @@ router.get("/:id", authenticationToken, handlerGetUserById);
 //API Refresh Token: POST user/refresh
 router.post("/refresh-token", authenticationToken,refreshJWTHandler);
 
-router.put("/update", authenticationToken, upload.single("image"), handlerPutUserProfile);
+router.put("/update/:id", authenticationToken, upload.single("image"), handlerPutUserProfile);
 
 module.exports = router;
