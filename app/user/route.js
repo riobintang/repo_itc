@@ -1,6 +1,6 @@
 const express = require("express");
 const authenticationToken = require("../../middleware/authenticationToken");
-const { handlerRegisterUser, handlerUserLogin, handlerGetUserById, refreshJWTHandler, handlerPutUserProfile } = require("./handler");
+const { handlerRegisterUser, handlerUserLogin, handlerGetUserById, refreshJWTHandler, handlerPutUserProfile, handlerChangePassword } = require("./handler");
 const upload = require("../../utils/multer");
 const router = express.Router();
 
@@ -15,5 +15,5 @@ router.post("/refresh-token", authenticationToken,refreshJWTHandler);
 
 router.put("/update/:id", authenticationToken, upload.single("image"), handlerPutUserProfile);
 
-router.put("/changepassword/:id", authenticationToken, );
+router.put("/changepassword/:id", authenticationToken, handlerChangePassword);
 module.exports = router;

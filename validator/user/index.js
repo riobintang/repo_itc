@@ -24,7 +24,7 @@ function validateUpdateUserSchema(payload) {
 function validateChangePasswordUserSchema(payload) {
   const validateResult = userChangePasswordSchema.validate(payload);
   if (validateResult.error) {
-    throw new Error(vlaidateResult.error.message);
+    throw new Error(validateResult.error.message);
   }
 }
 
