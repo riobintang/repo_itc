@@ -11,7 +11,7 @@ router.post("/login", handlerUserLogin);
 //API Get User by id: GET user/:id
 router.get("/:id", authenticationToken, handlerGetUserById);
 //API Refresh Token: POST user/refresh
-router.post("/refresh-token", authenticationToken,refreshJWTHandler);
+router.post("/refresh-token", refreshJWTHandler);
 
 router.put("/update/:id", authenticationToken, upload.single("image"), handlerPutUserProfile);
 

@@ -268,11 +268,28 @@ module.exports = {
       }
 
       await updateUser.update({ password: hashPassword });
-      
+
       res.status(201).json({
         status: "success",
         message: "Successfully change password User",
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerGetAllUserNotVerify: async (req, res, next) => {
+    try {
+      const users = await User.findAll({
+        where: {
+          verify: false,
+        },
+      });
+
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get All User Not Verify",
+        data: users,
+      })
     } catch (error) {
       next(error);
     }
