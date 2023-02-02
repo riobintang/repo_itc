@@ -10,10 +10,13 @@ const userRegisterSchema = Joi.object({
 
 const userUpdateSchema = Joi.object({
   fullName: Joi.string().min(6).required(),
-  password: Joi.string().min(8).required(),
   phoneNumber: Joi.string().min(9).required(),
   generation: Joi.string().min(4).required(),
   id_division: Joi.number().min(1).required(),
+}).unknown();
+
+const userChangePasswordSchema = Joi.object({
+  password: Joi.string().min(8).required(),
 }).unknown();
 
 const userCreateSchema = Joi.object({
@@ -39,6 +42,7 @@ const userFilePhotoProfileSchema = Joi.object({
 module.exports = {
   userRegisterSchema,
   userUpdateSchema,
+  userChangePasswordSchema,
   userCreateSchema,
   userLoginSchema,
   userFilePhotoProfileSchema,

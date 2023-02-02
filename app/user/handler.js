@@ -12,8 +12,9 @@ const {
   validateLoginUserSchema,
   validateUserFilePhotoProfileSchema,
   validateUpdateUserSchema,
+  validateChangePasswordUserSchema,
 } = require("../../validator/user");
-const uploadImage = require("../../utils/cloudinary/uploadImage");
+const {uploadImage, deleteImage} = require("../../utils/cloudinary/imageServiceCloudinary");
 
 const Op = Sequelize.Op;
 
@@ -194,14 +195,16 @@ module.exports = {
     }
   },
   handlerPutUserProfile: async (req, res, next) => {
+    const t = await sequelize.transaction();
+    let image_id;
     try {
-      const t = await sequelize.transaction();
-      const { fullName, password, generation, phoneNumber, id_division } =
+      
+      const { fullName, generation, phoneNumber, id_division } =
         req.body;
       const user = req.user;
       const { id } = req.params;
-
-      if (user.id !== id) {
+      console.log(`id = ${id}\nuser id = ${user.id}`)
+      if (user.id != id) {
         throw new Error("You are not allowed to edit");
       }
       const updateUser = await User.findByPk(id);
@@ -210,14 +213,13 @@ module.exports = {
       }
       if (req.file){
         validateUserFilePhotoProfileSchema(req.file);
-        const photoProfile = await uploadImage(req.file, "user");
+        const photoProfile = await uploadImage(req.file.path, "user");
         await updateUser.update({photoProfile: photoProfile.secure_url}, { transaction: t})
-
+        image_id = photoProfile.public_id.split("/")[2];
       }
       
       validateUpdateUserSchema({
         fullName,
-        password,
         generation,
         phoneNumber,
         id_division,
@@ -225,7 +227,6 @@ module.exports = {
       
       await updateUser.update({
         fullName,
-        password,
         generation,
         phoneNumber,
         id_division,
@@ -240,4 +241,19 @@ module.exports = {
       next(error);
     }
   },
+  handlerChangePassword: async (req, res, next) => {
+    const { password } = req.body;
+    const { id } = req.params;
+    const user = req.user;
+    if (user.id != id) {
+      throw new Error("You are not allowed to edit");
+    }
+    validateChangePasswordUserSchema(password);
+    const hashPassword = await bcrypt.hash(password, 10);
+    const updateUser = await User.findByPk(id);
+    if (!updateUser) {
+      throw new Error("User not found");
+    }
+    await updateUser.update({password: hashPassword});
+  }
 };

@@ -15,4 +15,5 @@ router.post("/refresh-token", authenticationToken,refreshJWTHandler);
 
 router.put("/update/:id", authenticationToken, upload.single("image"), handlerPutUserProfile);
 
+router.put("/changepassword/:id", authenticationToken, );
 module.exports = router;

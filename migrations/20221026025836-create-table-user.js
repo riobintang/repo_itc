@@ -70,7 +70,7 @@ module.exports = {
       verify: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        default: false,
+        defaultValue: false,
       },
     });
   },
