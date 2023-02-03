@@ -105,6 +105,10 @@ module.exports = {
         //validate password
         throw new Error("Invalid password");
       }
+
+      if (!user.verify) {
+        throw new Error("Your account has not been verified. Please wait for Admin to verify it first.")
+      }
       //generate access token
       const accessToken = generateAccessToken({
         id: user.id,

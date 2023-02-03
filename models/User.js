@@ -41,10 +41,12 @@ function createModelUser(Sequelize, DataTypes) {
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
       updatedAt: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
       id_division: {
         type: DataTypes.INTEGER,
