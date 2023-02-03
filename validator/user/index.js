@@ -5,6 +5,7 @@ const {
   userLoginSchema,
   userFilePhotoProfileSchema,
   userChangePasswordSchema,
+  userUpdateProfilePasswordSchema,
 } = require("./schema");
 
 function validateRegisterUserSchema(payload) {
@@ -48,6 +49,13 @@ function validateUserFilePhotoProfileSchema(payload) {
     throw new Error(validateResult.error.message);
   }
 }
+
+function validateUserUpdateProfilePasswordSchema(payload) {
+  const validateResult = userUpdateProfilePasswordSchema.validate(payload);
+  if (validateResult.error) {
+    throw new Error(validateResult.error.message);
+  }
+}
 module.exports = {
   validateRegisterUserSchema,
   validateUpdateUserSchema,
@@ -55,4 +63,5 @@ module.exports = {
   validateCreateUserSchema,
   validateLoginUserSchema,
   validateUserFilePhotoProfileSchema,
+  validateUserUpdateProfilePasswordSchema,
 };

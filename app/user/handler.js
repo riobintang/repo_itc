@@ -13,6 +13,7 @@ const {
   validateUserFilePhotoProfileSchema,
   validateUpdateUserSchema,
   validateChangePasswordUserSchema,
+  validateUserUpdateProfilePasswordSchema,
 } = require("../../validator/user");
 const {
   uploadImage,
@@ -200,26 +201,18 @@ module.exports = {
   handlerPutUserProfile: async (req, res, next) => {
     const t = await sequelize.transaction();
     let image_id;
+    let photoProfile;
     try {
       const { fullName, generation, phoneNumber, id_division } = req.body;
       const user = req.user;
       const { id } = req.params;
-      console.log(`id = ${id}\nuser id = ${user.id}`);
+
       if (user.id != id) {
         throw new Error("You are not allowed to edit");
       }
       const updateUser = await User.findByPk(id);
       if (!updateUser) {
         throw new Error("User not found");
-      }
-      if (req.file) {
-        validateUserFilePhotoProfileSchema(req.file);
-        const photoProfile = await uploadImage(req.file.path, "user");
-        await updateUser.update(
-          { photoProfile: photoProfile.secure_url },
-          { transaction: t }
-        );
-        image_id = photoProfile.public_id.split("/")[2];
       }
 
       validateUpdateUserSchema({
@@ -238,6 +231,26 @@ module.exports = {
         },
         { transaction: t }
       );
+
+      if (req.file) {
+        validateUserFilePhotoProfileSchema(req.file);
+        if (updateUser.photoProfile) {
+          const photo_id = updateUser.photoProfile.split("/user/").pop().split(".")[0];
+          // const deleteimg = await deleteImage("user", photo_id);
+          // console.log(deleteimg);
+          photoProfile = await uploadImage(req.file.path, "user", photo_id)
+          console.log("timpa")
+        } else {
+          photoProfile = await uploadImage(req.file.path, "user");
+          console.log("baru")
+        }
+        await updateUser.update(
+          { photoProfile: photoProfile.secure_url },
+          { transaction: t }
+        );
+        image_id = photoProfile.public_id.split("/")[2];
+      }
+
       await t.commit();
       res.status(201).json({
         status: "success",
@@ -289,8 +302,104 @@ module.exports = {
         status: "success",
         message: "Successfully get All User Not Verify",
         data: users,
-      })
+      });
     } catch (error) {
+      next(error);
+    }
+  },
+  handlerPutVerifyUser: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = await User.findByPk(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      if (user.verify) {
+        throw new Error("User has been verified");
+      }
+
+      await user.update({ verify: true });
+      res.status(201).json({
+        status: "success",
+        message: "Successfully verify User",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerPutUserProfilePassword: async (req, res, next) => {
+    const t = await sequelize.transaction();
+    let image_id;
+    try {
+      const { fullName, generation, phoneNumber, id_division, password, username, email } =
+        req.body;
+      const user = req.user;
+      const { id } = req.params;
+
+      if (user.id != id) {
+        throw new Error("You are not allowed to edit");
+      }
+      const updateUser = await User.findByPk(id);
+      if (!updateUser) {
+        throw new Error("User not found");
+      }
+      validateUserUpdateProfilePasswordSchema({fullName, generation, password, phoneNumber, id_division, username, email})
+
+      const hashPassword = await bcrypt.hash(password, 10);
+      const checkUsername = await User.findOne({
+        where:{
+          username,
+          id: {[Op.ne]: id},
+        }
+      });
+      if (checkUsername) {
+        throw new Error("Username has been used");
+      }
+      const checkEmail = await User.findOne({
+        where:{
+          email,
+          id: {[Op.ne]: id},
+        }
+      });
+
+      if (checkEmail) {
+        throw new Error("Email has been used");
+      }
+      await updateUser.update(
+        {
+          fullName,
+          generation,
+          phoneNumber,
+          id_division,
+          password: hashPassword,
+        },
+        { transaction: t }
+      );
+
+      if (req.file) {
+        validateUserFilePhotoProfileSchema(req.file);
+        if (updateUser.photoProfile) {
+          const photo_id = updateUser.photoProfile.split("/user/").pop().split(".")[0];
+          photoProfile = await uploadImage(req.file.path, "user", photo_id)
+          console.log("timpa")
+        } else {
+          photoProfile = await uploadImage(req.file.path, "user");
+          console.log("baru")
+        }
+        await updateUser.update(
+          { photoProfile: photoProfile.secure_url },
+          { transaction: t }
+        );
+        image_id = photoProfile.public_id.split("/")[2];
+      }
+      await t.commit();
+      res.status(201).json({
+        status: "success",
+        message: "Successfully update User",
+      });
+    } catch (error) {
+      await t.rollback();
       next(error);
     }
   },
