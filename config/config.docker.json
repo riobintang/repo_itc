@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "mysqlrootpassword",
+    "database": "pembelajaran_itc",
+    "host": "mysql",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "mysqlrootpassword",
+    "database": "pembelajaran_itc",
+    "host": "mysql",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "mysqlrootpassword",
+    "database": "pembelajaran_itc",
+    "host": "mysql",
+    "dialect": "mysql"
+  }
+}
