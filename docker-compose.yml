@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
+      - MYSQL_DATABASE=pembelajaran_itc
+    ports:
+      - 3307:3306
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+  app:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build: .
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+
+volumes:
+  db:
