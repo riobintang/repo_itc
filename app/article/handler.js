@@ -82,20 +82,20 @@ module.exports = {
   handlerGetArticleById: async (req, res, next) => {
     try {
       const { id_course, id_chapter, id_article } = req.params;
-      const article = await Article.findByPk(id_article);
-      // const course = await Course.findByPk(id_course);
-      const chapter = await Chapter.findAll({
-        where: {
-          id_course
-        }
-      });
-      const json = chapter.map((item) => {
-        return item.toJSON();
-      })
-      const check = json.find((item) => item.id == article.id_chapter)
-      if (!check) {
-        throw new Error("Article not found");
-      }
+      // const article = await Article.findByPk(id_article);
+      // // const course = await Course.findByPk(id_course);
+      // const chapter = await Chapter.findAll({
+      //   where: {
+      //     id_course
+      //   }
+      // });
+      // const json = chapter.map((item) => {
+      //   return item.toJSON();
+      // })
+      // const check = json.find((item) => item.id == article.id_chapter)
+      // if (!check) {
+      //   throw new Error("Article not found");
+      // }
       // if (chapter.id != article.id_chapter) {
       //   throw new Error("Article not found")
       // }
@@ -105,29 +105,29 @@ module.exports = {
       //const check = json.includes(article.id_chapter);
 
       //console.log(check);
-      // const article = await Article.findOne({
-      //   where: {
-      //     id: id_article,
-      //   },
-      //   include: [
-      //     {
-      //       model: Chapter,
-      //       where: {
-      //         id: id_chapter
-      //       },
-      //       attributes: [],
-      //       include: [
-      //         {
-      //           model: Course,
-      //           where: {
-      //             id: id_course,
-      //           },
-      //           attributes: [],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // });
+      const article = await Article.findOne({
+        where: {
+          id: id_article,
+        },
+        include: [
+          {
+            model: Chapter,
+            where: {
+              id: id_chapter
+            },
+            attributes: [],
+            include: [
+              {
+                model: Course,
+                where: {
+                  id: id_course,
+                },
+                attributes: [],
+              },
+            ],
+          },
+        ],
+      });
       if (!article) {
         throw new Error("Article not found");
       }
