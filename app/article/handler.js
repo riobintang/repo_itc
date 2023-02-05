@@ -84,14 +84,21 @@ module.exports = {
       const { id_course, id_chapter, id_article } = req.params;
       const article = await Article.findByPk(id_article);
       // const course = await Course.findByPk(id_course);
-      const chapter = await Chapter.findOne({
+      const chapter = await Chapter.findAll({
         where: {
           id_course
         }
       });
-      if (chapter.id != article.id_chapter) {
-        throw new Error("Article not found")
+      const json = chapter.map((item) => {
+        return item.toJSON();
+      })
+      const check = json.find((item) => item.id == article.id_chapter)
+      if (!check) {
+        throw new Error("Article not found");
       }
+      // if (chapter.id != article.id_chapter) {
+      //   throw new Error("Article not found")
+      // }
       // const json = course.map((item) => {
       //   return item.toJSON();
       // })
