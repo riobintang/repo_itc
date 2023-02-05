@@ -10,10 +10,65 @@ module.exports = {
   handlerGetAllArticleTitleByChapterCourseID: async (req, res, next) => {
     try {
       const { id_course, id_chapter } = req.params;
+      // const courseChapter = await Course.findAll({
+      //   where: {
+      //     id: id_course
+      //   },
+      //   include: [
+      //     {
+      //       model: Chapter,
+      //       where: {
+      //         id: id_chapter,
+      //       }
+      //     }
+      //   ]
+      // });
+      // if (!courseChapter) {
+
+      // }
+      // const articles = await Article.findAll({
+      //   where: {
+      //     id_chapter: id_chapter,
+      //   },
+      // });
+      // const articles = await Course.findAll({
+      //   where: {
+      //     id:id_course,
+      //   },
+      //   attributes: [],
+      //   include: [
+      //     {
+      //       model: Chapter,
+      //       attributes: [],
+      //       where: {
+      //         id:id_chapter,
+      //       },
+      //       include: [{ model: Article }],
+      //     },
+      //   ],
+      // });
       const articles = await Article.findAll({
         where: {
-          id_chapter: id_chapter,
+          id_chapter,
         },
+        include: [
+          {
+            model: Chapter,
+            where: {
+              id: id_chapter
+            },
+            attributes: [],
+            include: [
+              {
+                model: Course,
+                where: {
+                  id: id_course,
+                },
+                attributes: [],
+              },
+            ],
+          },
+        ],
       });
       res.status(200).json({
         status: "success",
@@ -26,11 +81,29 @@ module.exports = {
   },
   handlerGetArticleById: async (req, res, next) => {
     try {
-      const { id_article } = req.params;
+      const { id_course, id_chapter, id_article } = req.params;
       const article = await Article.findOne({
         where: {
           id: id_article,
         },
+        include: [
+          {
+            model: Chapter,
+            where: {
+              id: id_chapter
+            },
+            attributes: [],
+            include: [
+              {
+                model: Course,
+                where: {
+                  id: id_course,
+                },
+                attributes: [],
+              },
+            ],
+          },
+        ],
       });
       if (!article) {
         throw new Error("Article not found");
@@ -137,7 +210,7 @@ module.exports = {
       const { location } = req.body;
       const deleteImageLocation = location.split("/").pop().split(".")[0];
       const deleteImage = `itc-repo/article/${deleteImageLocation}`;
-      
+
       const result = await cloudinary.uploader.destroy(deleteImage); // delete image in cloudinary
 
       if (result.result !== "ok") {

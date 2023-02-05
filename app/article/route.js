@@ -15,7 +15,7 @@ router.post("/:id_course/chapter/:id_chapter/article", authenticationToken, logi
 router.post("/:id_course/chapter/:id_chapter/article/image", authenticationToken, loginAdmin, upload.single("image"), handlerPostImageArticle);
 // Put for Content and Title Article
 router.put("/:id_course/chapter/:id_chapter/article/:id_article", authenticationToken, loginAdmin, handlerPutArticle);
-
+// Delete for Image
 router.delete("/:id_course/chapter/:id_chapter/article/image", authenticationToken, loginAdmin, handlerDeleteImageArticle);
 // Delete Article
 router.delete("/:id_course/chapter/:id_chapter/article/:id_article", authenticationToken, loginAdmin, handlerDeleteArticle);
