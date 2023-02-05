@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { User, Token } = require("../../models");
-const sendEmail = require("../../utils/sendEmail");
+const sendEmailResetPassword = require("../../utils/sendEmail");
 const subtractHours = require("../../utils/subtractHours");
 const validateRequestTokenResetPassword = require("../../validator/token");
 
@@ -27,7 +27,7 @@ module.exports = {
       }).save();
       //make a link for reset password
       const link = `${process.env.BASE_URL}/password-reset/${userReset.id}/${token.token}`;
-      await sendEmail(userReset.email, "Password reset", link, userReset); //sent link to email
+      await sendEmailResetPassword(userReset.email, "Password reset", link, userReset); //sent link to email
       res.status(201).json({
         status: "success",
         message: "email sent successfully",

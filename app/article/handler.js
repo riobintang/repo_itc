@@ -82,29 +82,45 @@ module.exports = {
   handlerGetArticleById: async (req, res, next) => {
     try {
       const { id_course, id_chapter, id_article } = req.params;
-      const article = await Article.findOne({
+      const article = await Article.findByPk(id_article);
+      // const course = await Course.findByPk(id_course);
+      const chapter = await Chapter.findOne({
         where: {
-          id: id_article,
-        },
-        include: [
-          {
-            model: Chapter,
-            where: {
-              id: id_chapter
-            },
-            attributes: [],
-            include: [
-              {
-                model: Course,
-                where: {
-                  id: id_course,
-                },
-                attributes: [],
-              },
-            ],
-          },
-        ],
+          id_course
+        }
       });
+      if (chapter.id != article.id_chapter) {
+        throw new Error("Article not found")
+      }
+      // const json = course.map((item) => {
+      //   return item.toJSON();
+      // })
+      //const check = json.includes(article.id_chapter);
+
+      //console.log(check);
+      // const article = await Article.findOne({
+      //   where: {
+      //     id: id_article,
+      //   },
+      //   include: [
+      //     {
+      //       model: Chapter,
+      //       where: {
+      //         id: id_chapter
+      //       },
+      //       attributes: [],
+      //       include: [
+      //         {
+      //           model: Course,
+      //           where: {
+      //             id: id_course,
+      //           },
+      //           attributes: [],
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
       if (!article) {
         throw new Error("Article not found");
       }

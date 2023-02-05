@@ -19,6 +19,7 @@ const {
   uploadImage,
   deleteImage,
 } = require("../../utils/cloudinary/imageServiceCloudinary");
+const { sendEmailVerify } = require("../../utils/sendEmail");
 
 const Op = Sequelize.Op;
 
@@ -107,7 +108,7 @@ module.exports = {
       }
 
       if (!user.verify) {
-        throw new Error("Your account has not been verified. Please wait for Admin to verify it first.")
+        throw new Error("Your account not verified. Please wait for Admin to verify it first.")
       }
       //generate access token
       const accessToken = generateAccessToken({
@@ -324,6 +325,7 @@ module.exports = {
       }
 
       await user.update({ verify: true });
+      await sendEmailVerify(user)
       res.status(201).json({
         status: "success",
         message: "Successfully verify User",
@@ -383,13 +385,12 @@ module.exports = {
 
       if (req.file) {
         validateUserFilePhotoProfileSchema(req.file);
+        //replace image
         if (updateUser.photoProfile) {
           const photo_id = updateUser.photoProfile.split("/user/").pop().split(".")[0];
           photoProfile = await uploadImage(req.file.path, "user", photo_id)
-          console.log("timpa")
-        } else {
+        } else { // for new image
           photoProfile = await uploadImage(req.file.path, "user");
-          console.log("baru")
         }
         await updateUser.update(
           { photoProfile: photoProfile.secure_url },

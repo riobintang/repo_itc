@@ -1,7 +1,8 @@
 const express = require("express");
 const authenticationToken = require("../../middleware/authenticationToken");
-const { handlerRegisterUser, handlerUserLogin, handlerGetUserById, refreshJWTHandler, handlerPutUserProfile, handlerChangePassword, handlerPutUserProfilePassword } = require("./handler");
+const { handlerRegisterUser, handlerUserLogin, handlerGetUserById, refreshJWTHandler, handlerPutUserProfile, handlerChangePassword, handlerPutUserProfilePassword, handlerPutVerifyUser } = require("./handler");
 const upload = require("../../utils/multer");
+const loginAdmin = require("../../middleware/loginAdmin");
 const router = express.Router();
 
 //API Register user: POST user/register
@@ -19,4 +20,5 @@ router.put("/changepassword/:id", authenticationToken, handlerChangePassword);
 // API Update User Profile and Password: PUT user/updateprofilepassword/:id
 router.put("/updateprofilepassword/:id", authenticationToken, upload.single("image"), handlerPutUserProfilePassword);
 
+router.put("/verify/:id", authenticationToken, loginAdmin, handlerPutVerifyUser);
 module.exports = router;
