@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { User, Token } = require("../../models");
-const sendEmailResetPassword = require("../../utils/sendEmail");
+const {sendEmailResetPassword} = require("../../utils/sendEmail");
 const subtractHours = require("../../utils/subtractHours");
 const validateRequestTokenResetPassword = require("../../validator/token");
 
