@@ -140,12 +140,12 @@ module.exports = {
       if (!course) {
         throw new Error("Course not found");
       }
-      const deleteImagePublic_id = `itc-repo/course/${course.cloudinary_id}`; // to save public_id for parameter destroy
-      const result = await cloudinary.uploader.destroy(deleteImagePublic_id); // delete image in cloudinary
-      if (result.result !== "ok") {
-        throw new Error("Failed to delete image");
-      }
-
+      // const deleteImagePublic_id = `itc-repo/course/${course.cloudinary_id}`; // to save public_id for parameter destroy
+      // const result = await cloudinary.uploader.destroy(deleteImagePublic_id); // delete image in cloudinary
+      // if (result.result !== "ok") {
+      //   throw new Error("Failed to delete image");
+      // }
+      const result = await deleteImagePublic_id("course", course.cloudinary_id);
       await course.destroy();
 
       res.status(200).json({

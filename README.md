@@ -260,7 +260,7 @@ Response
 Endpoint
 
 ```text
-PUT /:id_user/:token
+POST /:id_user/:token
 ```
 
 Request
