@@ -235,7 +235,7 @@ Response
 Endpoint
 
 ```text
-POST /reset-password/
+POST /password-reset/
 ```
 
 Request
