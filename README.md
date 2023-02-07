@@ -61,6 +61,7 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Fetch User](#fetch-user)
     - [Refresh Token](#refresh-token)
     - [Link Reset Password](#link-reset-password)
+    - [Reset Password](#reset-password)
     - [Update Profile](#update-profile)
     - [Change Password](change-password)
     - [Update Profile and Password](#update-profile-and-password)
