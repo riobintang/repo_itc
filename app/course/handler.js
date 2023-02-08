@@ -5,7 +5,7 @@ const {
 } = require("../../validator/course");
 const cloudinary = require("../../utils/cloudinary").v2;
 const Sequelize = require("sequelize");
-const { deleteImagePublic_id } = require("../../utils/cloudinary/imageServiceCloudinary");;
+const { deleteImage } = require("../../utils/cloudinary/imageServiceCloudinary");;
 const Op = Sequelize.Op;
 module.exports = {
   //handler get course
@@ -165,7 +165,7 @@ module.exports = {
       // if (result.result !== "ok") {
       //   throw new Error("Failed to delete image");
       // }
-      const result = await deleteImagePublic_id("course", course.cloudinary_id);
+      const result = await deleteImage("course", course.cloudinary_id);
       await course.destroy();
 
       res.status(200).json({
