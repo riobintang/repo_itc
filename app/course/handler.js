@@ -21,6 +21,25 @@ module.exports = {
       next(error);
     }
   },
+  //handler get course by id
+  handlerGetCourseById: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const course = await Course.findByPk(id);
+
+      if (!course) {
+        throw new Error("Course not found");
+      }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Successfully get course',
+      data: course,
+    });
+    } catch (error) {
+      next(error);
+    }
+  },
   //handler search courses by title
   handlerGetCourseByTitle: async (req, res, next) => {
     try {

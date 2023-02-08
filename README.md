@@ -62,6 +62,9 @@ For more information about sequelize check the [documentation](https://sequelize
     - [Refresh Token](#refresh-token)
     - [Link Reset Password](#link-reset-password)
     - [Reset Password](#reset-password)
+    - [Update Profile](#update-profile)
+    - [Change Password](change-password)
+    - [Update Profile and Password](#update-profile-and-password)
   - [Division](#division)
     - [Fetch All Divisions](#fetch-all-divisions)
   - [Role](#role)
@@ -235,7 +238,7 @@ Response
 Endpoint
 
 ```text
-POST /password-reset/
+POST /reset-password/
 ```
 
 Request
@@ -277,6 +280,204 @@ Response
 {
   "status": "success",
   "message": "Password reset successfully"
+}
+```
+
+### Update Profile
+
+Endpoint
+
+```text
+PUT /user/update/:id => /user/update/1
+```
+
+Request
+
+```json
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmYWlzYWxyZXphQGZhaXNhbC5jb20iLCJ1c2VybmFtZSI6ImFkbWluaXRjIiwicm9sZSI6ImFkbWluIiwiaWRfcm9sZSI6MiwiZGl2aXNpb24iOiJNb2JpbGUgRGV2ZWxvcGVyIiwiaWRfZGl2aXNpb24iOjMsImlhdCI6MTY3NTc1MDIyMSwiZXhwIjoxNjc1NzUxNDIxLCJzdWIiOiJhZG1pbml0YyJ9.Y3f-E7qKBk3qbtqXIlQZeFiy7WQFQwKkwPiVcrcxAPk",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "mode": "formdata",
+    "formdata": [
+      {
+        "key": "image",
+        "type": "file",
+        "src": "/D:/Home/Pictures/test.png"
+      },
+      {
+        "key": "username",
+        "value": "adminitc",
+        "type": "text",
+        "disabled": true
+      },
+      {
+        "key": "fullName",
+        "value": "Faisalll",
+        "type": "text"
+      },
+      {
+        "key": "email",
+        "value": "faisalreza@faisal.com",
+        "type": "text",
+        "disabled": true
+      },
+      {
+        "key": "generation",
+        "value": "2020",
+        "type": "text"
+      },
+      {
+        "key": "phoneNumber",
+        "value": "081000000000",
+        "type": "text"
+      },
+      {
+        "key": "id_division",
+        "value": "3",
+        "type": "text"
+      },
+      {
+        "key": "password",
+        "value": "secret123",
+        "type": "text",
+        "disabled": true
+      }
+    ]
+  }
+}
+```
+
+Response
+
+```json
+{
+  "status": "success",
+  "message": "Successfully update User"
+}
+```
+
+### Change Password
+
+Endpoint
+
+```text
+PUT /user/changepassword/:id => /user/changepassword/1
+```
+
+Request
+
+```json
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmYWlzYWxyZXphQGZhaXNhbC5jb20iLCJ1c2VybmFtZSI6ImFkbWluaXRjIiwicm9sZSI6ImFkbWluIiwiaWRfcm9sZSI6MiwiZGl2aXNpb24iOiJNb2JpbGUgRGV2ZWxvcGVyIiwiaWRfZGl2aXNpb24iOjMsImlhdCI6MTY3NTc1MDIyMSwiZXhwIjoxNjc1NzUxNDIxLCJzdWIiOiJhZG1pbml0YyJ9.Y3f-E7qKBk3qbtqXIlQZeFiy7WQFQwKkwPiVcrcxAPk",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "password": "secret123"
+  }
+}
+```
+
+Response
+
+```json
+{
+  "status": "success",
+  "message": "Successfully change password User"
+}
+```
+
+### Update Profile and Password
+
+Endpoint
+
+```text
+PUT /user/updateprofilepassword/:id => /user/updateprofilepassword/1
+```
+
+Request
+
+```json
+{
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmYWlzYWxyZXphQGZhaXNhbC5jb20iLCJ1c2VybmFtZSI6ImFkbWluaXRjIiwicm9sZSI6ImFkbWluIiwiaWRfcm9sZSI6MiwiZGl2aXNpb24iOiJNb2JpbGUgRGV2ZWxvcGVyIiwiaWRfZGl2aXNpb24iOjMsImlhdCI6MTY3NTc1MDIyMSwiZXhwIjoxNjc1NzUxNDIxLCJzdWIiOiJhZG1pbml0YyJ9.Y3f-E7qKBk3qbtqXIlQZeFiy7WQFQwKkwPiVcrcxAPk",
+        "type": "string"
+      }
+    ]
+  },
+  "body": {
+    "mode": "formdata",
+    "formdata": [
+      {
+        "key": "image",
+        "type": "file",
+        "src": "/D:/Home/Pictures/test.png"
+      },
+      {
+        "key": "username",
+        "value": "adminitc",
+        "type": "text"
+      },
+      {
+        "key": "fullName",
+        "value": "Faisalll",
+        "type": "text"
+      },
+      {
+        "key": "email",
+        "value": "faisalreza@faisal.com",
+        "type": "text"
+      },
+      {
+        "key": "generation",
+        "value": "2020",
+        "type": "text"
+      },
+      {
+        "key": "phoneNumber",
+        "value": "081000000000",
+        "type": "text"
+      },
+      {
+        "key": "id_division",
+        "value": "3",
+        "type": "text"
+      },
+      {
+        "key": "password",
+        "value": "secret123",
+        "type": "text"
+      }
+    ]
+  }
+}
+```
+
+Response
+
+```json
+{
+  "status": "success",
+  "message": "Successfully update User"
 }
 ```
 
