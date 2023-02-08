@@ -5,6 +5,7 @@ const {
 } = require("../../validator/course");
 const cloudinary = require("../../utils/cloudinary").v2;
 const Sequelize = require("sequelize");
+const { deleteImagePublic_id } = require("../../utils/cloudinary/imageServiceCloudinary");;
 const Op = Sequelize.Op;
 module.exports = {
   //handler get course
