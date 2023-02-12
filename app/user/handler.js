@@ -331,20 +331,22 @@ module.exports = {
   handlerPutVerifyUser: async (req, res, next) => {
     try {
       const { id } = req.params;
+      const { verify } = req.body;
+
       const user = await User.findByPk(id);
+
       if (!user) {
         throw new Error("User not found");
       }
 
-      if (user.verify) {
-        throw new Error("User has been verified");
+      await user.update({ verify });
+      if (verify) {
+        await sendEmailVerify(user);
       }
 
-      await user.update({ verify: true });
-      await sendEmailVerify(user)
       res.status(201).json({
         status: "success",
-        message: "Successfully verify User",
+        message: "Successfully update User",
       });
     } catch (error) {
       next(error);
