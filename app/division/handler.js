@@ -16,14 +16,15 @@ module.exports = {
       next(error);
     }
   },
-  handlerGetDivisionByID: async (req, res, next) => {
+  handlerGetDivisionById: async (req, res, next) => {
     try {
-      const division = await Division.findOne({
-        where: {
-          id: id,
-        },
+      const { id } = req.params;
+      const division = await Division.findByPk(id, {
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
+      if (!division) {
+        throw new Error("Division not found");
+      }
       res.status(200).json({
         status: 'success',
         data: division,

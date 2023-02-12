@@ -14,4 +14,21 @@ module.exports = {
       next(error);
     }
   },
+  handlerGetRoleById: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const role = await Role.findByPk(id, {
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+      if (!role) {
+        throw new Error("Role not found");
+      }
+      res.status(200).json({
+        status: 'success',
+        data: role,
+      })
+    } catch (error) {
+      next(error);
+    }
+  },
 };

@@ -424,6 +424,25 @@ module.exports = {
       next(error);
     }
   },
+  handlerPutUserRole: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { id_role } = req.body;
+
+      const user = await User.findByPk(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      await user.update({ id_role });
+      res.status(201).json({
+        status: "success",
+        message: "Successfully update User Role",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   handlerDeleteUser: async (req, res, next) => {
     try {
       const { id } = req.params;

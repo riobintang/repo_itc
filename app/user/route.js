@@ -1,6 +1,6 @@
 const express = require("express");
 const authenticationToken = require("../../middleware/authenticationToken");
-const { handlerRegisterUser, handlerUserLogin, handlerGetAllUsers, handlerGetUserById, refreshJWTHandler, handlerPutUserProfile, handlerChangePassword, handlerPutUserProfilePassword, handlerPutVerifyUser, handlerDeleteUser } = require("./handler");
+const { handlerRegisterUser, handlerUserLogin, handlerGetAllUsers, handlerGetUserById, refreshJWTHandler, handlerPutUserProfile, handlerChangePassword, handlerPutUserProfilePassword, handlerPutVerifyUser, handlerPutUserRole, handlerDeleteUser } = require("./handler");
 const upload = require("../../utils/multer");
 const loginAdmin = require("../../middleware/loginAdmin");
 const router = express.Router();
@@ -23,6 +23,8 @@ router.post("/changepassword/:id", authenticationToken, handlerChangePassword);
 router.put("/updateprofilepassword/:id", authenticationToken, upload.single("image"), handlerPutUserProfilePassword);
 // API Verify User: Put user/verify/:id
 router.put("/verify/:id", authenticationToken, loginAdmin, handlerPutVerifyUser);
+// API Update User Role: PUT user/role/:id
+router.put("/role/:id", authenticationToken, loginAdmin, handlerPutUserRole);
 // API Delete User: DELETE user/:id
 router.delete("/:id", authenticationToken, loginAdmin, handlerDeleteUser);
 module.exports = router;
