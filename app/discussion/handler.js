@@ -2,6 +2,8 @@ const { Discussion, Course, User } = require("../../models");
 const {
   validateCreateDiscussionSchema,
 } = require("../../validator/discussion");
+const { Sequelize } = require("sequelize");
+const Op = Sequelize.Op;
 
 module.exports = {
   // handler post for discussion
@@ -46,7 +48,7 @@ module.exports = {
         },
         include: {
           model: User,
-          attributes: ["fullName", "id_division", "username"] ,
+          attributes: ["fullName", "id_division", "username", "id"],
         },
       });
       res.status(200).json({
@@ -65,8 +67,8 @@ module.exports = {
       const discussion = await Discussion.findByPk(id_discussion, {
         include: {
           model: User,
-          attributes: ["fullName", "id_division", "username"] ,
-        }
+          attributes: ["fullName", "id_division", "username", "id"],
+        },
       });
       if (!discussion) {
         throw new Error("Discussion not found");
@@ -129,6 +131,40 @@ module.exports = {
       res.status(200).json({
         status: "success",
         message: "Successfully delete Discussion",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerGetSearchDiscusssion: async (req, res, next) => {
+    try {
+      const { keyword } = req.query;
+      const { id_course } = req.params;
+      const discussion = await Discussion.findAll({
+        where: {
+          id_course,
+          [Op.or]: [
+            {
+              title: {
+                [Op.like]: `%${keyword}%`,
+              },
+            },
+            {
+              body: { 
+                [Op.like]: `%${keyword}%`, 
+              },
+            },
+          ],
+        },
+        include: {
+          model: User,
+          attributes: ["fullName", "id_division", "username", "id"],
+        },
+      });
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get Discussion by Course",
+        data: discussion,
       });
     } catch (error) {
       next(error);

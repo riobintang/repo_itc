@@ -1,5 +1,5 @@
 const express = require("express");
-const { handlerPostDiscussion, handlerGetDiscussionByIdCourse, handlerGetDiscussionById, handlerDeleteDiscussion, handlerPutDiscussion } = require("./handler");
+const { handlerPostDiscussion, handlerGetDiscussionByIdCourse, handlerGetDiscussionById, handlerDeleteDiscussion, handlerPutDiscussion, handlerGetSearchDiscusssion } = require("./handler");
 const loginAdmin = require('../../middleware/loginAdmin');
 const authenticationToken = require("../../middleware/authenticationToken");
 const router = express.Router();
@@ -8,6 +8,8 @@ const router = express.Router();
 router.post("/:id_course/discussion", authenticationToken, handlerPostDiscussion);
 // Get all dicussion by Specific Course
 router.get("/:id_course/discussion", authenticationToken, handlerGetDiscussionByIdCourse);
+// Get discussion with search
+router.get("/:id_course/discussion/search", authenticationToken, handlerGetSearchDiscusssion);
 // Get discussion by id discussion
 router.get("/:id_course/discussion/:id_discussion", authenticationToken, handlerGetDiscussionById);
 // Put for discussion
