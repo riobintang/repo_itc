@@ -7,7 +7,7 @@ module.exports = {
       });
       res.status(200).json({
         status: "success",
-        message: "Successfully get division",
+        message: "Successfully get Roles",
         data: role,
       });
     } catch (error) {
