@@ -340,7 +340,7 @@ module.exports = {
       }
 
       await user.update({ verify });
-      if (verify) {
+      if (verify === true) {
         await sendEmailVerify(user);
       }
 
