@@ -10,14 +10,15 @@ const {
 const refreshTokens = {};
 
 async function getUser(id) {
-  const user = await User.findByPk(id, {
+  const getUser = await User.findByPk(id, {
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+    include: [{ model: Role }, { model: Division }],
   });
-  if (!user) {
+  if (!getUser) {
     throw new Error("User not found");
   }
 
-  return user;
+  return getUser;
 }
 
 async function registerUser(user) {
@@ -177,7 +178,6 @@ async function putUserProfile(user) {
 
     await t.commit();
     return updateUser;
-
   } catch (error) {
     await t.rollback();
     throw new Error(error);
@@ -282,7 +282,6 @@ async function putUserProfileAndPassword(user) {
 
     await t.commit();
     return updateUser;
-
   } catch (error) {
     await t.rollback();
     throw new Error(error);

@@ -5,13 +5,16 @@ const {
 } = require("../../validator/course");
 const cloudinary = require("../../utils/cloudinary").v2;
 const Sequelize = require("sequelize");
-const { deleteImage } = require("../../utils/cloudinary/imageServiceCloudinary");;
+const {
+  deleteImage,
+} = require("../../utils/cloudinary/imageServiceCloudinary");
+const coursesServices = require("../../services/mysql/courseService");
 const Op = Sequelize.Op;
 module.exports = {
   //handler get course
   handlerGetAllCourse: async (req, res, next) => {
     try {
-      const courses = await Course.findAll();
+      const courses = await coursesServices.getAllCourses();
       res.status(200).json({
         status: "success",
         message: "Successfully get all courses",
@@ -25,17 +28,13 @@ module.exports = {
   handlerGetCourseById: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const course = await Course.findByPk(id);
+      const course = await coursesServices.getCourseById(id);
 
-      if (!course) {
-        throw new Error("Course not found");
-      }
-
-    res.status(200).json({
-      status: 'success',
-      message: 'Successfully get course',
-      data: course,
-    });
+      res.status(200).json({
+        status: "success",
+        message: "Successfully get course",
+        data: course,
+      });
     } catch (error) {
       next(error);
     }
@@ -43,14 +42,8 @@ module.exports = {
   //handler search courses by title
   handlerGetCourseByTitle: async (req, res, next) => {
     try {
-      const { title } = req.params;
-      const courses = await Course.findAll({
-        where: {
-          title: {
-            [Op.like]: `%${title}%`,
-          },
-        },
-      });
+      const { title } = req.query;
+      const courses = await coursesServices.searchByTitle(title);
       res.status(200).json({
         status: "success",
         message: "Successfully get courses by title",
@@ -64,10 +57,7 @@ module.exports = {
   handlerGetCourseByPage: async (req, res, next) => {
     try {
       const { page } = req.params;
-      const courses = await Course.findAll({
-        limit: 10,
-        offset: (page - 1) * 10,
-      });
+      const courses = await coursesServices.getCourseByPage(page);
       res.status(200).json({
         status: "success",
         message: "Successfully get all courses",
@@ -85,21 +75,14 @@ module.exports = {
       validateCoursePhotoSchema(req.file); // validate photo extension
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
 
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "itc-repo/course/",
-        use_filename: true,
-        unique_filename: true,
+      const course = await coursesServices.create({
+        image: req.file.path,
+        title,
+        description,
+        id_division,
+        userid: req.user.id,
       });
-      const course = await Course.create({
-        title: title,
-        description: description,
-        image_thumbnail: result.secure_url,
-        cloudinary_id: result.public_id.split("/")[2],
-        id_division: id_division,
-        id_user: req.user.id,
-      });
-
-      res.status(200).json({
+      res.status(201).json({
         status: "success",
         message: "Successfully create course",
         data: course,
@@ -114,36 +97,17 @@ module.exports = {
       const { id } = req.params;
       const { title, description, id_division } = req.body;
 
-      const course = await Course.findByPk(id); // search course by id
-      if (!course) {
-        throw new Error("Course not found");
-      }
-
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
+      validateCoursePhotoSchema(req.file); // validate photo extension
 
-      if (req.file != null) {
-        //update image
-        validateCoursePhotoSchema(req.file); //validate image
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          // upload image to cloudinary
-          folder: "itc-repo/course/",
-          public_id: course.cloudinary_id,
-        });
-        await course.update({
-          image_thumbnail: result.secure_url,
-          cloudinary_id: course.cloudinary_id,
-        });
-      }
-
-      await course.update({
-        title: title,
-        description: description,
-        id_division: id_division,
+      const course = await coursesServices.update({
+        id,
+        title,
+        description,
+        id_division,
+        image: req.file.path,
       });
-
-      await course.save();
-
-      res.status(200).json({
+      res.status(201).json({
         status: "success",
         message: "Successfully update course",
         data: course,
@@ -156,17 +120,7 @@ module.exports = {
   handlerDeleteCourse: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const course = await Course.findByPk(id);
-      if (!course) {
-        throw new Error("Course not found");
-      }
-      // const deleteImagePublic_id = `itc-repo/course/${course.cloudinary_id}`; // to save public_id for parameter destroy
-      // const result = await cloudinary.uploader.destroy(deleteImagePublic_id); // delete image in cloudinary
-      // if (result.result !== "ok") {
-      //   throw new Error("Failed to delete image");
-      // }
-      const result = await deleteImage("course", course.cloudinary_id);
-      await course.destroy();
+      await coursesServices.delete(id);
 
       res.status(200).json({
         status: "success",

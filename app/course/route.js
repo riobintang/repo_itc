@@ -7,12 +7,14 @@ const router = express.Router();
 
 //API get course: GET /course/
 router.get('/', authenticationToken, handlerGetAllCourse);
-//API get course by id: GET /course/:id
-router.get('/:id', authenticationToken, handlerGetCourseById);
+//API get search course: GET /course/:title
+router.get('/search', authenticationToken, handlerGetCourseByTitle);
 //API get course with pagination: GET /course/page:page
 router.get("/page/:page", authenticationToken, handlerGetCourseByPage);
-//API get search course: GET /course/:title
-router.get('/search/:title', authenticationToken, handlerGetCourseByTitle);
+//API get course by id: GET /course/:id
+router.get('/:id', authenticationToken, handlerGetCourseById);
+
+
 //API post course: POST /course/
 router.post('/', authenticationToken, loginAdmin, upload.single("image"), handlerPostCourse);
 //API update course: PUT /course/:id

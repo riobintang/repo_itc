@@ -75,9 +75,9 @@ async function updateCourse(data) {
     });
   }
   await course.update({
-    title: title,
-    description: description,
-    id_division: id_division,
+    title: data.title,
+    description: data.description,
+    id_division: data.id_division,
   });
 }
 

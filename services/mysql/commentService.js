@@ -1,10 +1,10 @@
 const { Comment, Discussion, User } = require("../../models");
 
-async function postComment(data, id_user) {
+async function postComment(data, id_user, id_course, id_discussion) {
   const discussion = await Discussion.findOne({
     where: {
-      id: data.id_discussion,
-      id_course: data.id_course,
+      id: id_discussion,
+      id_course: id_course,
     },
   });
   if (!discussion) {
@@ -13,7 +13,7 @@ async function postComment(data, id_user) {
   const comment = await Comment.create({
     body: data.body,
     isEdited: false,
-    id_discussion: data.id_discussion,
+    id_discussion: id_discussion,
     id_user,
   });
 
@@ -58,7 +58,7 @@ async function putComment(data, id_course, id_discussion, id_comment, id_user) {
   if (comment.id_user !== id_user) {
     throw new Error("You are not allowed User to edit");
   }
-  validateCreateCommentSchema({ body });
+  
   await comment.update({
     body: data.body,
     isEdited: true,
@@ -82,7 +82,6 @@ async function deleteComment(id_course, id_discussion, id_comment, user) {
     throw new Error("Comment not found");
   }
   // Check authority
-  console.log(req.user.role);
   if (user.id !== comment.id_user && user.role !== "admin") {
     throw new Error("You are not allowed");
   }

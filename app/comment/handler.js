@@ -1,4 +1,5 @@
 const { Comment, Discussion, User } = require("../../models");
+const commentsServices = require("../../services/mysql/commentService");
 const { validateCreateCommentSchema } = require("../../validator/comment");
 
 module.exports = {
@@ -9,21 +10,12 @@ module.exports = {
       const { body } = req.body;
       const { id_course, id_discussion } = req.params;
       validateCreateCommentSchema({ body });
-      const discussion = await Discussion.findOne({
-        where: {
-          id: id_discussion,
-          id_course,
-        },
-      });
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
-      const comment = await Comment.create({
-        body,
-        isEdited: false,
-        id_discussion,
+      const comment = await commentsServices.create(
+        { body },
         id_user,
-      });
+        id_course,
+        id_discussion
+      );
 
       res.status(201).json({
         status: "success",
@@ -37,27 +29,12 @@ module.exports = {
   handlerGetCommentByDiscussion: async (req, res, next) => {
     try {
       const { id_course, id_discussion } = req.params;
-      
-      const discussion = await Discussion.findOne({
-        where: {
-          id: id_discussion,
-          id_course,
-        },
-      });
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
 
-      const comment = await Comment.findAll({
-        where: {
-          id_discussion,
-        },
-        include: [{ model: User, attributes: ["id", "fullName"] }],
-      });
+      const comments = await commentsServices.getAll(id_discussion, id_course);
       res.status(200).json({
         status: "success",
-        message: "Successfully get All Comment by Discussion",
-        data: comment,
+        message: "Successfully get Comments by Discussion",
+        data: comments,
       });
     } catch (error) {
       next(error);
@@ -68,27 +45,14 @@ module.exports = {
       const id_user = req.user.id;
       const { body } = req.body;
       const { id_course, id_discussion, id_comment } = req.params;
-      const discussion = await Discussion.findOne({
-        where: {
-          id: id_discussion,
-          id_course,
-        },
-      });
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
-      const comment = await Comment.findByPk(id_comment);
-      if (!comment) {
-        throw new Error("Comment not found");
-      }
-      if (comment.id_user !== id_user) {
-        throw new Error("You are not allowed User to edit");
-      }
       validateCreateCommentSchema({ body });
-      await comment.update({
-        body,
-        isEdited: true,
-      });
+      await commentsServices.update(
+        { body },
+        id_course,
+        id_discussion,
+        id_comment,
+        id_user
+      );
 
       res.status(201).json({
         status: "success",
@@ -101,27 +65,8 @@ module.exports = {
   handlerDeleteComment: async (req, res, next) => {
     try {
       const { id_course, id_discussion, id_comment } = req.params;
-
-      const discussion = await Discussion.findOne({
-        where: {
-          id: id_discussion,
-          id_course,
-        },
-      });
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
-
-      const comment = await Comment.findByPk(id_comment);
-      if (!comment) {
-        throw new Error("Comment not found");
-      }
-      // Check authority
-      console.log(req.user.role);
-      if (req.user.id !== comment.id_user && req.user.role !== "admin") {
-        throw new Error("You are not allowed");
-      }
-      await comment.destroy();
+      const user = await usersServices.getUserById(req.user.id);
+      await commentsServices.delete(id_course, id_discussion, id_comment, user);
       res.status(200).json({
         status: "success",
         message: "Successfully delete comment",

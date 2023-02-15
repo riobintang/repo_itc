@@ -1,6 +1,4 @@
-const { Chapter, Article } = require("../../models");
 const chaptersServices = require("../../services/mysql/chapterService");
-const { updateDateCourse } = require("../../utils/courseDateUpdate");
 const {
   validateCreateUpdateChapterSchema,
 } = require("../../validator/chapter");
