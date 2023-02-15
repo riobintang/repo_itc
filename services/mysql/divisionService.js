@@ -1,6 +1,6 @@
 const { Division } = require("../../models");
 
-const divisionsService = {
+const divisionsServices = {
   getAllDivisions: async () => {
     const divisions = await Division.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -18,4 +18,4 @@ const divisionsService = {
   },
 };
 
-module.exports = divisionsService;
+module.exports = divisionsServices;

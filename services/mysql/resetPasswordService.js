@@ -59,9 +59,9 @@ async function resetPassword(user) {
   }
 }
 
-const resetPasswordService = {
+const resetPasswordServices = {
     getTokenReset,
     resetPassword,
 }
 
-module.exports = resetPasswordService;
+module.exports = resetPasswordServices;

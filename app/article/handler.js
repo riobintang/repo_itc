@@ -5,7 +5,7 @@ const {
   validateArticleValueSchema,
 } = require("../../validator/article");
 const cloudinary = require("../../utils/cloudinary").v2;
-
+const articlesServices = require("../../services/mysql/articleService");
 module.exports = {
   handlerGetAllArticleTitleByChapterCourseID: async (req, res, next) => {
     try {
@@ -47,32 +47,34 @@ module.exports = {
       //     },
       //   ],
       // });
-      const articles = await Article.findAll({
-        where: {
-          id_chapter,
-        },
-        include: [
-          {
-            model: Chapter,
-            where: {
-              id: id_chapter
-            },
-            attributes: [],
-            include: [
-              {
-                model: Course,
-                where: {
-                  id: id_course,
-                },
-                attributes: [],
-              },
-            ],
-          },
-        ],
-      });
+
+      // const articles = await Article.findAll({
+      //   where: {
+      //     id_chapter,
+      //   },
+      //   include: [
+      //     {
+      //       model: Chapter,
+      //       where: {
+      //         id: id_chapter
+      //       },
+      //       attributes: [],
+      //       include: [
+      //         {
+      //           model: Course,
+      //           where: {
+      //             id: id_course,
+      //           },
+      //           attributes: [],
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
+      const articles = await articlesServices.getAllArticleTitleByChapterAndCourseId(id_course, id_chapter)
       res.status(200).json({
         status: "success",
-        message: "Successfully get all title article by specific chapter",
+        message: "Successfully get all title articles by chapter",
         data: articles,
       });
     } catch (error) {
@@ -105,32 +107,33 @@ module.exports = {
       //const check = json.includes(article.id_chapter);
 
       //console.log(check);
-      const article = await Article.findOne({
-        where: {
-          id: id_article,
-        },
-        include: [
-          {
-            model: Chapter,
-            where: {
-              id: id_chapter
-            },
-            attributes: [],
-            include: [
-              {
-                model: Course,
-                where: {
-                  id: id_course,
-                },
-                attributes: [],
-              },
-            ],
-          },
-        ],
-      });
-      if (!article) {
-        throw new Error("Article not found");
-      }
+      // const article = await Article.findOne({
+      //   where: {
+      //     id: id_article,
+      //   },
+      //   include: [
+      //     {
+      //       model: Chapter,
+      //       where: {
+      //         id: id_chapter
+      //       },
+      //       attributes: [],
+      //       include: [
+      //         {
+      //           model: Course,
+      //           where: {
+      //             id: id_course,
+      //           },
+      //           attributes: [],
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
+      // if (!article) {
+      //   throw new Error("Article not found");
+      // }
+      const article = await articlesServices.getArticleById(id_course, id_chapter, id_article);
       res.status(200).json({
         status: "success",
         message: "Successfully get article by id",
@@ -145,21 +148,7 @@ module.exports = {
       const { title, content } = req.body;
       const { id_course, id_chapter } = req.params;
       validateArticleValueSchema({ title, content });
-      const chapter = await Chapter.findOne({
-        where: {
-          id: id_chapter,
-          id_course,
-        },
-      });
-      if (!chapter) {
-        throw new Error("Chapter not found");
-      }
-      const article = await Article.create({
-        title,
-        body: content,
-        id_chapter,
-      });
-
+      const article = await articlesServices.create({title, content}, id_course, id_chapter);
       res.status(201).json({
         status: "success",
         message: "Successfully post Article",
@@ -172,11 +161,7 @@ module.exports = {
   handlerPostImageArticle: async (req, res, next) => {
     try {
       validateArticleImageSchema(req.file);
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "itc-repo/article/",
-        use_filename: true,
-        unique_filename: true,
-      });
+      const result = await articlesServices.createImage(req.file.path)
       res.status(200).json({
         location: result.secure_url,
       });
@@ -189,20 +174,21 @@ module.exports = {
       const { id_article } = req.params;
       const { title, content } = req.body;
       validateArticleValueSchema({ title, content });
-      const article = await Article.update(
-        {
-          title,
-          content,
-        },
-        {
-          where: {
-            id: id_article,
-          },
-        }
-      );
-      if (!article) {
-        throw new Error("Article not found");
-      }
+      // const article = await Article.update(
+      //   {
+      //     title,
+      //     content,
+      //   },
+      //   {
+      //     where: {
+      //       id: id_article,
+      //     },
+      //   }
+      // );
+      // if (!article) {
+      //   throw new Error("Article not found");
+      // }
+      await articlesServices.update({title, content}, id_article);
       res.status(201).json({
         status: "success",
         message: "Successfully update Article",
@@ -214,12 +200,13 @@ module.exports = {
   handlerDeleteArticle: async (req, res, next) => {
     try {
       const { id_article } = req.params;
-      const article = await Article.findByPk(id_article);
-      if (!article) {
-        throw new Error("Article not found");
-      }
+      // const article = await Article.findByPk(id_article);
+      // if (!article) {
+      //   throw new Error("Article not found");
+      // }
 
-      await article.destroy();
+      // await article.destroy();
+      await articlesServices.delete(id_article);
       res.status(200).json({
         status: "success",
         message: "Successfully delete Article",
@@ -231,14 +218,7 @@ module.exports = {
   handlerDeleteImageArticle: async (req, res, next) => {
     try {
       const { location } = req.body;
-      const deleteImageLocation = location.split("/").pop().split(".")[0];
-      const deleteImage = `itc-repo/article/${deleteImageLocation}`;
-
-      const result = await cloudinary.uploader.destroy(deleteImage); // delete image in cloudinary
-
-      if (result.result !== "ok") {
-        throw new Error("Failed to delete image");
-      }
+      await articlesServices.deleteImage(location);
       res.status(201).json({
         status: "success",
         message: "Successfully delete Image Article",

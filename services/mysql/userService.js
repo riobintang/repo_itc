@@ -308,7 +308,7 @@ async function deleteUser(id) {
   return user;
 }
 
-const usersService = {
+const usersServices = {
   getUserById: getUser,
   register: registerUser,
   login: userLogin,
@@ -323,4 +323,4 @@ const usersService = {
   updateUserVerify: putVerifyUser,
 };
 
-module.exports = usersService;
+module.exports = usersServices;

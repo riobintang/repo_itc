@@ -111,7 +111,7 @@ async function searchDiscussion(data) {
   return discussion;
 }
 
-const discussionsService = {
+const discussionsServices = {
     create: postDiscussion,
     getDiscussionByIdCourse,
     getDiscussionById,
@@ -120,4 +120,4 @@ const discussionsService = {
     searchDiscussion,
 }
 
-module.exports = discussionsService;
+module.exports = discussionsServices;

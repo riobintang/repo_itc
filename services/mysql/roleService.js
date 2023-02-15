@@ -1,6 +1,6 @@
 const { Role } = require("../../models");
 
-const rolesService = {
+const rolesServices = {
   getAllRoles: async () => {
     const roles = await Role.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -19,4 +19,4 @@ const rolesService = {
   },
 };
 
-module.exports = rolesService;
+module.exports = rolesServices;

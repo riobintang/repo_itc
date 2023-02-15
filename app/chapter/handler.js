@@ -1,4 +1,5 @@
 const { Chapter, Article } = require("../../models");
+const chaptersServices = require("../../services/mysql/chapterService");
 const { updateDateCourse } = require("../../utils/courseDateUpdate");
 const {
   validateCreateUpdateChapterSchema,
@@ -8,14 +9,10 @@ module.exports = {
   handlerGetAllChaptersByCourseID: async (req, res, next) => {
     try {
       const { id_course } = req.params;
-      const chapters = await Chapter.findAll({
-        where: {
-          id_course: id_course,
-        },
-      });
+      const chapters = await chaptersServices.getAllChaptersByCourse(id_course);
       res.status(200).json({
         status: "success",
-        message: "Successfully get all chapters by specific course",
+        message: "Successfully get all chapters by course",
         data: chapters,
       });
     } catch (error) {
@@ -26,15 +23,10 @@ module.exports = {
   handlerGetChapterAndArticle: async (req, res, next) => {
     try {
       const { id_course } = req.params;
-      const chapters = await Chapter.findAll({
-        where: {
-          id_course: id_course,
-        },
-        include: [{ model: Article, attributes: ["id", "title", "id_chapter"],}],
-      });
+      const chapters = await chaptersServices.getChaptersAndArticles(id_course);
       res.status(200).json({
         status: "success",
-        message: "Successfully get all chapters by specific course",
+        message: "Successfully get all chapters and title articles by course",
         data: chapters,
       });
     } catch (error) {
@@ -45,11 +37,7 @@ module.exports = {
   handlerGetChapterById: async (req, res, next) => {
     try {
       const { id_course, id_chapter } = req.params;
-      const chapter = await Chapter.findByPk(id_chapter);
-
-      if (!chapter) {
-        throw new Error("Chapter not found");
-      }
+      const chapter = await chaptersServices.getChapterById(id_chapter, id_course);
 
       res.status(200).json({
         status: "success",
@@ -65,11 +53,7 @@ module.exports = {
       const { id_course } = req.params;
       const { title } = req.body;
       validateCreateUpdateChapterSchema(req.body);
-      await updateDateCourse(id_course);
-      const chapter = await Chapter.create({
-        title: title,
-        id_course: id_course,
-      });
+      const chapter = await chaptersServices.create(title, id_course);
 
       res.status(200).json({
         status: "success",
@@ -85,24 +69,13 @@ module.exports = {
       const { id_course, id_chapter } = req.params;
       const { title } = req.body;
 
-      const chapter = await Chapter.findByPk(id_chapter);
-      if (!chapter) {
-        throw new Error("Chapter not found");
-      }
-      if (chapter.id_course != id_course) {
-        throw new Error("Chapter from Course not found");
-      }
       validateCreateUpdateChapterSchema(req.body);
-      await chapter.update({
-        title: title,
-      });
 
-      await updateDateCourse(id_course);
+      await chaptersServices.update(title, id_course, id_chapter);
 
       res.status(200).json({
         status: "success",
         message: "Successfully update Chapter",
-        data: chapter,
       });
     } catch (error) {
       next(error);
@@ -111,15 +84,7 @@ module.exports = {
   handlerDeleteChapter: async (req, res, next) => {
     try {
       const { id_course, id_chapter } = req.params;
-      const chapter = await Chapter.findByPk(id_chapter);
-      if (!chapter) {
-        throw new Error("Chapter not found");
-      }
-      if (chapter.id_course != id_course) {
-        throw new Error("Chapter from Course not found");
-      }
-      await chapter.destroy();
-      await updateDateCourse(id_course);
+      await chaptersServices.delete(id_chapter, id_course)
       res.status(200).json({
         status: "success",
         message: "Successfully delete chapter",

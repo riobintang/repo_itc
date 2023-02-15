@@ -6,19 +6,19 @@ const authenticationToken = require("../../middleware/authenticationToken");
 const router = express.Router();
 
 // Get all Article 
-router.get("/:id_course/chapter/:id_chapter/article", authenticationToken, handlerGetAllArticleTitleByChapterCourseID);
+router.get("/:id_course/chapters/:id_chapter/articles", authenticationToken, handlerGetAllArticleTitleByChapterCourseID);
 // Get Article by id
-router.get("/:id_course/chapter/:id_chapter/article/:id_article", authenticationToken, handlerGetArticleById);
+router.get("/:id_course/chapters/:id_chapter/articles/:id_article", authenticationToken, handlerGetArticleById);
 // Post for Content and Title Article
-router.post("/:id_course/chapter/:id_chapter/article", authenticationToken, loginAdmin, handlerPostArticle);
+router.post("/:id_course/chapters/:id_chapter/articles", authenticationToken, loginAdmin, handlerPostArticle);
 // Post for image 
-router.post("/:id_course/chapter/:id_chapter/article/image", authenticationToken, loginAdmin, upload.single("image"), handlerPostImageArticle);
+router.post("/:id_course/chapters/:id_chapter/articles/image", authenticationToken, loginAdmin, upload.single("image"), handlerPostImageArticle);
 // Put for Content and Title Article
-router.put("/:id_course/chapter/:id_chapter/article/:id_article", authenticationToken, loginAdmin, handlerPutArticle);
+router.put("/:id_course/chaptesr/:id_chapter/articles/:id_article", authenticationToken, loginAdmin, handlerPutArticle);
 // Delete for Image
-router.delete("/:id_course/chapter/:id_chapter/article/image", authenticationToken, loginAdmin, handlerDeleteImageArticle);
+router.delete("/:id_course/chapters/:id_chapter/articles/image", authenticationToken, loginAdmin, handlerDeleteImageArticle);
 // Delete Article
-router.delete("/:id_course/chapter/:id_chapter/article/:id_article", authenticationToken, loginAdmin, handlerDeleteArticle);
+router.delete("/:id_course/chapters/:id_chapter/articles/:id_article", authenticationToken, loginAdmin, handlerDeleteArticle);
 //
 
 

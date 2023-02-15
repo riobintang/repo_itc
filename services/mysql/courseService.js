@@ -93,7 +93,7 @@ async function deleteCourse(id) {
   return course;
 }
 
-const coursesService = {
+const coursesServices = {
     getAllCourses,
     getCourseById,
     getCourseByPage,
@@ -103,4 +103,4 @@ const coursesService = {
     delete: deleteCourse,
 }
 
-module.exports = coursesService;
+module.exports = coursesServices;
