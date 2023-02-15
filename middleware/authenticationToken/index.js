@@ -15,12 +15,6 @@ function authenticationToken(req, res, next) {
     const decoded = jwt.verify(token, accessTokenSecretKey);
     const user = {
         id: decoded.id,
-        email: decoded.email,
-        username: decoded.username,
-        role: decoded.role,
-        id_role: decoded.id_role,
-        division: decoded.division,
-        id_division: decoded.id_division,
     };
     req.user = user;
 
