@@ -7,6 +7,7 @@ const {
   uploadImage,
   deleteImage,
 } = require("../../utils/cloudinary/imageServiceCloudinary");
+const { sendEmailVerify } = require("../../utils/sendEmail.js");
 const refreshTokens = {};
 const Op = Sequelize.Op;
 async function getUser(id) {
@@ -216,7 +217,7 @@ async function putVerifyUser(id, verify) {
 
   await updateUser.update({ verify });
   if (verify) {
-    await sendEmailVerify(user);
+    await sendEmailVerify(updateUser);
   }
 
   return updateUser;
