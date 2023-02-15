@@ -24,18 +24,18 @@ async function getTokenReset(email) {
   return userReset;
 }
 
-async function resetPassword(user) {
+async function resetPassword(id_user, token) {
   try {
     const reqUser = await User.findOne({
       where: {
-        id: user.id_user,
+        id: id_user,
       },
     });
     //checking token in db
     const reqToken = await Token.findOne({
       where: {
-        id_user: user.id_user,
-        token: user.token,
+        id_user: id_user,
+        token: token,
       },
     });
 
@@ -49,8 +49,11 @@ async function resetPassword(user) {
       reqUser.set({
         password: hashPassword,
       });
+      
       await reqUser.save();
       await reqToken.destroy();
+
+      return reqUser;
     } else {
       throw new Error("Invalid link or expired");
     }
@@ -60,8 +63,8 @@ async function resetPassword(user) {
 }
 
 const resetPasswordServices = {
-    getTokenReset,
-    resetPassword,
-}
+  getTokenReset,
+  resetPassword,
+};
 
 module.exports = resetPasswordServices;

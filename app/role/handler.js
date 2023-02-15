@@ -1,14 +1,13 @@
-const { Role } = require("../../models");
+const rolesServices = require("../../services/mysql/roleService");
+
 module.exports = {
   getAllRoleHandler: async (req, res, next) => {
     try {
-      const role = await Role.findAll({
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-      });
+      const roles = await rolesServices.getAllRoles();
       res.status(200).json({
         status: "success",
         message: "Successfully get Roles",
-        data: role,
+        data: roles,
       });
     } catch (error) {
       next(error);
@@ -17,12 +16,7 @@ module.exports = {
   handlerGetRoleById: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const role = await Role.findByPk(id, {
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-      });
-      if (!role) {
-        throw new Error("Role not found");
-      }
+      const role = await rolesServices.getRoleById(id);
       res.status(200).json({
         status: 'success',
         data: role,

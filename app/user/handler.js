@@ -1,12 +1,5 @@
-const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
-const { User, Role, Division, sequelize } = require("../../models");
-const jwt = require("jsonwebtoken");
-const accessTokenSecretKey = "testing-secret-repo-itc";
-const randtoken = require("rand-token");
-const refreshTokens = {};
 
-const generateAccessToken = require("../../utils/tokenManager");
 const {
   validateRegisterUserSchema,
   validateLoginUserSchema,
@@ -15,62 +8,32 @@ const {
   validateChangePasswordUserSchema,
   validateUserUpdateProfilePasswordSchema,
 } = require("../../validator/user");
-const {
-  uploadImage,
-  deleteImage,
-} = require("../../utils/cloudinary/imageServiceCloudinary");
-const { sendEmailVerify } = require("../../utils/sendEmail");
 
-const Op = Sequelize.Op;
+const usersServices = require("../../services/mysql/userService");
 
 module.exports = {
   //handler for register user
   handlerRegisterUser: async (req, res, next) => {
     try {
       const { username, fullName, email, password, id_division } = req.body;
-      validateRegisterUserSchema(req.body);
-      //check unique username and email
-      const checkEmail = await User.findOne({
-        where: {
-          email: email,
-        },
+      console.log(req.body);
+      validateRegisterUserSchema({
+        username,
+        fullName,
+        email,
+        password,
+        id_division,
       });
-      const checkUsername = await User.findOne({
-        where: {
-          username: username,
-        },
+      await usersServices.register({
+        username,
+        fullName,
+        email,
+        password,
+        id_division,
       });
-
-      if (checkEmail) {
-        throw new Error(`Email address already in use`);
-      }
-      if (checkUsername) {
-        throw new Error(`Username already in use`);
-      }
-
-      const hashPassword = await bcrypt.hash(password, 10);
-      const role = await Role.findOne({
-        where: {
-          roleName: "User",
-        },
-      });
-
-      await User.create({
-        username: username,
-        fullName: fullName,
-        email: email,
-        password: hashPassword,
-        id_division: id_division,
-        id_role: role.id,
-      });
-
       res.status(200).json({
         status: "success",
-        message: "Successfully register user",
-        data: await User.findOne({
-          attributes: { exclude: ["password", "createdAt", "updatedAt"] },
-          order: [["createdAt", "DESC"]], //to send last data inserted to database
-        }),
+        message: "Successfully register User",
       });
     } catch (error) {
       next(error);
@@ -82,60 +45,14 @@ module.exports = {
       const { emailUsername, password } = req.body;
       validateLoginUserSchema(req.body);
       //get User from db
-      const user = await User.findOne({
-        where: {
-          [Op.or]: [
-            {
-              email: emailUsername,
-            },
-            {
-              userName: emailUsername,
-            },
-          ],
-        },
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-        include: [{ model: Role }, { model: Division }],
-      });
-
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      const passwordValidate = bcrypt.compareSync(password, user.password);
-      if (!passwordValidate) {
-        //validate password
-        throw new Error("Invalid password");
-      }
-
-      if (!user.verify) {
-        throw new Error("Your account not verified. Please wait for Admin to verify it first.")
-      }
-      //generate access token
-      const accessToken = generateAccessToken({
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.Role.roleName,
-        id_role: user.id_role,
-        division: user.Division.divisionName,
-        id_division: user.id_division,
-      });
-
-      const refreshToken = randtoken.uid(256);
-      refreshTokens[refreshToken] = user.username;
+      const user = await usersServices.login(emailUsername, password);
 
       res.status(200).json({
         status: "success",
         data: {
           user: {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-            fullName: user.fullName,
-            id_role: user.id_role,
-            id_division: user.id_division,
-            accessToken,
-            refreshToken,
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
           },
         },
       });
@@ -146,14 +63,11 @@ module.exports = {
   //handler for get all users
   handlerGetAllUsers: async (req, res, next) => {
     try {
-      const user = await User.findAll({
-        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
-      });
-
+      const users = await usersServices.getAllUsers();
       res.status(200).json({
         status: "success",
         message: "Successfully get all users",
-        data: user,
+        data: users,
       });
     } catch (error) {
       next(error);
@@ -163,16 +77,10 @@ module.exports = {
   handlerGetUserById: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const user = await User.findByPk(id, {
-        attributes: { exclude: ["password", "createdAt", "updatedAt"] },
-      });
-
-      if (!user) {
-        throw new Error("User not found");
-      }
+      const user = await usersServices.getUserById(id);
       res.status(200).json({
         status: "success",
-        message: "Successfully get user by id",
+        message: "Successfully get User",
         data: user,
       });
     } catch (error) {
@@ -184,27 +92,12 @@ module.exports = {
     const username = req.body.username;
     const refreshToken = req.body.refreshToken;
 
-    if (
-      refreshToken in refreshTokens &&
-      refreshTokens[refreshToken] == username
-    ) {
-      const user = await User.findOne({
-        where: {
-          username: username,
-        },
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-        include: [{ model: Role }, { model: Division }],
-      });
-      const accessToken = generateAccessToken({
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.Role.roleName,
-        id_role: user.id_role,
-        division: user.Division.divisionName,
-        id_division: user.id_division,
-      });
-      //const accessToken = generateAccessToken(user);
+    const accessToken = await usersServices.refreshJWT({
+      username,
+      refreshToken,
+    });
+
+    if (accessToken) {
       res.status(200).json({
         status: "success",
         message: "Successfully refresh access token",
@@ -220,88 +113,41 @@ module.exports = {
     }
   },
   handlerPutUserProfile: async (req, res, next) => {
-    const t = await sequelize.transaction();
-    let image_id;
-    let photoProfile;
     try {
       const { fullName, generation, phoneNumber, id_division } = req.body;
-      const user = req.user;
-      const { id } = req.params;
-
-      if (user.id != id) {
-        throw new Error("You are not allowed to edit");
-      }
-      const updateUser = await User.findByPk(id);
-      if (!updateUser) {
-        throw new Error("User not found");
-      }
-
       validateUpdateUserSchema({
         fullName,
         generation,
         phoneNumber,
         id_division,
       });
-
-      await updateUser.update(
-        {
-          fullName,
-          generation,
-          phoneNumber,
-          id_division,
-        },
-        { transaction: t }
-      );
-
       if (req.file) {
         validateUserFilePhotoProfileSchema(req.file);
-        if (updateUser.photoProfile) {
-          const photo_id = updateUser.photoProfile.split("/user/").pop().split(".")[0];
-          // const deleteimg = await deleteImage("user", photo_id);
-          // console.log(deleteimg);
-          photoProfile = await uploadImage(req.file.path, "user", photo_id)
-          console.log("timpa")
-        } else {
-          photoProfile = await uploadImage(req.file.path, "user");
-          console.log("baru")
-        }
-        await updateUser.update(
-          { photoProfile: photoProfile.secure_url },
-          { transaction: t }
-        );
-        image_id = photoProfile.public_id.split("/")[2];
       }
+      await usersServices.updateUserProfile({
+        fullName,
+        generation,
+        phoneNumber,
+        id_division,
+        id: req.user.id,
+        image: req.file.path,
+      });
 
-      await t.commit();
       res.status(201).json({
         status: "success",
         message: "Successfully update User",
       });
     } catch (error) {
-      await t.rollback();
       next(error);
     }
   },
   handlerChangePassword: async (req, res, next) => {
     try {
       const { password } = req.body;
-      const { id } = req.params;
-      const user = req.user;
-
-      if (user.id != id) {
-        throw new Error("You are not allowed to edit");
-      }
 
       validateChangePasswordUserSchema({ password });
 
-      const hashPassword = await bcrypt.hash(password, 10);
-      const updateUser = await User.findByPk(id);
-
-      if (!updateUser) {
-        throw new Error("User not found");
-      }
-
-      await updateUser.update({ password: hashPassword });
+      await usersServices.updateUserPassword({ password, id: req.user.id });
 
       res.status(201).json({
         status: "success",
@@ -313,11 +159,7 @@ module.exports = {
   },
   handlerGetAllUserNotVerify: async (req, res, next) => {
     try {
-      const users = await User.findAll({
-        where: {
-          verify: false,
-        },
-      });
+      const users = await usersServices.getAllUserNulLVerify();
 
       res.status(200).json({
         status: "success",
@@ -333,17 +175,7 @@ module.exports = {
       const { id } = req.params;
       const { verify } = req.body;
 
-      const user = await User.findByPk(id);
-
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      await user.update({ verify });
-      if (verify === true) {
-        await sendEmailVerify(user);
-      }
-
+      await usersServices.updateUserVerify(id, verify);
       res.status(201).json({
         status: "success",
         message: "Successfully update User",
@@ -353,76 +185,43 @@ module.exports = {
     }
   },
   handlerPutUserProfilePassword: async (req, res, next) => {
-    const t = await sequelize.transaction();
-    let image_id;
     try {
-      const { fullName, generation, phoneNumber, id_division, password, username, email } =
-        req.body;
-      const user = req.user;
-      const { id } = req.params;
-
-      if (user.id != id) {
-        throw new Error("You are not allowed to edit");
-      }
-      const updateUser = await User.findByPk(id);
-      if (!updateUser) {
-        throw new Error("User not found");
-      }
-      validateUserUpdateProfilePasswordSchema({fullName, generation, password, phoneNumber, id_division, username, email})
-
-      const hashPassword = await bcrypt.hash(password, 10);
-      const checkUsername = await User.findOne({
-        where:{
-          username,
-          id: {[Op.ne]: id},
-        }
+      const {
+        username,
+        fullName,
+        phoneNumber,
+        id_division,
+        generation,
+        password,
+        email,
+      } = req.body;
+      validateUserUpdateProfilePasswordSchema({
+        username,
+        fullName,
+        phoneNumber,
+        id_division,
+        generation,
+        password,
+        email,
       });
-      if (checkUsername) {
-        throw new Error("Username has been used");
-      }
-      const checkEmail = await User.findOne({
-        where:{
-          email,
-          id: {[Op.ne]: id},
-        }
-      });
-
-      if (checkEmail) {
-        throw new Error("Email has been used");
-      }
-      await updateUser.update(
-        {
-          fullName,
-          generation,
-          phoneNumber,
-          id_division,
-          password: hashPassword,
-        },
-        { transaction: t }
-      );
-
       if (req.file) {
         validateUserFilePhotoProfileSchema(req.file);
-        //replace image
-        if (updateUser.photoProfile) {
-          const photo_id = updateUser.photoProfile.split("/user/").pop().split(".")[0];
-          photoProfile = await uploadImage(req.file.path, "user", photo_id)
-        } else { // for new image
-          photoProfile = await uploadImage(req.file.path, "user");
-        }
-        await updateUser.update(
-          { photoProfile: photoProfile.secure_url },
-          { transaction: t }
-        );
-        image_id = photoProfile.public_id.split("/")[2];
       }
-      await t.commit();
+      await usersServices.updateUserProfileAndPassword({
+        username,
+        fullName,
+        phoneNumber,
+        id_division,
+        generation,
+        password,
+        email,
+        image: req.file.path,
+      });
       res.status(201).json({
         status: "success",
         message: "Successfully update User",
       });
     } catch (error) {
-      await t.rollback();
       next(error);
     }
   },
@@ -431,12 +230,7 @@ module.exports = {
       const { id } = req.params;
       const { id_role } = req.body;
 
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      await user.update({ id_role });
+      await usersServices.updateRoleUser(id, id_role);
       res.status(201).json({
         status: "success",
         message: "Successfully update User Role",
@@ -448,11 +242,7 @@ module.exports = {
   handlerDeleteUser: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw new Error("User not found");
-      }
-      await user.destroy();
+      await usersServices.deleteUser(id);
       res.status(200).json({
         status: "success",
         message: "Successfully delete User",

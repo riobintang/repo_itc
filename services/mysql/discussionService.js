@@ -3,10 +3,10 @@ const { Discussion, Course, User } = require("../../models");
 const { Sequelize } = require("sequelize");
 const Op = Sequelize.Op;
 
-async function postDiscussion(data) {
+async function postDiscussion(data, id_course, id_user) {
   const course = await Course.findOne({
     where: {
-      id: data.id_course,
+      id: id_course,
     },
   });
   if (!course) {
@@ -16,8 +16,8 @@ async function postDiscussion(data) {
     title: data.title,
     body: data.body,
     isEdited: false,
-    id_course: data.id_course,
-    id_user: data.id_user,
+    id_course: id_course,
+    id_user: id_user,
   });
 
   return discussion;
@@ -26,11 +26,11 @@ async function postDiscussion(data) {
 async function getDiscussionByIdCourse(id_course) {
   const discussion = await Discussion.findAll({
     where: {
-      data: id_course,
+      id_course,
     },
     include: {
       model: User,
-      attributes: ["fullName", "id"],
+      attributes: ["fullName", "photoProfile"],
     },
   });
 
@@ -41,7 +41,7 @@ async function getDiscussionById(id_discussion) {
   const discussion = await Discussion.findByPk(id_discussion, {
     include: {
       model: User,
-      attributes: ["fullName", "id_division", "username", "id"],
+      attributes: ["fullName", "photoProfile"],
     },
   });
   if (!discussion) {
@@ -85,26 +85,26 @@ async function deleteDiscussion(data) {
   return discussion;
 }
 
-async function searchDiscussion(data) {
+async function searchDiscussion(id_course, keyword) {
   const discussion = await Discussion.findAll({
     where: {
-      id_course: data.id_course,
+      id_course: id_course,
       [Op.or]: [
         {
           title: {
-            [Op.like]: `%${data.keyword}%`,
+            [Op.like]: `%${keyword}%`,
           },
         },
         {
           body: {
-            [Op.like]: `%${data.keyword}%`,
+            [Op.like]: `%${keyword}%`,
           },
         },
       ],
     },
     include: {
       model: User,
-      attributes: ["fullName", "id"],
+      attributes: ["fullName", "photoProfile"],
     },
   });
 

@@ -3,6 +3,8 @@ const {
   validateCreateDiscussionSchema,
 } = require("../../validator/discussion");
 const { Sequelize } = require("sequelize");
+const discussionsServices = require("../../services/mysql/discussionService");
+const usersServices = require("../../services/mysql/userService");
 const Op = Sequelize.Op;
 
 module.exports = {
@@ -13,21 +15,11 @@ module.exports = {
       const { title, body } = req.body;
       const { id_course } = req.params;
       validateCreateDiscussionSchema({ title, body });
-      const course = await Course.findOne({
-        where: {
-          id: id_course,
-        },
-      });
-      if (!course) {
-        throw new Error("Course not found");
-      }
-      const discussion = await Discussion.create({
-        title,
-        body,
-        isEdited: false,
+      const discussion = await discussionsServices.create(
+        { title, body },
         id_course,
-        id_user,
-      });
+        id_user
+      );
 
       res.status(201).json({
         status: "success",
@@ -42,19 +34,13 @@ module.exports = {
   handlerGetDiscussionByIdCourse: async (req, res, next) => {
     try {
       const { id_course } = req.params;
-      const discussion = await Discussion.findAll({
-        where: {
-          id_course,
-        },
-        include: {
-          model: User,
-          attributes: ["fullName", "id_division", "username", "id"],
-        },
-      });
+      const discussions = await discussionsServices.getDiscussionByIdCourse(
+        id_course
+      );
       res.status(200).json({
         status: "success",
         message: "Successfully get Discussion by Course",
-        data: discussion,
+        data: discussions,
       });
     } catch (error) {
       next(error);
@@ -64,16 +50,9 @@ module.exports = {
   handlerGetDiscussionById: async (req, res, next) => {
     try {
       const { id_discussion } = req.params;
-      const discussion = await Discussion.findByPk(id_discussion, {
-        include: {
-          model: User,
-          attributes: ["fullName", "id_division", "username", "id"],
-        },
-      });
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
-
+      const discussion = await discussionsServices.getDiscussionById(
+        id_discussion
+      );
       res.status(200).json({
         status: "success",
         message: "Successfully get Discussion by id",
@@ -89,23 +68,13 @@ module.exports = {
       const id_user = req.user.id;
       const { id_course, id_discussion } = req.params;
       const { title, body } = req.body;
-      const discussion = await Discussion.findOne({
-        where: {
-          id: id_discussion,
-          id_course,
-        },
-      });
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
-      if (discussion.id_user !== id_user) {
-        throw new Error("You are not allowed to edit this discussion");
-      }
       validateCreateDiscussionSchema({ title, body });
-      await discussion.update({
+      await discussionsServices.update({
+        id_discussion,
+        id_course,
         title,
         body,
-        isEdited: true,
+        id_user
       });
       res.status(201).json({
         status: "success",
@@ -118,16 +87,10 @@ module.exports = {
   // handler delete discussion
   handlerDeleteDiscussion: async (req, res, next) => {
     try {
-      const user = req.user;
+
       const { id_discussion } = req.params;
-      const discussion = await Discussion.findByPk(id_discussion);
-      if (!discussion) {
-        throw new Error("Discussion not found");
-      }
-      if (discussion.id_user !== user.id && user.role != "admin") {
-        throw new Error("You are not allowed to delete this discussion");
-      }
-      await discussion.destroy();
+      const userData = await usersServices.getUserById(req.user.id)
+      await discussionsServices.delete({id_discussion, userid: userData.id, role:userData.role})
       res.status(200).json({
         status: "success",
         message: "Successfully delete Discussion",
@@ -140,27 +103,7 @@ module.exports = {
     try {
       const { keyword } = req.query;
       const { id_course } = req.params;
-      const discussion = await Discussion.findAll({
-        where: {
-          id_course,
-          [Op.or]: [
-            {
-              title: {
-                [Op.like]: `%${keyword}%`,
-              },
-            },
-            {
-              body: { 
-                [Op.like]: `%${keyword}%`, 
-              },
-            },
-          ],
-        },
-        include: {
-          model: User,
-          attributes: ["fullName", "id_division", "username", "id"],
-        },
-      });
+      const discussion = await discussionsServices.searchDiscussion(id_course, keyword)
       res.status(200).json({
         status: "success",
         message: "Successfully get Discussion by Course",

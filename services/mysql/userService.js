@@ -2,13 +2,13 @@ const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 const randtoken = require("rand-token");
 const generateAccessToken = require("../../utils/tokenManager");
-const { User, Role } = require("../../models");
+const { User, Role, Division } = require("../../models");
 const {
   uploadImage,
   deleteImage,
 } = require("../../utils/cloudinary/imageServiceCloudinary");
 const refreshTokens = {};
-
+const Op = Sequelize.Op;
 async function getUser(id) {
   const getUser = await User.findByPk(id, {
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
@@ -22,7 +22,7 @@ async function getUser(id) {
 }
 
 async function registerUser(user) {
-  const errorStack = [];
+  //const errorStack = [];
   const checkEmail = await User.findOne({
     where: {
       email: user.email,
@@ -36,43 +36,44 @@ async function registerUser(user) {
   });
 
   if (checkEmail) {
-    //throw new Error(`Email address already in use`);
-    errorStack.push("Email address already in use");
+    throw new Error(`Email address already in use`);
+    //errorStack.push("Email address already in use");
   }
   if (checkUsername) {
-    //throw new Error(`Username already in use`);
-    errorStack.push(`Username already in use`);
+    throw new Error(`Username already in use`);
+    //errorStack.push(`Username already in use`);
   }
-  if (errorStack.length > 0) {
-    throw new Error(errorStack);
-  }
+  // if (errorStack.length > 0) {
+  //   throw new Error(errorStack);
+  // }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  const hashPassword = await bcrypt.hash(user.password, 10);
   const role = await Role.findOne({
     where: {
       roleName: "User",
     },
   });
 
-  await User.create({
-    username: username,
-    fullName: fullName,
-    email: email,
+  const registerUser = await User.create({
+    username: user.username,
+    fullName: user.fullName,
+    email: user.email,
     password: hashPassword,
-    id_division: id_division,
+    id_division: user.id_division,
     id_role: role.id,
   });
   return {
-    username: username,
-    fullName: fullName,
-    email: email,
-    id_division: id_division,
-    id_role: role.id,
+    id: registerUser.id,
+    username: registerUser.username,
+    fullName: registerUser.fullName,
+    email: registerUser.email,
+    id_division: registerUser.id_division,
+    id_role: registerUser.id,
   };
 }
 
-async function userLogin(user) {
-  const user = await User.findOne({
+async function userLogin(emailUsername, password) {
+  const userLogin = await User.findOne({
     where: {
       [Op.or]: [
         {
@@ -87,26 +88,26 @@ async function userLogin(user) {
     include: [{ model: Role }, { model: Division }],
   });
 
-  if (!user) {
+  if (!userLogin) {
     throw new Error("User not found");
   }
 
-  const passwordValidate = bcrypt.compareSync(password, user.password);
+  const passwordValidate = bcrypt.compareSync(password, userLogin.password);
   if (!passwordValidate) {
     //validate password
     throw new Error("Invalid password");
   }
-  if (user.verify === null) {
+  if (userLogin.verify === null) {
     throw new Error(
       "Your account not verified. Please wait for Admin to verify it first."
     );
   }
   const accessToken = generateAccessToken({
-    id: user.id,
+    id: userLogin.id,
   });
 
   const refreshToken = randtoken.uid(256);
-  refreshTokens[refreshToken] = user.username;
+  refreshTokens[refreshToken] = userLogin.username;
   return {
     accessToken,
     refreshToken,
@@ -206,19 +207,19 @@ async function getAllUsersNullVerify() {
   return users;
 }
 
-async function putVerifyUser(user) {
-  const user = await User.findByPk(id);
+async function putVerifyUser(id, verify) {
+  const updateUser = await User.findByPk(id);
 
-  if (!user) {
+  if (!updateUser) {
     throw new Error("User not found");
   }
 
-  await user.update({ verify });
+  await updateUser.update({ verify });
   if (verify) {
     await sendEmailVerify(user);
   }
 
-  return user;
+  return updateUser;
 }
 
 async function putUserProfileAndPassword(user) {
@@ -242,7 +243,7 @@ async function putUserProfileAndPassword(user) {
     }
     const checkEmail = await User.findOne({
       where: {
-        email: username.email,
+        email: user.email,
         id: { [Op.ne]: user.id },
       },
     });
@@ -288,14 +289,14 @@ async function putUserProfileAndPassword(user) {
   }
 }
 
-async function putUserRole(user) {
-  const user = await User.findByPk(user.id);
-  if (!user) {
+async function putUserRole(id, id_role) {
+  const updateUserRole = await User.findByPk(id);
+  if (!updateUserRole) {
     throw new Error("User not found");
   }
 
-  await user.update({ id_role: user.id_role });
-  return user;
+  await updateUserRole.update({ id_role: id_role });
+  return updateUserRole;
 }
 
 async function deleteUser(id) {
