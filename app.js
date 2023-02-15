@@ -29,14 +29,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/user", userRouter);
-app.use("/division", divisionRouter);
-app.use("/role", roleRouter);
-app.use("/course", courseRouter);
-app.use("/course", chapterRouter);
-app.use("/course", articleRouter);
-app.use("/course", discussionRouter);
-app.use("/course", commentRouter);
+app.use("/users", userRouter);
+app.use("/divisions", divisionRouter);
+app.use("/roles", roleRouter);
+app.use("/courses", courseRouter);
+app.use("/courses", chapterRouter);
+app.use("/courses", articleRouter);
+app.use("/courses", discussionRouter);
+app.use("/courses", commentRouter);
 app.use("/password-reset", passwordResetRouter);
 
 

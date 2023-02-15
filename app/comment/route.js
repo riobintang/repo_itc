@@ -5,13 +5,13 @@ const authenticationToken = require("../../middleware/authenticationToken");
 const router = express.Router();
 
 // Get for Comment 
-router.get("/:id_course/discussion/:id_discussion/comment", authenticationToken, handlerGetCommentByDiscussion);
+router.get("/:id_course/discussions/:id_discussion/comments", authenticationToken, handlerGetCommentByDiscussion);
 // Post for Comment
-router.post("/:id_course/discussion/:id_discussion/comment", authenticationToken, handlerPostComment);
+router.post("/:id_course/discussions/:id_discussion/comments", authenticationToken, handlerPostComment);
 // Put for Comment
-router.put("/:id_course/discussion/:id_discussion/comment/:id_comment", authenticationToken, handlerPutComment);
+router.put("/:id_course/discussions/:id_discussion/comments/:id_comment", authenticationToken, handlerPutComment);
 // Delete for Comment
-router.delete("/:id_course/discussion/:id_discussion/comment/:id_comment", authenticationToken, handlerDeleteComment);
+router.delete("/:id_course/discussions/:id_discussion/comments/:id_comment", authenticationToken, handlerDeleteComment);
 
 
 module.exports = router;
