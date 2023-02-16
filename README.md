@@ -109,7 +109,7 @@ For more information about sequelize check the [documentation](https://sequelize
 Endpoint
 
 ```text
-POST /user/register
+POST /users/register
 ```
 
 Body
@@ -130,16 +130,6 @@ Response
 {
   "status": "success",
   "message": "Successfully register user",
-  "data": {
-    "id": 1,
-    "username": "John",
-    "fullName": "John Doe",
-    "email": "johndoe@gmail.com",
-    "generation": null,
-    "phoneNumber": null,
-    "id_division": 2,
-    "id_role": 1
-  }
 }
 ```
 
@@ -148,7 +138,7 @@ Response
 Endpoint
 
 ```text
-POST /user/login
+POST /users/login
 ```
 
 Body
@@ -164,18 +154,13 @@ Response
 
 ```json
 {
-  "status": "success",
-  "data": {
-    "user": {
-      "id": 1,
-      "email": "johndoe@gmail.com",
-      "username": "John",
-      "fullName": "John Doe",
-      "id_role": 1,
-      "id_division": 2,
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsImVtYWlsIjoiam9obmRvZUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6IkpvaG4iLCJyb2xlIjoiVXNlciIsImRpdmlzaW9uIjoiRnJvbnQgRW5kIiwiaWF0IjoxNjY3NTkwOTMxLCJleHAiOjE2Njc1OTIxMzEsInN1YiI6IkpvaG4ifQ.INPm4rFWzXcy95yfoL_pF-HN52d4G2l0IEMppPWPlps"
+    "status": "success",
+    "data": {
+        "user": {
+            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjc2NTQ4NDM3LCJleHAiOjE2NzY1NDk2Mzd9.rclqrnlpDM0azxP675qQkCvck5Q54R4uYlzWcvYzREE",
+            "refreshToken": "WyDIsd1xR9p023YLw1W1uhSUiM8RAIwiNVX2K1OO6vf1sugeexNwPFf2dMMZdK4Iqf4V31qz3Wqhd4vl4yDbNJEv9QVwAU7OEUctsG6V6i7ohYunZLCtCMlyf1gMBMoH3p8NdQL4xMQfFtneqKGCEDSufCuU7RoDqrGqQYIWUWeyh7RxG4MaDc6ZYM1eSImQQ2sqClmSEP6EmBOJOCNzA181TRdiypCbtHmZWb1Rmy5FUIbmi4MIquIRYehR23Oe"
+        }
     }
-  }
 }
 ```
 
@@ -184,7 +169,7 @@ Response
 Endpoint
 
 ```text
-GET /user/:id => /user/1
+GET /users/:id => /users/1
 ```
 
 Response
@@ -209,7 +194,7 @@ Response
 ### Refresh Token
 
 ```text
-POST /user/refresh-token
+POST /users/refresh-token
 ```
 
 Body
@@ -288,7 +273,7 @@ Response
 Endpoint
 
 ```text
-PUT /user/update/:id => /user/update/1
+PUT /users/update/:id => /users/update/1
 ```
 
 Request
@@ -370,7 +355,7 @@ Response
 Endpoint
 
 ```text
-PUT /user/changepassword/:id => /user/changepassword/1
+PUT /users/changepassword => /users/changepassword
 ```
 
 Request
@@ -407,7 +392,7 @@ Response
 Endpoint
 
 ```text
-PUT /user/updateprofilepassword/:id => /user/updateprofilepassword/1
+PUT /users/updateprofilepassword => /users/updateprofilepassword
 ```
 
 Request
@@ -490,7 +475,7 @@ Response
 Endpoint
 
 ```text
-GET /division
+GET /divisions
 ```
 
 Response
@@ -525,7 +510,7 @@ Response
 Endpoint
 
 ```text
-GET /role
+GET /roles
 ```
 
 Response
@@ -556,7 +541,7 @@ Response
 Endpoint
 
 ```text
-GET /course
+GET /courses
 ```
 
 Response
@@ -586,7 +571,7 @@ Response
 Endpoint
 
 ```text
-POST /course
+POST /courses
 ```
 
 Request
@@ -660,7 +645,7 @@ Response
 Endpoint
 
 ```text
-PUT /course/:id => /course/2
+PUT /courses/:id => /courses/2
 ```
 
 Request
@@ -729,7 +714,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id => /course/2
+DELETE /courses/:id => /courses/2
 ```
 
 Request
@@ -766,7 +751,7 @@ Response
 Endpoint
 
 ```text
-GET /course/:id_course/chapter
+GET /courses/:id_course/chapter
 ```
 
 Response
@@ -799,7 +784,7 @@ Response
 Endpoint
 
 ```text
-GET course/:id_course/chapter/article
+GET courses/:id_course/chapter/article
 ```
 
 Response
@@ -867,7 +852,7 @@ Response
 Endpoint
 
 ```text
-POST /course/:id_course/chapter
+POST /courses/:id_course/chapters
 ```
 
 Request
@@ -899,7 +884,7 @@ Response
 Endpoint
 
 ```text
-PUT /course/:id_course/chapter/:id_chapter
+PUT /courses/:id_course/chapters/:id_chapter
 ```
 
 Request
@@ -931,7 +916,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id_course/chapter/:id_chapter
+DELETE /courses/:id_course/chapters/:id_chapter
 ```
 
 Response
@@ -952,7 +937,7 @@ Response
 Endpoint
 
 ```text
-GET /course/:id_course/chapter/:id_chapter/article => /course/1/chapter/1/article
+GET /courses/:id_course/chapters/:id_chapter/articles => /courses/1/chapters/1/articles
 ```
 
 Request
@@ -1012,7 +997,7 @@ Response
 Endpoint
 
 ```text
-GET /course/:id_course/chapter/:id_chapter/article/:id_article => /course/1/chapter/1/article/1
+GET /courses/:id_course/chapters/:id_chapter/articles/:id_article => /courses/1/chapters/1/articles/1
 ```
 
 Request
@@ -1054,7 +1039,7 @@ Response
 Endpoint
 
 ```text
-POST /course/:id_course/chapter/:id_chapter/article => /course/1/chapter/1/article
+POST /courses/:id_course/chapters/:id_chapter/articles => /courses/1/chapters/1/articles
 ```
 
 Request
@@ -1100,7 +1085,7 @@ Response
 Endpoint
 
 ```text
-POST /course/:id_course/chapter/:id_chapter/article/image => /course/1/chapter/1/article/image
+POST /courses/:id_course/chapters/:id_chapter/articles/image => /courses/1/chapters/1/articles/image
 ```
 
 Request
@@ -1143,7 +1128,7 @@ Response
 Endpoint
 
 ```text
-PUT /course/:id_course/chapter/:id_chapter/article/:id_article => /course/1/chapter/1/article/1
+PUT /courses/:id_course/chapters/:id_chapter/articles/:id_article => /courses/1/chapters/1/articles/1
 ```
 
 Request
@@ -1181,7 +1166,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id_course/chapter/:id_chapter/article/:id_article => course/1/chapter/1/article/5
+DELETE /courses/:id_course/chapters/:id_chapter/articles/:id_article => courses/1/chapters/1/articles/5
 ```
 
 Request
@@ -1215,7 +1200,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id_course/chapter/:id_chapter/article/image => /course/1/chapter/1/article/image
+DELETE /courses/:id_course/chapters/:id_chapter/articles/image => /courses/1/chapters/1/articles/image
 ```
 
 Request
@@ -1256,7 +1241,7 @@ Response
 Endpoint
 
 ```text
-GET /course/:id_course/discussion => /course/1/discussion
+GET /courses/:id_course/discussions => /courses/1/discussions
 ```
 
 Request
@@ -1337,7 +1322,7 @@ Response
 Endpoint
 
 ```text
-GET /course/:id_course/discussion/:id_discussion => /course/1/discussion/1
+GET /courses/:id_course/discussions/:id_discussion => /courses/1/discussions/1
 ```
 
 Request
@@ -1386,7 +1371,7 @@ Response
 Endpoint
 
 ```text
-POST /course/:id_course/discussion => /course/1/discussion
+POST /courses/:id_course/discussions => /courses/1/discussions
 ```
 
 Request
@@ -1434,7 +1419,7 @@ Response
 Endpoint
 
 ```text
-PUT /course/:id_course/discussion/:id_discussion => /course/1/discussion/6
+PUT /courses/:id_course/discussions/:id_discussion => /courses/1/discussions/6
 ```
 
 Request
@@ -1472,7 +1457,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id_course/discussion/:id_discussion => /course/1/discussion/1
+DELETE /courses/:id_course/discussions/:id_discussion => /courses/1/discussions/1
 ```
 
 Request
@@ -1510,7 +1495,7 @@ Response
 Endpoint
 
 ```text
-GET /course/:id_course/discussion/:id_discussion/comment => /course/1/discussion/2/comment
+GET /courses/:id_course/discussions/:id_discussion/comments => /courses/1/discussion/2/comments
 ```
 
 Request
@@ -1572,7 +1557,7 @@ Response
 Endpoint
 
 ```text
-POST /course/:id_course/discussion/:id_discussion/comment => /course/1/discussion/2/comment
+POST /courses/:id_course/discussions/:id_discussion/comments => /courses/1/discussions/2/comments
 ```
 
 Request
@@ -1618,7 +1603,7 @@ Response
 Endpoint
 
 ```text
-PUT /course/:id_course/discussion/:id_discussion/comment/:id_comment => /course/1/discussion/2/comment/3
+PUT /courses/:id_course/discussions/:id_discussion/comments/:id_comment => /courses/1/discussions/2/comments/3
 ```
 
 Request
@@ -1655,7 +1640,7 @@ Response
 Endpoint
 
 ```text
-DELETE /course/:id_course/discussion/:id_discussion/comment/:id_comment => course/1/discussion/2/comment/3
+DELETE /courses/:id_course/discussions/:id_discussion/comments/:id_comment => courses/1/discussions/2/comments/3
 ```
 
 Request

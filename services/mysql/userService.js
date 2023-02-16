@@ -129,13 +129,13 @@ async function refreshJWT(user) {
     user.refreshToken in refreshTokens &&
     refreshTokens[user.refreshToken] == user.username
   ) {
-    const user = await User.findOne({
+    const selectedUser = await User.findOne({
       where: {
         username: user.username,
       },
     });
     const accessToken = generateAccessToken({
-      id: user.id,
+      id: selectedUser.id,
     });
     return accessToken;
   }
