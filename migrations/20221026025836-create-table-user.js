@@ -69,8 +69,7 @@ module.exports = {
       },
       verify: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+        allowNull: true,
       },
     });
   },

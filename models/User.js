@@ -72,8 +72,7 @@ function createModelUser(Sequelize, DataTypes) {
       },
       verify: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
+        allowNull: true,
       },
     },
     {
