@@ -49,6 +49,12 @@ npm run start-dev
 ```
 
 \
+If you want to Drop Database, you can do it with terminal command:
+
+```text
+ npx sequelize db:drop
+```
+\
 For more information about sequelize check the [documentation](https://sequelize.org/docs/v6/).
 
 ## Table of Contents
