@@ -10,14 +10,14 @@ async function postComment(data, id_user, id_course, id_discussion) {
   if (!discussion) {
     throw new Error("Discussion not found");
   }
-  const comment = await Comment.create({
+  const createComment = await Comment.create({
     body: data.body,
     isEdited: false,
     id_discussion: id_discussion,
     id_user,
   });
 
-  return comment;
+  return createComment;
 }
 
 async function getCommentDiscussion(id_discussion, id_course) {
@@ -31,63 +31,63 @@ async function getCommentDiscussion(id_discussion, id_course) {
     throw new Error("Discussion not found");
   }
 
-  const comment = await Comment.findAll({
+  const comments = await Comment.findAll({
     where: {
       id_discussion,
     },
     include: [{ model: User, attributes: ["id", "fullName"] }],
   });
 
-  return comment;
+  return comments;
 }
 
 async function putComment(data, id_course, id_discussion, id_comment, id_user) {
-  const discussion = await Discussion.findOne({
+  const discussionUpdateComment = await Discussion.findOne({
     where: {
       id: id_discussion,
       id_course,
     },
   });
-  if (!discussion) {
+  if (!discussionUpdateComment) {
     throw new Error("Discussion not found");
   }
-  const comment = await Comment.findByPk(id_comment);
-  if (!comment) {
+  const updateComment = await Comment.findByPk(id_comment);
+  if (!updateComment) {
     throw new Error("Comment not found");
   }
-  if (comment.id_user !== id_user) {
+  if (updateComment.id_user !== id_user) {
     throw new Error("You are not allowed User to edit");
   }
   
-  await comment.update({
+  await updateComment.update({
     body: data.body,
     isEdited: true,
   });
-  return comment;
+  return updateComment;
 }
 
 async function deleteComment(id_course, id_discussion, id_comment, user) {
-  const discussion = await Discussion.findOne({
+  const discussionDeleteComment = await Discussion.findOne({
     where: {
       id: id_discussion,
       id_course,
     },
   });
-  if (!discussion) {
+  if (!discussionDeleteComment) {
     throw new Error("Discussion not found");
   }
 
-  const comment = await Comment.findByPk(id_comment);
-  if (!comment) {
+  const deleteComment = await Comment.findByPk(id_comment);
+  if (!deleteComment) {
     throw new Error("Comment not found");
   }
   // Check authority
-  if (user.id !== comment.id_user && user.role !== "admin") {
+  if (user.id !== deleteComment.id_user && user.role !== "admin") {
     throw new Error("You are not allowed");
   }
-  await comment.destroy();
+  await deleteComment.destroy();
 
-  return comment;
+  return deleteComment;
 }
 
 const commentsServices = {

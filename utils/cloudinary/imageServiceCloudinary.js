@@ -22,4 +22,9 @@ async function deleteImage(location, cloudinary_id) {
     return result;
 }
 
-module.exports = {uploadImage, deleteImage};
+async function deleteImageWithLink(link) {
+  const result = await cloudinary.uploader.destroy(link);
+  return result;
+}
+
+module.exports = {uploadImage, deleteImage, deleteImageWithLink};

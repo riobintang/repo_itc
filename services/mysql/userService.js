@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 const randtoken = require("rand-token");
 const generateAccessToken = require("../../utils/tokenManager");
-const { User, Role, Division } = require("../../models");
+const { User, Role, Division, sequelize } = require("../../models");
 const {
   uploadImage,
   deleteImage,
@@ -19,7 +19,6 @@ async function getUser(id) {
   if (!getUser) {
     throw new Error("User not found");
   }
-  console.log(getUser)
 
   return getUser;
 }
@@ -118,10 +117,10 @@ async function userLogin(emailUsername, password) {
 }
 
 async function getAllUsers() {
-  const user = await User.findAll({
+  const users = await User.findAll({
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
   });
-  return user;
+  return users;
 }
 
 async function refreshJWT(user) {
@@ -202,12 +201,12 @@ async function changePassword(user) {
 }
 
 async function getAllUsersNullVerify() {
-  const users = await User.findAll({
+  const usersNullVerif = await User.findAll({
     where: {
       verify: null,
     },
   });
-  return users;
+  return usersNullVerif;
 }
 
 async function putVerifyUser(id, verify) {
@@ -303,12 +302,12 @@ async function putUserRole(id, id_role) {
 }
 
 async function deleteUser(id) {
-  const user = await User.findByPk(id);
-  if (!user) {
+  const userDelete = await User.findByPk(id);
+  if (!userDelete) {
     throw new Error("User not found");
   }
-  await user.destroy();
-  return user;
+  await userDelete.destroy();
+  return userDelete;
 }
 
 const usersServices = {

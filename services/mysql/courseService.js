@@ -36,71 +36,73 @@ async function searchByTitle(title) {
 }
 
 async function getCourseByPage(page) {
-  const courses = await Course.findAll({
+  const coursesByPage = await Course.findAll({
     limit: 10,
     offset: (page - 1) * 10,
   });
-  return courses;
+  return coursesByPage;
 }
 
 async function postCourse(data) {
-  const result = await uploadImage(data.image, "course");
+  const resultPostImageCourse = await uploadImage(data.image, "course");
 
-  const course = await Course.create({
+  const createCourse = await Course.create({
     title: data.title,
     description: data.description,
-    image_thumbnail: result.secure_url,
-    cloudinary_id: result.public_id.split("/")[2],
+    image_thumbnail: resultPostImageCourse.secure_url,
+    cloudinary_id: resultPostImageCourse.public_id.split("/")[2],
     id_division: data.id_division,
     id_user: data.userid,
   });
 
-  return course;
+  return createCourse;
 }
 
 async function updateCourse(data) {
-  const course = await Course.findByPk(data.id); // search course by id
-  if (!course) {
+  const updateCourse = await Course.findByPk(data.id); // search course by id
+  if (!updateCourse) {
     throw new Error("Course not found");
   }
   if (data.image != null) {
     const result = await uploadImage(
       data.image,
       "course",
-      course.cloudinary_id
+      updateCourse.cloudinary_id
     );
-    await course.update({
+    await updateCourse.update({
       image_thumbnail: result.secure_url,
-      cloudinary_id: course.cloudinary_id,
+      cloudinary_id: updateCourse.cloudinary_id,
     });
   }
-  await course.update({
+  await updateCourse.update({
     title: data.title,
     description: data.description,
     id_division: data.id_division,
   });
+
+  return updateCourse;
 }
 
 async function deleteCourse(id) {
-  const course = await Course.findByPk(id);
-  if (!course) {
+  const deleteCourse = await Course.findByPk(id);
+  if (!deleteCourse) {
     throw new Error("Course not found");
   }
 
-  await deleteImage("course", course.cloudinary_id);
-  await course.destroy();
+  await deleteImage("course", deleteCourse.cloudinary_id);
+  await deleteCourse.destroy();
 
-  return course;
+  return deleteCourse;
 }
 
 const coursesServices = {
-    getAllCourses,
-    getCourseById,
-    getCourseByPage,
-    searchByTitle,
-    create: postCourse,
-    update: updateCourse,
-    delete: deleteCourse,
-}
+  getAllCourses,
+  getCourseById,
+  getCourseByPage,
+  searchByTitle,
+  create: postCourse,
+  update: updateCourse,
+  delete: deleteCourse,
+};
 
 module.exports = coursesServices;

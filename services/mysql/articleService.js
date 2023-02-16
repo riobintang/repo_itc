@@ -2,6 +2,7 @@ const { Article, Chapter, Course } = require("../../models");
 const {
   uploadImage,
   deleteImage,
+  deleteImageWithLink,
 } = require("../../utils/cloudinary/imageServiceCloudinary");
 
 async function getAllArticleTitleByChapterAndCourseId(id_course, id_chapter) {
@@ -81,12 +82,12 @@ async function postArticle(data, id_course, id_chapter) {
 }
 
 async function postImage(image) {
-  const result = await uploadImage(image, "article");
-  return result;
+  const resultPost = await uploadImage(image, "article");
+  return resultPost;
 }
 
 async function putArticle(data, id_article) {
-  const article = await Article.update(
+  const updateArticle = await Article.update(
     {
       title: data.title,
       content: data.content,
@@ -97,33 +98,33 @@ async function putArticle(data, id_article) {
       },
     }
   );
-  if (!article) {
+  if (!updateArticle) {
     throw new Error("Article not found");
   }
 
-  return article;
+  return updateArticle;
 }
 
 async function deleteArticle(id_article) {
-  const article = await Article.findByPk(id_article);
-  if (!article) {
+  const deleteArticle = await Article.findByPk(id_article);
+  if (!deleteArticle) {
     throw new Error("Article not found");
   }
 
-  await article.destroy();
-  return article;
+  await deleteArticle.destroy();
+  return deleteArticle;
 }
 
 async function deleteImageArticle(location) {
     const deleteImageLocation = location.split("/").pop().split(".")[0];
     const deleteImg = `itc-repo/article/${deleteImageLocation}`;
 
-    const result = await cloudinary.uploader.destroy(deleteImg); // delete image in cloudinary
+    const resultDelete = await deleteImageWithLink(deleteImg) // delete image in cloudinary
 
-    if (result.result !== "ok") {
+    if (resultDelete.result !== "ok") {
       throw new Error("Failed to delete image");
     }
-    return result;
+    return resultDelete;
 }
 
 const articlesServices = {

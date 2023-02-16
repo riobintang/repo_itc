@@ -12,7 +12,7 @@ async function postDiscussion(data, id_course, id_user) {
   if (!course) {
     throw new Error("Course not found");
   }
-  const discussion = await Discussion.create({
+  const createDiscussion = await Discussion.create({
     title: data.title,
     body: data.body,
     isEdited: false,
@@ -20,7 +20,7 @@ async function postDiscussion(data, id_course, id_user) {
     id_user: id_user,
   });
 
-  return discussion;
+  return createDiscussion;
 }
 
 async function getDiscussionByIdCourse(id_course) {
@@ -52,37 +52,37 @@ async function getDiscussionById(id_discussion) {
 }
 
 async function putDiscussion(data) {
-  const discussion = await Discussion.findOne({
+  const updateDiscussion = await Discussion.findOne({
     where: {
       id: data.id_discussion,
       id_course: data.id_course,
     },
   });
-  if (!discussion) {
+  if (!updateDiscussion) {
     throw new Error("Discussion not found");
   }
-  if (discussion.id_user !== data.id_user) {
+  if (updateDiscussion.id_user !== data.id_user) {
     throw new Error("You are not allowed to edit this discussion");
   }
-  await discussion.update({
+  await updateDiscussion.update({
     title: data.title,
     body: data.body,
     isEdited: true,
   });
-  return discussion;
+  return updateDiscussion;
 }
 
 async function deleteDiscussion(data) {
-  const discussion = await Discussion.findByPk(data.id_discussion);
-  if (!discussion) {
+  const deleteDiscussion = await Discussion.findByPk(data.id_discussion);
+  if (!deleteDiscussion) {
     throw new Error("Discussion not found");
   }
-  if (discussion.id_user !== data.userid && data.role != "admin") {
+  if (deleteDiscussion.id_user !== data.userid && data.role != "admin") {
     throw new Error("You are not allowed to delete this discussion");
   }
-  await discussion.destroy();
+  await deleteDiscussion.destroy();
 
-  return discussion;
+  return deleteDiscussion;
 }
 
 async function searchDiscussion(id_course, keyword) {
