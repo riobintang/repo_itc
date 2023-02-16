@@ -1,8 +1,8 @@
 const usersServices = require("../../services/mysql/userService");
 
+
 async function loginAdmin(req, res, next) {
   const user = await usersServices.getUserById(req.user.id);
-  console.log(user.Role)
   if (user.Role.roleName.toLowerCase() === "admin") {
     return next();
   }
