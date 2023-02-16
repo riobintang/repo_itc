@@ -7,6 +7,7 @@ const {
   validateUpdateUserSchema,
   validateChangePasswordUserSchema,
   validateUserUpdateProfilePasswordSchema,
+  validateUserVerifySchema,
 } = require("../../validator/user");
 const refreshTokens = {};
 const usersServices = require("../../services/mysql/userService");
@@ -92,7 +93,6 @@ module.exports = {
     const username = req.body.username;
     const refreshToken = req.body.refreshToken;
 
-    
     const accessToken = await usersServices.refreshJWT({
       username,
       refreshToken,
@@ -175,7 +175,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const { verify } = req.body;
-
+      validateUserVerifySchema({ verify });
       await usersServices.updateUserVerify(id, verify);
       res.status(201).json({
         status: "success",

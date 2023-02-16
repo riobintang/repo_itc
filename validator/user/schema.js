@@ -49,6 +49,11 @@ const userUpdateProfilePasswordSchema = Joi.object({
   email: Joi.string().email().required(),
 })
 .unknown();
+
+const userVerifySchema = Joi.object({
+  verify: Joi.boolean().required(),
+}).unknown();
+
 module.exports = {
   userRegisterSchema,
   userUpdateSchema,
@@ -57,4 +62,5 @@ module.exports = {
   userLoginSchema,
   userFilePhotoProfileSchema,
   userUpdateProfilePasswordSchema,
+  userVerifySchema,
 };

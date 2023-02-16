@@ -14,7 +14,10 @@ const Op = Sequelize.Op;
 async function getUser(id) {
   const getUser = await User.findByPk(id, {
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
-    include: [{ model: Role, attributes: ["roleName"] }, { model: Division, attributes: ["divisionName"] }],
+    include: [
+      { model: Role, attributes: ["roleName"] },
+      { model: Division, attributes: ["divisionName"] },
+    ],
   });
   if (!getUser) {
     throw new Error("User not found");
@@ -91,17 +94,24 @@ async function userLogin(emailUsername, password) {
   });
 
   if (!userLogin) {
-    throw new Error("User not found");
+    throw new Error("Wrong Email or Password");
   }
 
   const passwordValidate = bcrypt.compareSync(password, userLogin.password);
   if (!passwordValidate) {
     //validate password
-    throw new Error("Invalid password");
+    throw new Error("Wrong Email or Password");
   }
+
   if (userLogin.verify === null) {
     throw new Error(
-      "Your account not verified. Please wait for Admin to verify it first."
+      "Your account has not verified. Please wait for Admin to verify it first."
+    );
+  }
+  console.log(userLogin.verify);
+  if (userLogin.verify === false) {
+    throw new Error(
+      "Your account has been declined. Please contact Admin for more information."
     );
   }
   const accessToken = generateAccessToken({
