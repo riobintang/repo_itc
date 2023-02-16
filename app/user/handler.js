@@ -8,7 +8,7 @@ const {
   validateChangePasswordUserSchema,
   validateUserUpdateProfilePasswordSchema,
 } = require("../../validator/user");
-
+const refreshTokens = {};
 const usersServices = require("../../services/mysql/userService");
 
 module.exports = {
@@ -92,6 +92,7 @@ module.exports = {
     const username = req.body.username;
     const refreshToken = req.body.refreshToken;
 
+    
     const accessToken = await usersServices.refreshJWT({
       username,
       refreshToken,

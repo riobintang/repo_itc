@@ -9,14 +9,16 @@ const {
 } = require("../../utils/cloudinary/imageServiceCloudinary");
 const refreshTokens = {};
 const Op = Sequelize.Op;
+
 async function getUser(id) {
   const getUser = await User.findByPk(id, {
     attributes: { exclude: ["password", "createdAt", "updatedAt"] },
-    include: [{ model: Role }, { model: Division }],
+    include: [{ model: Role, attributes: ["roleName"] }, { model: Division, attributes: ["divisionName"] }],
   });
   if (!getUser) {
     throw new Error("User not found");
   }
+  console.log(getUser)
 
   return getUser;
 }
