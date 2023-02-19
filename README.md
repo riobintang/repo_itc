@@ -57,6 +57,9 @@ If you want to Drop Database, you can do it with terminal command:
 \
 For more information about sequelize check the [documentation](https://sequelize.org/docs/v6/).
 
+## Postman API Documentation
+[API Documentation](https://documenter.getpostman.com/view/25897371/2s93CHuah6)
+
 ## Table of Contents
 
 - [Pembelajaran_itc](#pembelajaran-itc)
