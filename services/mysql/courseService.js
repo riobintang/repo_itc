@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 
-const { Course } = require("../../models");
-const cloudinary = require("../../utils/cloudinary").v2;
+const { Course, User, Division } = require("../../models");
+
 const {
   uploadImage,
   deleteImage,
@@ -9,13 +9,24 @@ const {
 
 const Op = Sequelize.Op;
 
-async function getAllCourses() {
-  const courses = await Course.findAll();
+async function getAllCourses(title = "") {
+    const courses = await Course.findAll({
+      where: {
+        title: {
+          [Op.like]: `%${title}%`,
+        },
+      },
+    attributes: {exclude: ["id_user", "id_division"]},
+    include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}],
+  });
   return courses;
 }
 
 async function getCourseById(id) {
-  const course = await Course.findByPk(id);
+  const course = await Course.findByPk(id, {
+    attributes: {exclude: ["id_user", "id_division"]},
+    include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}]
+  });
 
   if (!course) {
     throw new Error("Course not found");
@@ -24,23 +35,32 @@ async function getCourseById(id) {
   return course;
 }
 
-async function searchByTitle(title) {
+// async function searchByTitle(title= "") {
+//   const courses = await Course.findAll({
+//     where: {
+//       title: {
+//         [Op.like]: `%${title}%`,
+//       },
+//     },
+//   });
+//   return courses;
+// }
+
+async function getCourseForMobile(title = "", page = 1) {
+  console.log("page = " + page)
   const courses = await Course.findAll({
     where: {
       title: {
         [Op.like]: `%${title}%`,
       },
     },
-  });
-  return courses;
-}
+  attributes: {exclude: ["id_user", "id_division"]},
+  include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}],
+  limit: 10,
+  offset: (page - 1) * 10,
+});
+return courses;
 
-async function getCourseByPage(page) {
-  const coursesByPage = await Course.findAll({
-    limit: 10,
-    offset: (page - 1) * 10,
-  });
-  return coursesByPage;
 }
 
 async function postCourse(data) {
@@ -98,8 +118,8 @@ async function deleteCourse(id) {
 const coursesServices = {
   getAllCourses,
   getCourseById,
-  getCourseByPage,
-  searchByTitle,
+  getCourseForMobile,
+  //searchByTitle,
   create: postCourse,
   update: updateCourse,
   delete: deleteCourse,

@@ -1,10 +1,10 @@
 const Joi = require("joi");
 
 const filePhotoSchema = Joi.object({
-    fieldname: Joi.string().required(),
-    mimetype: Joi.string().valid("image/jpeg", "image/png", "image/jpg"),
+    path: Joi.string().required(),
+    mimetype: Joi.string().valid("image/jpeg", "image/png", "image/jpg").required(),
     filename: Joi.string().required(),
-}).unknown();
+}).required().unknown();
 
 const createCourseSchema = Joi.object({
     title: Joi.string().min(3).required(),

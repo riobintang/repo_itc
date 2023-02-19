@@ -50,6 +50,9 @@ module.exports = {
   },
   handlerPostImageArticle: async (req, res, next) => {
     try {
+      if(!req.file) {
+        throw new Error("Image is required");
+      }
       validateArticleImageSchema(req.file);
       const result = await articlesServices.createImage(req.file.path)
       res.status(200).json({

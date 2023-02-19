@@ -14,7 +14,8 @@ module.exports = {
   //handler get course
   handlerGetAllCourse: async (req, res, next) => {
     try {
-      const courses = await coursesServices.getAllCourses();
+      const { title } = req.query;
+      const courses = await coursesServices.getAllCourses(title);
       res.status(200).json({
         status: "success",
         message: "Successfully get all courses",
@@ -40,24 +41,25 @@ module.exports = {
     }
   },
   //handler search courses by title
-  handlerGetCourseByTitle: async (req, res, next) => {
-    try {
-      const { title } = req.query;
-      const courses = await coursesServices.searchByTitle(title);
-      res.status(200).json({
-        status: "success",
-        message: "Successfully get courses by title",
-        data: courses,
-      });
-    } catch (error) {
-      next(error);
-    }
-  },
+  // handlerGetCourseByTitle: async (req, res, next) => {
+  //   try {
+  //     const { title } = req.query;
+  //     const courses = await coursesServices.searchByTitle(title);
+  //     res.status(200).json({
+  //       status: "success",
+  //       message: "Successfully get courses by title",
+  //       data: courses,
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
   //handler Get Course with Pagination
-  handlerGetCourseByPage: async (req, res, next) => {
+  handlerGetCourseForMobile: async (req, res, next) => {
     try {
-      const { page } = req.params;
-      const courses = await coursesServices.getCourseByPage(page);
+      const { title} = req.query;
+      const page = (req.query?.page || null) ?? 1
+      const courses = await coursesServices.getCourseForMobile(title, page);
       res.status(200).json({
         status: "success",
         message: "Successfully get all courses",
@@ -71,10 +73,12 @@ module.exports = {
   handlerPostCourse: async (req, res, next) => {
     try {
       const { title, description, id_division } = req.body;
-
+      if (!req.file) {
+        throw new Error("Image is required");
+      }
       validateCoursePhotoSchema(req.file); // validate photo extension
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
-      
+
       const course = await coursesServices.create({
         image: req.file.path,
         title,
@@ -96,7 +100,9 @@ module.exports = {
     try {
       const { id } = req.params;
       const { title, description, id_division } = req.body;
-
+      if (!req.file) {
+        throw new Error("Image is required");
+      }
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
       validateCoursePhotoSchema(req.file); // validate photo extension
 

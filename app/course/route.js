@@ -1,17 +1,16 @@
 const express = require('express');
 const authenticationToken = require("../../middleware/authenticationToken");
 const loginAdmin = require('../../middleware/loginAdmin');
-const {handlerGetAllCourse,  handlerGetCourseById, handlerPostCourse, handlerPutCourse, handlerDeleteCourse, handlerGetCourseByTitle, handlerGetCourseByPage} = require('./handler');
+const {handlerGetAllCourse,  handlerGetCourseById, handlerPostCourse, handlerPutCourse, handlerDeleteCourse, handlerGetCourseByTitle, handlerGetCourseByPage, handlerGetCourseForMobile} = require('./handler');
 const upload = require("../../utils/multer");
+const { validateCoursePhotoSchema } = require('../../validator/course');
 const router = express.Router();
 
-//API get course: GET /course/
+//API get course: GET /courses/
 router.get('/', authenticationToken, handlerGetAllCourse);
-//API get search course: GET /course/:title
-router.get('/search', authenticationToken, handlerGetCourseByTitle);
-//API get course with pagination: GET /course/page:page
-router.get("/page/:page", authenticationToken, handlerGetCourseByPage);
-//API get course by id: GET /course/:id
+//API get course for mobile: GET /courses/
+router.get("/mobile", authenticationToken, handlerGetCourseForMobile);
+//API get course by id: GET /courses/:id
 router.get('/:id', authenticationToken, handlerGetCourseById);
 
 

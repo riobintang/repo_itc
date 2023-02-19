@@ -17,7 +17,6 @@ module.exports = {
   handlerRegisterUser: async (req, res, next) => {
     try {
       const { username, fullName, email, password, id_division } = req.body;
-      console.log(req.body);
       validateRegisterUserSchema({
         username,
         fullName,

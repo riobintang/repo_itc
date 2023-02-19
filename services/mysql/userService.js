@@ -13,7 +13,7 @@ const Op = Sequelize.Op;
 
 async function getUser(id) {
   const getUser = await User.findByPk(id, {
-    attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+    attributes: { exclude: ["password", "updatedAt"] },
     include: [
       { model: Role, attributes: ["roleName"] },
       { model: Division, attributes: ["divisionName"] },
