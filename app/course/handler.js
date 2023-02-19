@@ -74,7 +74,7 @@ module.exports = {
 
       validateCoursePhotoSchema(req.file); // validate photo extension
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
-
+      
       const course = await coursesServices.create({
         image: req.file.path,
         title,

@@ -108,7 +108,7 @@ async function userLogin(emailUsername, password) {
       "Your account has not verified. Please wait for Admin to verify it first."
     );
   }
-  console.log(userLogin.verify);
+
   if (userLogin.verify === false) {
     throw new Error(
       "Your account has been declined. Please contact Admin for more information."
@@ -150,12 +150,12 @@ async function refreshJWT(user) {
   }
 }
 
-async function putUserProfile(user) {
+async function putUserProfile(data) {
   const t = await sequelize.transaction();
   let image_id;
   let photoProfile;
   try {
-    const updateUser = await User.findByPk(user.id);
+    const updateUser = await User.findByPk(data.id);
     if (!updateUser) {
       throw new Error("User not found");
     }

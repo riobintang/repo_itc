@@ -1,5 +1,6 @@
 const { Comment, Discussion, User } = require("../../models");
 const commentsServices = require("../../services/mysql/commentService");
+const usersServices = require("../../services/mysql/userService")
 const { validateCreateCommentSchema } = require("../../validator/comment");
 
 module.exports = {
