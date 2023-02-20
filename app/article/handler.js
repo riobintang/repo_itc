@@ -1,10 +1,9 @@
-const { Article, Chapter, Course } = require("../../models");
-const { updateDateCourse } = require("../../utils/courseDateUpdate");
+
 const {
   validateArticleImageSchema,
   validateArticleValueSchema,
 } = require("../../validator/article");
-const cloudinary = require("../../utils/cloudinary").v2;
+
 const articlesServices = require("../../services/mysql/articleService");
 module.exports = {
   handlerGetAllArticleTitleByChapterCourseID: async (req, res, next) => {

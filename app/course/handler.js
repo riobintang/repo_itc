@@ -86,7 +86,6 @@ module.exports = {
       res.status(201).json({
         status: "success",
         message: "Successfully create course",
-        data: course,
       });
     } catch (error) {
       next(error);
@@ -113,7 +112,6 @@ module.exports = {
       res.status(201).json({
         status: "success",
         message: "Successfully update course",
-        data: course,
       });
     } catch (error) {
       next(error);
