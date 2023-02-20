@@ -128,7 +128,7 @@ async function userLogin(emailUsername, password) {
 
 async function getAllUsers() {
   const users = await User.findAll({
-    attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+    attributes: { exclude: ["password", "updatedAt"] },
   });
   return users;
 }

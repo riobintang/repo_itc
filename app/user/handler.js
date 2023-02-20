@@ -81,7 +81,19 @@ module.exports = {
       res.status(200).json({
         status: "success",
         message: "Successfully get User",
-        data: user,
+        data: {
+          id: user.id,
+          username: user.username,
+          fullName: user.fullName,
+          email: user.email,
+          generation: user.generation,
+          phoneNumber: user.phoneNumber,
+          photoProfile: user.photoProfile,
+          createdAt: user.createdAt,
+          verify: user.verify,
+          id_role: user.id_role,
+          divisionName: user.Division.divisionName,
+        },
       });
     } catch (error) {
       next(error);
