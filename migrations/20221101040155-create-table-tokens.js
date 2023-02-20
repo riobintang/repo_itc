@@ -20,9 +20,18 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      token: {
-        type: Sequelize.STRING,
+      otp: {
+        type: Sequelize.INTEGER(5),
         allowNull: false,
+      },
+      token: {
+        type: Sequelize.TEXT("long"),
+        unique: true,
+      },
+      valid: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
       },
       createdAt: {
         type: Sequelize.DATE,

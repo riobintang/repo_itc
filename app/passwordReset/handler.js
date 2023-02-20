@@ -1,9 +1,8 @@
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
-const { User, Token } = require("../../models");
-const { sendEmailResetPassword } = require("../../utils/sendEmail");
-const subtractHours = require("../../utils/subtractHours");
-const validateRequestTokenResetPassword = require("../../validator/token");
+const {
+  validateRequestTokenResetPassword,
+  validateVerifyOtpToken,
+  validateResetPassword,
+} = require("../../validator/token");
 const resetPasswordServices = require("../../services/mysql/resetPasswordService");
 
 module.exports = {
@@ -13,11 +12,25 @@ module.exports = {
       const { email } = req.body;
       validateRequestTokenResetPassword({ email });
       //get user by email from db
-      await resetPasswordServices.getTokenReset(email);
+      const token = await resetPasswordServices.getTokenReset(email);
       res.status(201).json({
         status: "success",
         message: "email sent successfully",
+        data: { token: token.token },
       });
+    } catch (error) {
+      next(error);
+    }
+  },
+  verifyOTPHandler: async (req, res, next) => {
+    try{
+      const { token, otp } = req.body;
+      validateVerifyOtpToken({ token, otp });
+      
+      res.status(200).json({
+        status: 'success',
+        message: "OTP is valid"
+      })
     } catch (error) {
       next(error);
     }
@@ -27,6 +40,7 @@ module.exports = {
     try {
       const { id_user, token } = req.params;
       const { password } = req.body;
+      validateResetPassword(password);
       //get user by id from db
       const resetPassword = await resetPasswordServices.resetPassword(
         id_user,

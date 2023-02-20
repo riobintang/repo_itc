@@ -1,3 +1,6 @@
+const sequelizeTokenify = require("sequelize-tokenify");
+
+
 function createModelToken(Sequelize, DataTypes) {
   const Token = Sequelize.define(
     "Token",
@@ -18,9 +21,18 @@ function createModelToken(Sequelize, DataTypes) {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      token: {
-        type: DataTypes.STRING,
+      otp: {
+        type: DataTypes.INTEGER(5),
         allowNull: false,
+      },
+      token: {
+        type: DataTypes.TEXT("long"),
+        unique: true,
+      },
+      valid: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -35,6 +47,12 @@ function createModelToken(Sequelize, DataTypes) {
       tableName: "tokens",
     }
   );
+  
+  sequelizeTokenify.tokenify(Token, {
+    field: 'token',
+    length: 250,
+  })
+
   Token.assoicate = (models) => {
     Token.belongsTo(models.User, {
       foreignKey: "id_user",

@@ -1,8 +1,8 @@
 const nodemailer = require("nodemailer");
 
-const sendEmailResetPassword = async (email, subject, text, userReset) => {
+const sendEmailResetPassword = async (email, otp, user) => {
   try {
-    const newText = `Hi ${userReset.fullName}.\nYou requested a password reset. \nTo reset your password, click this link: \n${text} \nIf you don't use this link within 1 hour, it will expire.`;
+    const body = `Hi ${user}.\nPlease use the following OTP to reset your password. \nOTP is valid for 10 minutes.\n ${otp}\nIf you didn't request this, you can ignore this email or let us know.`;
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
       service: process.env.SERVICE,
@@ -16,8 +16,8 @@ const sendEmailResetPassword = async (email, subject, text, userReset) => {
     await transporter.sendMail({
       from: process.env.USER,
       to: email,
-      subject: subject,
-      text: newText,
+      subject: "OTP for Reset Password",
+      text: body,
     });
     console.log("email sent successfully");
   } catch (error) {

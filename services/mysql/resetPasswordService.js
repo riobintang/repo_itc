@@ -16,15 +16,30 @@ async function getTokenReset(email) {
   }
   const token = await new Token({
     id_user: userReset.id,
-    token: crypto.randomBytes(32).toString("hex"),
+    otp: crypto.randomInt(99999),
   }).save();
   //make a link for reset password
-  const link = `${process.env.BASE_URL}/password-reset/${userReset.id}/${token.token}`;
-  await sendEmailResetPassword(email, "Password reset", link, userReset); //sent link to email
-  return userReset;
+  await sendEmailResetPassword(email, token.otp, userReset.fullName); //sent link to email
+  return token;
 }
 
-async function resetPassword(id_user, token) {
+async function verifyOtpToken(otp, token) {
+  const verifyReset = await Token.findOne({
+    where: {
+      otp, token
+    }
+  });
+  if (!verifyReset) {
+    throw new Error("Invalid code or expired");
+  }
+  if (!verifyReset.valid) {
+    throw new Error("Invalid code or expired")
+  }
+
+  return verifyReset;
+}
+
+async function resetPassword(id_user, token, otp) {
   try {
     const reqUser = await User.findOne({
       where: {
@@ -36,6 +51,7 @@ async function resetPassword(id_user, token) {
       where: {
         id_user: id_user,
         token: token,
+        otp: otp,
       },
     });
 
