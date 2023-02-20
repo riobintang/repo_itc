@@ -16,7 +16,7 @@ async function getAllCourses(title = "") {
           [Op.like]: `%${title}%`,
         },
       },
-    attributes: {exclude: ["id_user", "id_division"]},
+    attributes: {exclude: ["id_user"]},
     include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}],
   });
   return courses;
@@ -24,7 +24,7 @@ async function getAllCourses(title = "") {
 
 async function getCourseById(id) {
   const course = await Course.findByPk(id, {
-    attributes: {exclude: ["id_user", "id_division"]},
+    attributes: {exclude: ["id_user"]},
     include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}]
   });
 
@@ -54,7 +54,7 @@ async function getCourseForMobile(title = "", page = 1) {
         [Op.like]: `%${title}%`,
       },
     },
-  attributes: {exclude: ["id_user", "id_division"]},
+  attributes: {exclude: ["id_user"]},
   include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}],
   limit: 10,
   offset: (page - 1) * 10,
