@@ -1,15 +1,12 @@
-const { Course } = require("../../models");
+
 const {
   validateCoursePhotoSchema,
   validateCourseCreateUpdateSchema,
 } = require("../../validator/course");
-const cloudinary = require("../../utils/cloudinary").v2;
-const Sequelize = require("sequelize");
-const {
-  deleteImage,
-} = require("../../utils/cloudinary/imageServiceCloudinary");
+
+
 const coursesServices = require("../../services/mysql/courseService");
-const Op = Sequelize.Op;
+
 module.exports = {
   //handler get course
   handlerGetAllCourse: async (req, res, next) => {
@@ -58,7 +55,7 @@ module.exports = {
   handlerGetCourseForMobile: async (req, res, next) => {
     try {
       const { title} = req.query;
-      const page = (req.query?.page || null) ?? 1
+      const page = req.query?.page || 1
       const courses = await coursesServices.getCourseForMobile(title, page);
       res.status(200).json({
         status: "success",
