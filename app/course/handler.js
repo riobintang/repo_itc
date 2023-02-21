@@ -96,18 +96,18 @@ module.exports = {
     try {
       const { id } = req.params;
       const { title, description, id_division } = req.body;
-      if (!req.file) {
-        throw new Error("Image is required");
+      if (req.file) {
+        validateCoursePhotoSchema(req.file); // validate photo extension
       }
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
-      validateCoursePhotoSchema(req.file); // validate photo extension
+      
 
       const course = await coursesServices.update({
         id,
         title,
         description,
         id_division,
-        image: req.file.path,
+        image: req.file?.path || null,
       });
       res.status(201).json({
         status: "success",
