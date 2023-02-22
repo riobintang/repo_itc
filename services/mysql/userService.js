@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const Sequelize = require("sequelize");
 const randtoken = require("rand-token");
 const generateAccessToken = require("../../utils/tokenManager");
-const { User, Role, Division, sequelize } = require("../../models");
+const { User, Role, Division, RefreshToken, sequelize } = require("../../models");
 const {
   uploadImage,
   deleteImage,
@@ -119,6 +119,10 @@ async function userLogin(emailUsername, password) {
   });
 
   const refreshToken = randtoken.uid(256);
+  await RefreshToken.create({
+    refresh_token: refreshToken,
+    id_user: userLogin.id,
+  });
   refreshTokens[refreshToken] = userLogin.username;
   return {
     accessToken,
@@ -133,18 +137,17 @@ async function getAllUsers() {
   return users;
 }
 
-async function refreshJWT(user) {
-  if (
-    user.refreshToken in refreshTokens &&
-    refreshTokens[user.refreshToken] == user.username
-  ) {
-    const selectedUser = await User.findOne({
-      where: {
-        username: user.username,
-      },
-    });
+async function refreshJWT(refreshToken) {
+  const foundRefreshToken = await RefreshToken.findOne({
+    where: {
+      refresh_token: refreshToken,
+    },
+    include: [{ model: User }],
+  });
+  
+  if (refreshToken in refreshTokens && refreshTokens[refreshToken] == foundRefreshToken.User.username) {
     const accessToken = generateAccessToken({
-      id: selectedUser.id,
+      id: foundRefreshToken.User.id,
     });
     return accessToken;
   }
