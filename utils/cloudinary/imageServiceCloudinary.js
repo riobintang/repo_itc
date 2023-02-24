@@ -15,10 +15,9 @@ async function uploadImage(image, location, public_id = "") {
 async function deleteImage(location, cloudinary_id) {
     console.log(`/itc-repo/${location}/${cloudinary_id}`)
     const result = await cloudinary.uploader.destroy(`itc-repo/${location}/${cloudinary_id}`);
-    console.log(result)
-    if (result.result != "ok") {
-      throw new Error("Failed to delete image");
-    }
+    // if (result.result != "ok") {
+    //   throw new Error("Failed to delete image");
+    // }
     return result;
 }
 

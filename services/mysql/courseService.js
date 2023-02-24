@@ -17,7 +17,7 @@ async function getAllCourses(title = "") {
         },
       },
     attributes: {exclude: ["id_user"]},
-    include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}],
+    include: [{model: User, attributes: ["id_user", "fullName"]}, {model: Division, attributes: ["divisionName"]}],
   });
   return courses;
 }
@@ -83,7 +83,7 @@ async function updateCourse(data) {
   if (!updateCourse) {
     throw new Error("Course not found");
   }
-  if (data.image != null) {
+  if (data.image) {
     const result = await uploadImage(
       data.image,
       "course",

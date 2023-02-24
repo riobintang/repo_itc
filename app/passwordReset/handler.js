@@ -16,21 +16,23 @@ module.exports = {
       res.status(201).json({
         status: "success",
         message: "email sent successfully",
-        data: { token: token.token },
+        data: token,
       });
     } catch (error) {
       next(error);
     }
   },
   verifyOTPHandler: async (req, res, next) => {
-    try{
-      const { token, otp } = req.body;
-      validateVerifyOtpToken({ token, otp });
-      
+    try {
+      const { otp } = req.body;
+      validateVerifyOtpToken({ otp });
+
+      const unique_token = await resetPasswordServices.verifyOtp(otp);
       res.status(200).json({
-        status: 'success',
-        message: "OTP is valid"
-      })
+        status: "success",
+        message: "Successfully verify OTP",
+        data: unique_token,
+      });
     } catch (error) {
       next(error);
     }
@@ -38,13 +40,13 @@ module.exports = {
   //handler for reset password
   resetPasswordHandler: async (req, res, next) => {
     try {
-      const { id_user, token } = req.params;
-      const { password } = req.body;
-      validateResetPassword(password);
+      const { unique_token, password, confirmPassword } = req.body;
+      validateResetPassword({ unique_token, password, confirmPassword });
       //get user by id from db
       const resetPassword = await resetPasswordServices.resetPassword(
-        id_user,
-        token
+        unique_token,
+        password,
+        confirmPassword
       );
 
       res.status(201).json({

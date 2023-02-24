@@ -74,6 +74,14 @@ function createModelUser(Sequelize, DataTypes) {
         type: DataTypes.BOOLEAN,
         allowNull: true,
       },
+      otp: {
+        type: DataTypes.INTEGER(5),
+        allowNull: true,
+      },
+      unique_token: {
+        type: DataTypes.TEXT('long'),
+        unique: true,
+      },
     },
     {
       tableName: "users",

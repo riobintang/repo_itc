@@ -14,60 +14,54 @@ async function getTokenReset(email) {
   if (!userReset) {
     throw new Error("User with given email doesn't exist");
   }
-  const token = await new Token({
-    id_user: userReset.id,
+  userReset.update({
     otp: crypto.randomInt(99999),
-  }).save();
+    unique_token: crypto.randomBytes(256),
+  });
+
   //make a link for reset password
-  await sendEmailResetPassword(email, token.otp, userReset.fullName); //sent link to email
-  return token;
+  await sendEmailResetPassword(email, userReset.otp, userReset.fullName); //sent link to email
+  return userReset.otp;
 }
 
-async function verifyOtpToken(otp, token) {
+async function verifyOtpToken(otp) {
   const verifyReset = await Token.findOne({
     where: {
-      otp, token
-    }
+      otp,
+    },
   });
   if (!verifyReset) {
     throw new Error("Invalid code or expired");
   }
-  if (!verifyReset.valid) {
-    throw new Error("Invalid code or expired")
-  }
 
-  return verifyReset;
+  return verifyReset.unique_token;
 }
 
-async function resetPassword(id_user, token, otp) {
+async function resetPassword(unique_token, password, confirmPassword) {
   try {
     const reqUser = await User.findOne({
       where: {
-        id: id_user,
+        unique_token,
       },
     });
-    //checking token in db
-    const reqToken = await Token.findOne({
-      where: {
-        id_user: id_user,
-        token: token,
-        otp: otp,
-      },
-    });
+    
+    if(password !== confirmPassword) {
+      throw new Error("Confirm Password is not the same")
+    }
 
-    if (!reqUser || !reqToken) {
-      throw new Error("Invalid link or expired");
+    if (!reqUser) {
+      throw new Error("Invalid token");
     }
     const diffTime = subtractHours(1, new Date()); //to substract 1 hour when using the token
     //check token expired or not
     if (reqToken.createdAt >= diffTime) {
-      const hashPassword = await bcrypt.hash(user.password, 10);
-      reqUser.set({
+      const hashPassword = await bcrypt.hash(password.password, 10);
+
+      reqUser.update({
         password: hashPassword,
+        otp: null,
+        unique_token: null,
       });
-      
-      await reqUser.save();
-      await reqToken.destroy();
 
       return reqUser;
     } else {
@@ -79,8 +73,9 @@ async function resetPassword(id_user, token, otp) {
 }
 
 const resetPasswordServices = {
-  getTokenReset,
+  getOtp: getTokenReset,
   resetPassword,
+  verifyOtp: verifyOtpToken,
 };
 
 module.exports = resetPasswordServices;

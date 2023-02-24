@@ -71,6 +71,14 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: true,
       },
+      otp: {
+        type: Sequelize.INTEGER(5),
+        allowNull: true,
+      },
+      unique_token: {
+        type: Sequelize.TEXT('long'),
+        unique: true,
+      },
     });
   },
 
