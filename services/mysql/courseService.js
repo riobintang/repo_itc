@@ -17,7 +17,7 @@ async function getAllCourses(title = "") {
         },
       },
     attributes: {exclude: ["id_user"]},
-    include: [{model: User, attributes: ["id_user", "fullName"]}, {model: Division, attributes: ["divisionName"]}],
+    include: [{model: User, attributes: ["id", "fullName"]}, {model: Division, attributes: ["divisionName"]}],
   });
   return courses;
 }
@@ -25,7 +25,7 @@ async function getAllCourses(title = "") {
 async function getCourseById(id) {
   const course = await Course.findByPk(id, {
     attributes: {exclude: ["id_user"]},
-    include: [{model: User, attributes: ["id_user", "fullName"]}, {model: Division, attributes: ["divisionName"]}]
+    include: [{model: User, attributes: ["id", "fullName"]}, {model: Division, attributes: ["divisionName"]}]
   });
 
   if (!course) {
