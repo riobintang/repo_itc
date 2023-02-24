@@ -101,13 +101,9 @@ module.exports = {
   },
   // handler for refresh token
   refreshJWTHandler: async (req, res, next) => {
-    const username = req.body.username;
-    const refreshToken = req.body.refreshToken;
+    const { refreshToken } = req.body;
 
-    const accessToken = await usersServices.refreshJWT({
-      username,
-      refreshToken,
-    });
+    const accessToken = await usersServices.refreshJWT(refreshToken);
 
     if (accessToken) {
       res.status(200).json({
