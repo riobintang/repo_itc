@@ -52,10 +52,8 @@ async function resetPassword(unique_token, password, confirmPassword) {
     if (!reqUser) {
       throw new Error("Invalid token");
     }
-    const diffTime = subtractHours(1, new Date()); //to substract 1 hour when using the token
+    //const diffTime = subtractHours(1, new Date()); //to substract 1 hour when using the token
     //check token expired or not
-    if (reqToken.createdAt >= diffTime) {
-      const hashPassword = await bcrypt.hash(password.password, 10);
 
       reqUser.update({
         password: hashPassword,
@@ -64,9 +62,7 @@ async function resetPassword(unique_token, password, confirmPassword) {
       });
 
       return reqUser;
-    } else {
-      throw new Error("Invalid link or expired");
-    }
+    
   } catch (error) {
     throw new Error(error);
   }
