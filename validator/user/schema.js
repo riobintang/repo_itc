@@ -10,8 +10,8 @@ const userRegisterSchema = Joi.object({
 
 const userUpdateSchema = Joi.object({
   fullName: Joi.string().min(6).required(),
-  phoneNumber: Joi.string().min(9).required(),
-  generation: Joi.string().min(4).required(),
+  phoneNumber: Joi.string().min(9),
+  generation: Joi.string().min(4),
   id_division: Joi.number().min(1).required(),
 }).unknown();
 
@@ -48,7 +48,7 @@ const userUpdateProfilePasswordSchema = Joi.object({
   id_division: Joi.number().min(1).required(),
   email: Joi.string().email().required(),
 })
-.unknown();
+  .unknown();
 
 const userVerifySchema = Joi.object({
   verify: Joi.boolean().required(),

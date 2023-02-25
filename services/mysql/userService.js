@@ -144,7 +144,7 @@ async function refreshJWT(refreshToken) {
     },
     include: [{ model: User }],
   });
-  
+
   if (refreshToken in refreshTokens && refreshTokens[refreshToken] == foundRefreshToken.User.username) {
     const accessToken = generateAccessToken({
       id: foundRefreshToken.User.id,
@@ -166,8 +166,8 @@ async function putUserProfile(data) {
     await updateUser.update(
       {
         fullName: data.fullName,
-        generation: data.generation,
-        phoneNumber: data.phoneNumber,
+        generation: data.generation || '',
+        phoneNumber: data.phoneNumber || '',
         id_division: data.id_division,
       },
       { transaction: t }
