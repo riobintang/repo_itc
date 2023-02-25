@@ -1,6 +1,6 @@
 const {
   validateRequestTokenResetPassword,
-  validateVerifyOtpToken,
+  validateVerifyOtp,
   validateResetPassword,
 } = require("../../validator/token");
 const resetPasswordServices = require("../../services/mysql/resetPasswordService");
@@ -12,7 +12,7 @@ module.exports = {
       const { email } = req.body;
       validateRequestTokenResetPassword({ email });
       //get user by email from db
-      const token = await resetPasswordServices.getTokenReset(email);
+      const token = await resetPasswordServices.getOtp(email);
       res.status(201).json({
         status: "success",
         message: "email sent successfully",
@@ -25,7 +25,7 @@ module.exports = {
   verifyOTPHandler: async (req, res, next) => {
     try {
       const { otp } = req.body;
-      validateVerifyOtpToken({ otp });
+      validateVerifyOtp({ otp });
 
       const unique_token = await resetPasswordServices.verifyOtp(otp);
       res.status(200).json({

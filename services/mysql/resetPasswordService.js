@@ -15,8 +15,8 @@ async function getTokenReset(email) {
     throw new Error("User with given email doesn't exist");
   }
   userReset.update({
-    otp: crypto.randomInt(99999),
-    unique_token: crypto.randomBytes(256),
+    otp: crypto.randomInt(11111,99999),
+    unique_token: crypto.randomBytes(128).toString("hex"),
   });
 
   //make a link for reset password
@@ -25,7 +25,7 @@ async function getTokenReset(email) {
 }
 
 async function verifyOtpToken(otp) {
-  const verifyReset = await Token.findOne({
+  const verifyReset = await User.findOne({
     where: {
       otp,
     },
@@ -54,6 +54,8 @@ async function resetPassword(unique_token, password, confirmPassword) {
     }
     //const diffTime = subtractHours(1, new Date()); //to substract 1 hour when using the token
     //check token expired or not
+
+    const hashPassword = await bcrypt.hash(password, 10);
 
       reqUser.update({
         password: hashPassword,

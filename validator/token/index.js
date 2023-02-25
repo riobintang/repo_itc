@@ -1,7 +1,7 @@
 const {
   requestTokenResetPasswordSchema,
   resetPasswordSchema,
-  verifyOTPTokenSchema,
+  verifyOTPSchema,
 } = require("./schema");
 
 function validateRequestTokenResetPassword(payload) {
@@ -11,8 +11,8 @@ function validateRequestTokenResetPassword(payload) {
   }
 }
 
-function validateVerifyOtpToken(payload) {
-  const validateResult = verifyOTPTokenSchema.validate(payload);
+function validateVerifyOtp(payload) {
+  const validateResult = verifyOTPSchema.validate(payload);
   if (validateResult.error) {
     throw new Error(validateResult.error.message);
   }
@@ -27,6 +27,6 @@ function validateResetPassword(payload) {
 
 module.exports = {
   validateRequestTokenResetPassword,
-  validateVerifyOtpToken,
+  validateVerifyOtp,
   validateResetPassword,
 };
