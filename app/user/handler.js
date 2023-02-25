@@ -92,6 +92,7 @@ module.exports = {
           createdAt: user.createdAt,
           verify: user.verify,
           id_role: user.id_role,
+          id_division: user.id_division,
           divisionName: user.Division.divisionName,
         },
       });
@@ -138,7 +139,7 @@ module.exports = {
         phoneNumber,
         id_division,
         id: req.user.id,
-        image: req.file.path,
+        image: req.file?.path || null,
       });
 
       res.status(201).json({
