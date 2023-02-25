@@ -1,6 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const supportType = [".jpg", "jpeg", ".png"];
+const supportType = [".jpg", ".jpeg", ".png"];
 module.exports = multer({
   storage: multer.diskStorage({}),
   limits: { fileSize: 1024 * 5000 }, // max size is 5 megabyte
