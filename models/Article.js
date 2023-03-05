@@ -12,7 +12,7 @@ function createModelArticle(Sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      body: {
+      content: {
         type: DataTypes.TEXT('long'),
         allowNull: false,
       },

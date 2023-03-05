@@ -74,7 +74,7 @@ async function postArticle(data, id_course, id_chapter) {
   }
   const article = await Article.create({
     title: data.title,
-    body: data.content,
+    content: data.content,
     id_chapter,
   });
 

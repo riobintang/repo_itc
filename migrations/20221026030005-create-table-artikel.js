@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      body: {
+      content: {
         type: Sequelize.TEXT('long'),
         allowNull: false,
       },
