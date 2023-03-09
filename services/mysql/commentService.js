@@ -35,7 +35,7 @@ async function getCommentDiscussion(id_discussion, id_course) {
     where: {
       id_discussion,
     },
-    include: [{ model: User, attributes: ["id", "fullName"] }],
+    include: [{ model: User, attributes: ["id", "fullName", "photoProfile"] }],
   });
 
   return comments;
