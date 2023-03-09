@@ -12,7 +12,6 @@ module.exports = {
       
       await course.changed("updatedAt",true);
       await course.update({updatedAt: new Date()})
-      console.log(`update at ${course.updatedAt}`);
       return course;
     } catch (error) {
       throw new Error(error);
