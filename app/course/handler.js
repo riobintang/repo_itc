@@ -1,9 +1,7 @@
-
 const {
   validateCoursePhotoSchema,
   validateCourseCreateUpdateSchema,
 } = require("../../validator/course");
-
 
 const coursesServices = require("../../services/mysql/courseService");
 
@@ -54,8 +52,8 @@ module.exports = {
   //handler Get Course with Pagination
   handlerGetCourseForMobile: async (req, res, next) => {
     try {
-      const { title} = req.query;
-      const page = req.query?.page || 1
+      const { title } = req.query;
+      const page = req.query.page || 1;
       const courses = await coursesServices.getCourseForMobile(title, page);
       res.status(200).json({
         status: "success",
@@ -100,14 +98,13 @@ module.exports = {
         validateCoursePhotoSchema(req.file); // validate photo extension
       }
       validateCourseCreateUpdateSchema({ title, description, id_division }); // validate title and description
-      
 
       const course = await coursesServices.update({
         id,
         title,
         description,
         id_division,
-        image: req.file?.path || null,
+        image: req.file.path || null,
       });
       res.status(201).json({
         status: "success",
