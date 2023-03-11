@@ -1,5 +1,4 @@
 const cloudinary = require("./index").v2;
-const path = require("path");
 
 async function uploadImage(image, location, public_id = "") {
     const result = await cloudinary.uploader.upload(image, {
@@ -13,7 +12,6 @@ async function uploadImage(image, location, public_id = "") {
 }
 
 async function deleteImage(location, cloudinary_id) {
-    console.log(`/itc-repo/${location}/${cloudinary_id}`)
     const result = await cloudinary.uploader.destroy(`itc-repo/${location}/${cloudinary_id}`);
     // if (result.result != "ok") {
     //   throw new Error("Failed to delete image");

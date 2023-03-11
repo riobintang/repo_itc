@@ -1,11 +1,14 @@
-const { Discussion, Course, User } = require("../../models");
 const {
   validateCreateDiscussionSchema,
+  validateDiscussionImageSchema,
 } = require("../../validator/discussion");
-const { Sequelize } = require("sequelize");
+
 const discussionsServices = require("../../services/mysql/discussionService");
 const usersServices = require("../../services/mysql/userService");
-const Op = Sequelize.Op;
+const {
+  uploadImage,
+  deleteImageWithLink,
+} = require("../../utils/cloudinary/imageServiceCloudinary");
 
 module.exports = {
   // handler post for discussion
@@ -74,7 +77,7 @@ module.exports = {
         id_course,
         title,
         body,
-        id_user
+        id_user,
       });
       res.status(201).json({
         status: "success",
@@ -87,10 +90,13 @@ module.exports = {
   // handler delete discussion
   handlerDeleteDiscussion: async (req, res, next) => {
     try {
-
       const { id_discussion } = req.params;
-      const userData = await usersServices.getUserById(req.user.id)
-      await discussionsServices.delete({id_discussion, userid: userData.id, role:userData.role})
+      const userData = await usersServices.getUserById(req.user.id);
+      await discussionsServices.delete({
+        id_discussion,
+        userid: userData.id,
+        role: userData.role,
+      });
       res.status(200).json({
         status: "success",
         message: "Successfully delete Discussion",
@@ -103,11 +109,43 @@ module.exports = {
     try {
       const { keyword } = req.query;
       const { id_course } = req.params;
-      const discussion = await discussionsServices.searchDiscussion(id_course, keyword)
+      const discussion = await discussionsServices.searchDiscussion(
+        id_course,
+        keyword
+      );
       res.status(200).json({
         status: "success",
         message: "Successfully get Discussion by Course",
         data: discussion,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerPostImageDiscussion: async (req, res, next) => {
+    try {
+      if (!req.file) {
+        throw new Error("Image is required");
+      }
+      validateDiscussionImageSchema(req.file);
+      const result = await uploadImage(
+        req.file.path,
+        (location = "discussion")
+      );
+      res.status(200).json({
+        location: result.secure_url,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerDeleteImageDiscussion: async (req, res, next) => {
+    try {
+      const { location } = req.body;
+      await deleteImageWithLink(location);
+      res.status(201).json({
+        status: "success",
+        message: "Successfully delete Image Discussion",
       });
     } catch (error) {
       next(error);

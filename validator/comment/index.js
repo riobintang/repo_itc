@@ -1,4 +1,4 @@
-const { createCommentSchema } = require("./schema");
+const { createCommentSchema, filePhotoCommentSchema } = require("./schema");
 
 function validateCreateCommentSchema(payload) {
     const validateResult = createCommentSchema.validate(payload);
@@ -7,4 +7,12 @@ function validateCreateCommentSchema(payload) {
     }
 }
 
-module.exports = { validateCreateCommentSchema };
+function validateCommentImageSchema(payload) {
+    const validateResult = filePhotoCommentSchema.validate(payload);
+    if (validateResult.error) {
+        throw new Error(validateResult.error.message);
+    }
+}
+
+
+module.exports = { validateCreateCommentSchema, validateCommentImageSchema };

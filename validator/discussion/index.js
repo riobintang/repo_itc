@@ -1,4 +1,4 @@
-const { createDiscussionSchema } = require("./schema");
+const { createDiscussionSchema, filePhotoDiscussionSchema } = require("./schema");
 
 function validateCreateDiscussionSchema(payload) {
     const validateResult = createDiscussionSchema.validate(payload);
@@ -7,4 +7,11 @@ function validateCreateDiscussionSchema(payload) {
     }
 }
 
-module.exports = { validateCreateDiscussionSchema };
+function validateDiscussionImageSchema(payload) {
+    const validateResult = filePhotoDiscussionSchema.validate(payload);
+    if (validateResult.error) {
+        throw new Error(validateResult.error.message);
+    }
+}
+
+module.exports = { validateCreateDiscussionSchema, validateDiscussionImageSchema };

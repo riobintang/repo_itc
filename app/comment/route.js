@@ -1,9 +1,14 @@
 const express = require("express");
-const { handlerPostComment, handlerGetCommentByDiscussion, handlerPutComment, handlerDeleteComment } = require("./handler");
-const loginAdmin = require('../../middleware/loginAdmin');
+const { handlerPostComment, handlerGetCommentByDiscussion, handlerPutComment, handlerDeleteComment, handlerPostImageComment, handlerDeleteImageComment } = require("./handler");
+
 const authenticationToken = require("../../middleware/authenticationToken");
 const router = express.Router();
+const upload = require("../../utils/multer");
 
+// Post for Image Discussion
+router.post("/image", authenticationToken, upload.single("image"), handlerPostImageComment);
+// Delete for Image Discussion
+router.delete("/deleteimage", authenticationToken, handlerDeleteImageComment);
 // Get for Comment 
 router.get("/:id_course/discussions/:id_discussion/comments", authenticationToken, handlerGetCommentByDiscussion);
 // Post for Comment

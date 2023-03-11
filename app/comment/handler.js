@@ -1,6 +1,6 @@
 const commentsServices = require("../../services/mysql/commentService");
 const usersServices = require("../../services/mysql/userService")
-const { validateCreateCommentSchema } = require("../../validator/comment");
+const { validateCreateCommentSchema, validateCommentImageSchema } = require("../../validator/comment");
 
 module.exports = {
   // handler post for comment
@@ -70,6 +70,35 @@ module.exports = {
       res.status(200).json({
         status: "success",
         message: "Successfully delete comment",
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  handlerPostImageComment: async (req, res, next) => {
+    try {
+      if (!req.file) {
+        throw new Error("Image is required");
+      }
+      validateCommentImageSchema(req.file)
+      const result = await uploadImage(
+        req.file.path,
+        (location = "comment")
+      );
+      res.status(200).json({
+        location: result.secure_url,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }, 
+  handlerDeleteImageComment: async (req, res, next) => {
+    try {
+      const { location } = req.body;
+      await deleteImageWithLink(location);
+      res.status(201).json({
+        status: "success",
+        message: "Successfully delete Image Comment",
       });
     } catch (error) {
       next(error);
