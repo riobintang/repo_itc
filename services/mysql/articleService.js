@@ -11,6 +11,7 @@ async function getAllArticleTitleByChapterAndCourseId(id_course, id_chapter) {
     where: {
       id_chapter,
     },
+    order: sequelize.col("id"),
     include: [
       {
         model: Chapter,
@@ -38,6 +39,7 @@ async function getArticleById(id_course, id_chapter, id_article) {
     where: {
       id: id_article,
     },
+    order: sequelize.col("id"),
     include: [
       {
         model: Chapter,
@@ -64,7 +66,7 @@ async function getArticleById(id_course, id_chapter, id_article) {
 }
 
 async function postArticle(data, id_course, id_chapter) {
-  const t = await sequelize.transaction();
+  
   try {
     const chapter = await Chapter.findOne({
       where: {
@@ -79,13 +81,11 @@ async function postArticle(data, id_course, id_chapter) {
       title: data.title,
       content: data.content,
       id_chapter,
-    }, {transaction: t});
+    });
 
-    await updateDateCourse(id_course, t);
-    await t.commit();
+    await updateDateCourse(id_course);
     return article;
   } catch (error) {
-    t.rollback();
     throw new Error(error);
   }
 }

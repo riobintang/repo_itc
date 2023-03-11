@@ -26,6 +26,7 @@ async function getCommentDiscussion(id_discussion, id_course) {
       id: id_discussion,
       id_course,
     },
+    order: sequelize.col("id"),
   });
   if (!discussion) {
     throw new Error("Discussion not found");
@@ -35,6 +36,7 @@ async function getCommentDiscussion(id_discussion, id_course) {
     where: {
       id_discussion,
     },
+    order: sequelize.col("id"),
     include: [{ model: User, attributes: ["id", "fullName", "photoProfile"] }],
   });
 
@@ -58,7 +60,7 @@ async function putComment(data, id_course, id_discussion, id_comment, id_user) {
   if (updateComment.id_user !== id_user) {
     throw new Error("You are not allowed User to edit");
   }
-  
+
   await updateComment.update({
     body: data.body,
     isEdited: true,

@@ -76,7 +76,7 @@ module.exports = {
         allowNull: true,
       },
       unique_token: {
-        type: Sequelize.TEXT('long'),
+        type: Sequelize.STRING(210),
         unique: true,
       },
     });

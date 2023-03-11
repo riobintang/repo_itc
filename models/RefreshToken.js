@@ -19,7 +19,7 @@ function createModelRefreshToken(Sequelize, DataTypes) {
           onDelete: "CASCADE",
         },
         refresh_token: {
-          type: DataTypes.TEXT('long'),
+          type: DataTypes.STRING(220),
           allowNull: false,
         },
         createdAt: {

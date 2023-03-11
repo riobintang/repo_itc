@@ -1,9 +1,10 @@
-const { Division } = require("../../models");
+const { Division, sequelize } = require("../../models");
 
 const divisionsServices = {
   getAllDivisions: async () => {
     const divisions = await Division.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
+      order: sequelize.col("id"),
     });
     return divisions;
   },

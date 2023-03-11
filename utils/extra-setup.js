@@ -1,5 +1,5 @@
 function applyExtraSetup(sequelize) {
-    const { User, Role, Division, Course, Chapter, Article, Discussion, Comment, Token, RefreshToken } = sequelize.models;
+    const { User, Role, Division, Course, Chapter, Article, Discussion, Comment, RefreshToken } = sequelize.models;
 
     Role.hasMany(User, {
         foreignKey: 'id_role',
@@ -87,15 +87,6 @@ function applyExtraSetup(sequelize) {
         sourceKey: 'id',
     });
     Comment.belongsTo(User, {
-        foreignKey: "id_user",
-        targetKey: 'id'
-    });
-
-    User.hasMany(Token, {
-        foreignKey: "id_user",
-        sourceKey: 'id',
-    });
-    Token.belongsTo(User, {
         foreignKey: "id_user",
         targetKey: 'id'
     });

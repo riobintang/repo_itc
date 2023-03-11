@@ -47,22 +47,19 @@ async function postChapter(title, id_course) {
         title: title,
         id_course: id_course,
       },
-      { transaction: t }
     );
 
-    await updateDateCourse(id_course, t);
+    await updateDateCourse(id_course);
     
-    await t.commit();
+
     return createChapter;
 
   } catch (error) {
-    t.rollback();
     throw new Error(error);
   }
 }
 
 async function putChapter(title, id_course, id_chapter) {
-  const t = await sequelize.transaction();
   try {
     const updateChapter = await Chapter.findByPk(id_chapter);
     if (!updateChapter) {
@@ -76,17 +73,14 @@ async function putChapter(title, id_course, id_chapter) {
       {
         title: title,
       },
-      {
-        transaction: t,
-      }
+ 
     );
 
-    await updateDateCourse(id_course, t);
-    await t.commit();
-    
+    await updateDateCourse(id_course);
+
     return updateChapter;
   } catch (error) {
-    await t.rollback();
+
     throw new Error(error);
   }
 }

@@ -1,4 +1,4 @@
-const { Discussion, Course, User } = require("../../models");
+const { Discussion, Course, User, sequelize } = require("../../models");
 
 const { Sequelize } = require("sequelize");
 const Op = Sequelize.Op;
@@ -43,6 +43,7 @@ async function getDiscussionById(id_discussion) {
       model: User,
       attributes: ["fullName", "photoProfile"],
     },
+    order: sequelize.col("id"),
   });
   if (!discussion) {
     throw new Error("Discussion not found");

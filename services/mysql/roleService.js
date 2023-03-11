@@ -1,9 +1,10 @@
-const { Role } = require("../../models");
+const { Role, sequelize } = require("../../models");
 
 const rolesServices = {
   getAllRoles: async () => {
     const roles = await Role.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
+      order: sequelize.col("id"),
     });
 
     return roles;

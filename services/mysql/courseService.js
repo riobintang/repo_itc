@@ -10,22 +10,28 @@ const {
 const Op = Sequelize.Op;
 
 async function getAllCourses(title = "") {
-    const courses = await Course.findAll({
-      where: {
-        title: {
-          [Op.like]: `%${title}%`,
-        },
+  const courses = await Course.findAll({
+    where: {
+      title: {
+        [Op.like]: `%${title}%`,
       },
-    attributes: {exclude: ["id_user"]},
-    include: [{model: User, attributes: ["id", "fullName"]}, {model: Division, attributes: ["divisionName"]}],
+    },
+    attributes: { exclude: ["id_user"] },
+    include: [
+      { model: User, attributes: ["id", "fullName"] },
+      { model: Division, attributes: ["divisionName"] },
+    ],
   });
   return courses;
 }
 
 async function getCourseById(id) {
   const course = await Course.findByPk(id, {
-    attributes: {exclude: ["id_user"]},
-    include: [{model: User, attributes: ["id", "fullName"]}, {model: Division, attributes: ["divisionName"]}]
+    attributes: { exclude: ["id_user"] },
+    include: [
+      { model: User, attributes: ["id", "fullName"] },
+      { model: Division, attributes: ["divisionName"] },
+    ],
   });
 
   if (!course) {
@@ -47,20 +53,23 @@ async function getCourseById(id) {
 // }
 
 async function getCourseForMobile(title = "", page = 1) {
-  console.log("page = " + page)
+  console.log("page = " + page);
   const courses = await Course.findAll({
     where: {
       title: {
         [Op.like]: `%${title}%`,
       },
     },
-  attributes: {exclude: ["id_user"]},
-  include: [{model: User, attributes: ["fullName"]}, {model: Division, attributes: ["divisionName"]}],
-  limit: 10,
-  offset: (page - 1) * 10,
-});
-return courses;
-
+    order: sequelize.col("id"),
+    attributes: { exclude: ["id_user"] },
+    include: [
+      { model: User, attributes: ["fullName"] },
+      { model: Division, attributes: ["divisionName"] },
+    ],
+    limit: 10,
+    offset: (page - 1) * 10,
+  });
+  return courses;
 }
 
 async function postCourse(data) {
