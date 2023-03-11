@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-const { Course, User, Division } = require("../../models");
+const { Course, User, Division, sequelize } = require("../../models");
 
 const {
   uploadImage,
