@@ -139,7 +139,7 @@ module.exports = {
         phoneNumber,
         id_division,
         id: req.user.id,
-        image: req.file?.path || null,
+        image: req.file.path || null,
       });
 
       res.status(201).json({
