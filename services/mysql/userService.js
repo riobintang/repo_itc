@@ -123,7 +123,6 @@ async function userLogin(emailUsername, password) {
     refresh_token: refreshToken,
     id_user: userLogin.id,
   });
-  refreshTokens[refreshToken] = userLogin.username;
   return {
     accessToken,
     refreshToken,
@@ -142,12 +141,11 @@ async function refreshJWT(refreshToken) {
     where: {
       refresh_token: refreshToken,
     },
-    include: [{ model: User }],
   });
 
-  if (refreshToken in refreshTokens && refreshTokens[refreshToken] == foundRefreshToken.User.username) {
+  if (foundRefreshToken) {
     const accessToken = generateAccessToken({
-      id: foundRefreshToken.User.id,
+      id: foundRefreshToken.id_user,
     });
     return accessToken;
   }
