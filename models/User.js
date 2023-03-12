@@ -84,7 +84,7 @@ function createModelUser(Sequelize, DataTypes) {
         allowNull: true,
       },
       unique_token: {
-        type: DataTypes.STRING(210),
+        type: DataTypes.STRING(256),
         unique: true,
       },
     },
