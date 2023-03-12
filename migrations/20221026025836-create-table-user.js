@@ -9,6 +9,11 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
+      uuid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+      },
       username: {
         type: Sequelize.STRING,
         allowNull: false,

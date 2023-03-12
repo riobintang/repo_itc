@@ -16,7 +16,7 @@
   "production": {
     "username": "root",
     "password": "",
-    "database": "pembelajaran_itc",
+    "database": "itc_learning_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
