@@ -16,7 +16,6 @@ module.exports = {
       res.status(201).json({
         status: "success",
         message: "email sent successfully",
-        data: token,
       });
     } catch (error) {
       next(error);

@@ -4,7 +4,7 @@ const accessTokenSecretKey = "testing-secret-repo-itc";
 
 function generateAccessToken(userPayload) {
     return jwt.sign(userPayload, accessTokenSecretKey, {
-        expiresIn: "1m",
+        expiresIn: "5m",
     });
 }
 
