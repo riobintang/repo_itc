@@ -31,7 +31,7 @@ module.exports = {
       next(error);
     }
   },
-  //Belum dipakai
+  //Get Chapter By Id
   handlerGetChapterById: async (req, res, next) => {
     try {
       const { id_course, id_chapter } = req.params;
