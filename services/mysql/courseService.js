@@ -78,7 +78,7 @@ async function postCourse(data) {
   const createCourse = await Course.create({
     title: data.title,
     description: data.description,
-    image_thumbnail: resultPostImageCourse.secure_url,
+    image_thumbnail: resultPostImageCourse.eager[0].secure_url,
     cloudinary_id: resultPostImageCourse.public_id.split("/")[2],
     id_division: data.id_division,
     id_user: data.userid,
@@ -99,7 +99,7 @@ async function updateCourse(data) {
       updateCourse.cloudinary_id
     );
     await updateCourse.update({
-      image_thumbnail: result.secure_url,
+      image_thumbnail: result.eager[0].secure_url,
       cloudinary_id: updateCourse.cloudinary_id,
     });
   }

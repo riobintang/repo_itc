@@ -6,9 +6,14 @@ async function uploadImage(image, location, public_id = "") {
       use_filename: false,
       unique_filename: false,
       public_id,
+      eager: location === "course" ? [
+        { width: 600,
+          quality: "auto:low",
+          fetch_format: "auto",
+        },
+      ] : null,
     });
     return result;
-
 }
 
 async function deleteImage(location, cloudinary_id) {
