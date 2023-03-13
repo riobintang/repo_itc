@@ -1,4 +1,4 @@
-const { Comment, Discussion, User } = require("../../models");
+const { Comment, Discussion, User, sequelize } = require("../../models");
 
 async function postComment(data, id_user, id_course, id_discussion) {
   const discussion = await Discussion.findOne({
