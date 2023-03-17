@@ -81,7 +81,7 @@ module.exports = {
         allowNull: true,
       },
       unique_token: {
-        type: Sequelize.STRING(256),
+        type: Sequelize.STRING(300),
         unique: true,
       },
     });

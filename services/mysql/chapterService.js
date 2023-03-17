@@ -15,7 +15,7 @@ async function getChaptersAndArticles(id_course) {
     where: {
       id_course: id_course,
     },
-    include: [{ model: Article, attributes: ["id", "title", "id_chapter"] }],
+    include: [{ model: Article, attributes: ["id", "title", "id_chapter"], order: sequelize.col("id"), }],
   });
   return chapters;
 }

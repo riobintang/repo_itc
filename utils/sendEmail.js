@@ -7,14 +7,14 @@ const sendEmailResetPassword = async (email, otp, user) => {
       host: process.env.HOST,
       service: process.env.SERVICE,
       port: 465,
-      secure: true,
+      //secure: true,
       auth: {
-        user: process.env.USER,
+        user: process.env.USER_EMAIL,
         pass: process.env.PASS,
       },
     });
     await transporter.sendMail({
-      from: process.env.USER,
+      from: process.env.USER_EMAIL,
       to: email,
       subject: "OTP for Reset Password",
       text: body,
@@ -36,12 +36,12 @@ async function sendEmailVerify(user) {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.USER,
+        user: process.env.USER_EMAIL,
         pass: process.env.PASS,
       },
     });
     await transporter.sendMail({
-      from: process.env.USER,
+      from: process.env.USER_EMAIL,
       to: user.email,
       subject: subject,
       text: newText,
